@@ -23,9 +23,7 @@ exports[`GCC stacks snapshot ai stack matches snapshot 1`] = `
       },
     },
     "KbIdRef": {
-      "Value": {
-        "Fn::ImportValue": "GccBedrockKbId",
-      },
+      "Value": "PLACEHOLDER-KB-ID",
     },
   },
   "Parameters": {
@@ -340,7 +338,7 @@ exports[`GCC stacks snapshot compute stack matches snapshot 1`] = `
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
-        "DesiredCount": 2,
+        "DesiredCount": 0,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
         "LaunchType": "FARGATE",
@@ -409,9 +407,7 @@ exports[`GCC stacks snapshot compute stack matches snapshot 1`] = `
               },
               {
                 "Name": "BEDROCK_KB_ID",
-                "Value": {
-                  "Fn::ImportValue": "GccBedrockKbId",
-                },
+                "Value": "PLACEHOLDER-KB-ID",
               },
               {
                 "Name": "BEDROCK_GUARDRAIL_ID",
@@ -951,7 +947,7 @@ exports[`GCC stacks snapshot compute stack matches snapshot 1`] = `
           "MaximumPercent": 200,
           "MinimumHealthyPercent": 50,
         },
-        "DesiredCount": 2,
+        "DesiredCount": 0,
         "EnableECSManagedTags": false,
         "HealthCheckGracePeriodSeconds": 60,
         "LaunchType": "FARGATE",

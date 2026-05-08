@@ -53,7 +53,7 @@ export class AiStack extends cdk.Stack {
 
     // KB itself is created via custom resource or manually if Bedrock CFN gaps;
     // for now expose a placeholder ID (overwritten when KB is provisioned).
-    this.kbId = cdk.Fn.importValue('GccBedrockKbId').toString();
+    this.kbId = 'PLACEHOLDER-KB-ID';   // Plan 5 polish: replace with real KB after KB provisioning
 
     // ── AgentCore Memory (custom resource — same pattern as retail ADR 0001) ──
     // Plan 1에서는 placeholder string으로 두고, 실제 생성은 retail의 패턴 그대로

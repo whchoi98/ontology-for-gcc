@@ -1,199 +1,168 @@
 import * as cdk from 'aws-cdk-lib';
-import { Stack, StackProps, RemovalPolicy, CfnOutput, Tags } from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as secrets from 'aws-cdk-lib/aws-secretsmanager';
 import { Construct } from 'constructs';
 
-export interface ComputeStackProps extends StackProps {
-  projectName: string;
-  envName: string;
+export interface ComputeStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
+  appSg: ec2.SecurityGroup;
   albSg: ec2.SecurityGroup;
-  webSg: ec2.SecurityGroup;
-  apiSg: ec2.SecurityGroup;
+  neptuneEndpoint: string;
+  openSearchEndpoint: string;
+  rawDocsBucket: s3.IBucket;
+  uploadsBucket: s3.IBucket;
+  syntheticDataBucket: s3.IBucket;
+  bedrockKbId: string;
+  bedrockGuardrailId: string;
+  agentCoreMemoryId: string;
 }
 
-export class ComputeStack extends Stack {
-  public readonly cluster: ecs.Cluster;
+export class ComputeStack extends cdk.Stack {
   public readonly alb: elbv2.ApplicationLoadBalancer;
-  public readonly webRepo: ecr.Repository;
-  public readonly apiRepo: ecr.Repository;
-  public readonly apiTaskRole: iam.Role;
-  public readonly webTaskRole: iam.Role;
+  public readonly apiServiceArn: string;
+  public readonly webServiceArn: string;
 
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
-    const { projectName, envName, vpc, albSg, webSg, apiSg } = props;
-    const prefix = `${projectName}-${envName}`;
 
-    // ==== ECR (×2) ====
-    this.webRepo = new ecr.Repository(this, 'WebRepo', {
-      repositoryName: `${prefix}-web`,
-      imageScanOnPush: true,
-      removalPolicy: RemovalPolicy.DESTROY,
-      emptyOnDelete: true,
-    });
-    this.apiRepo = new ecr.Repository(this, 'ApiRepo', {
-      repositoryName: `${prefix}-api`,
-      imageScanOnPush: true,
-      removalPolicy: RemovalPolicy.DESTROY,
-      emptyOnDelete: true,
+    const cluster = new ecs.Cluster(this, 'Cluster', {
+      vpc: props.vpc,
+      clusterName: 'ontology-gcc-dev-cluster',
+      containerInsights: true,
     });
 
-    // ==== ECS Cluster ====
-    this.cluster = new ecs.Cluster(this, 'Cluster', {
-      clusterName: `${prefix}-cluster`,
-      vpc,
-      containerInsightsV2: ecs.ContainerInsights.ENABLED,
+    const apiRepo = new ecr.Repository(this, 'ApiRepo', {
+      repositoryName: 'ontology-gcc-dev-api',
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+    const webRepo = new ecr.Repository(this, 'WebRepo', {
+      repositoryName: 'ontology-gcc-dev-web',
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
 
-    // ==== Task Roles ====
-    this.webTaskRole = new iam.Role(this, 'WebTaskRole', {
-      roleName: `${prefix}-ecs-task-role-web`,
+    const originAuthSecret = new secrets.Secret(this, 'OriginAuthSecret', {
+      secretName: 'ontology-gcc-dev/origin-auth',
+      generateSecretString: { passwordLength: 48, excludePunctuation: true },
+    });
+
+    const taskRole = new iam.Role(this, 'TaskRole', {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
     });
-    this.apiTaskRole = new iam.Role(this, 'ApiTaskRole', {
-      roleName: `${prefix}-ecs-task-role-api`,
-      assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
-    });
-    this.apiTaskRole.addToPolicy(new iam.PolicyStatement({
-      actions: [
-        'bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream',
-        'bedrock:Retrieve', 'bedrock:RetrieveAndGenerate',
-        'bedrock:ApplyGuardrail',
-      ],
+    taskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('NeptuneFullAccess'));
+    taskRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:InvokeModel', 'bedrock:Converse', 'bedrock:Retrieve',
+                'bedrock:ApplyGuardrail', 'aoss:APIAccessAll'],
       resources: ['*'],
     }));
-    this.apiTaskRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['neptune-db:*'],
-      resources: [`arn:aws:neptune-db:${this.region}:${this.account}:*/*`],
-    }));
-    this.apiTaskRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['aoss:APIAccessAll'],
-      resources: [`arn:aws:aoss:${this.region}:${this.account}:collection/*`],
-    }));
-    this.apiTaskRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['secretsmanager:GetSecretValue'],
-      resources: [`arn:aws:secretsmanager:${this.region}:${this.account}:secret:${prefix}-*`],
-    }));
+    props.rawDocsBucket.grantReadWrite(taskRole);
+    props.uploadsBucket.grantReadWrite(taskRole);
+    props.syntheticDataBucket.grantReadWrite(taskRole);
+    originAuthSecret.grantRead(taskRole);
 
-    // ==== Web Task Definition (ARM64, 0.5 vCPU / 1 GB) ====
-    const webLogs = new logs.LogGroup(this, 'WebLogs', {
-      logGroupName: `/aws/ecs/${prefix}-web`,
-      retention: logs.RetentionDays.ONE_MONTH,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
-    const webTask = new ecs.FargateTaskDefinition(this, 'WebTask', {
-      family: `${prefix}-web`,
-      cpu: 512,
-      memoryLimitMiB: 1024,
+    // ── API task ──
+    const apiTask = new ecs.FargateTaskDefinition(this, 'ApiTask', {
+      cpu: 1024, memoryLimitMiB: 2048,
       runtimePlatform: {
         cpuArchitecture: ecs.CpuArchitecture.ARM64,
         operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
       },
-      taskRole: this.webTaskRole,
+      taskRole,
+    });
+    apiTask.addContainer('api', {
+      image: ecs.ContainerImage.fromEcrRepository(apiRepo, 'latest'),
+      logging: ecs.LogDrivers.awsLogs({
+        streamPrefix: 'api',
+        logRetention: logs.RetentionDays.ONE_MONTH,
+      }),
+      portMappings: [{ containerPort: 8000 }],
+      environment: {
+        AWS_REGION: cdk.Stack.of(this).region,
+        NEPTUNE_ENDPOINT: props.neptuneEndpoint,
+        OPENSEARCH_ENDPOINT: props.openSearchEndpoint,
+        OPENSEARCH_INDEX: 'ontology-gcc-dev-kb-index',
+        BEDROCK_CHAT_MODEL_ID: 'global.anthropic.claude-sonnet-4-6',
+        BEDROCK_EMBED_MODEL_ID: 'global.cohere.embed-v4:0',
+        BEDROCK_KB_ID: props.bedrockKbId,
+        BEDROCK_GUARDRAIL_ID: props.bedrockGuardrailId,
+        AGENTCORE_MEMORY_ID: props.agentCoreMemoryId,
+        RAW_DOCS_BUCKET: props.rawDocsBucket.bucketName,
+        UPLOADS_BUCKET: props.uploadsBucket.bucketName,
+        SYNTHETIC_DATA_BUCKET: props.syntheticDataBucket.bucketName,
+        ONTOLOGY_ENV: 'dev',
+        DEMO_PUBLIC_MODE: 'false',
+      },
+      secrets: { ORIGIN_AUTH_TOKEN: ecs.Secret.fromSecretsManager(originAuthSecret) },
+    });
+
+    // ── Web task ──
+    const webTask = new ecs.FargateTaskDefinition(this, 'WebTask', {
+      cpu: 512, memoryLimitMiB: 1024,
+      runtimePlatform: {
+        cpuArchitecture: ecs.CpuArchitecture.ARM64,
+        operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
+      },
     });
     webTask.addContainer('web', {
-      containerName: 'web',
-      image: ecs.ContainerImage.fromEcrRepository(this.webRepo, 'latest'),
+      image: ecs.ContainerImage.fromEcrRepository(webRepo, 'latest'),
+      logging: ecs.LogDrivers.awsLogs({
+        streamPrefix: 'web',
+        logRetention: logs.RetentionDays.ONE_MONTH,
+      }),
       portMappings: [{ containerPort: 3000 }],
-      logging: ecs.LogDrivers.awsLogs({ logGroup: webLogs, streamPrefix: 'web' }),
       environment: {
         NEXT_PUBLIC_API_BASE: '/api',
       },
     });
 
-    // ==== API Task Definition (ARM64, 1 vCPU / 2 GB) ====
-    const apiLogs = new logs.LogGroup(this, 'ApiLogs', {
-      logGroupName: `/aws/ecs/${prefix}-api`,
-      retention: logs.RetentionDays.ONE_MONTH,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
-    const apiTask = new ecs.FargateTaskDefinition(this, 'ApiTask', {
-      family: `${prefix}-api`,
-      cpu: 1024,
-      memoryLimitMiB: 2048,
-      runtimePlatform: {
-        cpuArchitecture: ecs.CpuArchitecture.ARM64,
-        operatingSystemFamily: ecs.OperatingSystemFamily.LINUX,
-      },
-      taskRole: this.apiTaskRole,
-    });
-    apiTask.addContainer('api', {
-      containerName: 'api',
-      image: ecs.ContainerImage.fromEcrRepository(this.apiRepo, 'latest'),
-      portMappings: [{ containerPort: 8000 }],
-      logging: ecs.LogDrivers.awsLogs({ logGroup: apiLogs, streamPrefix: 'api' }),
-      environment: {
-        AWS_REGION: this.region,
-        NEPTUNE_ENDPOINT: cdk.Fn.sub('https://${Endpoint}:8182', {
-          Endpoint: cdk.Fn.importValue(`${prefix}-neptune-endpoint`),
-        }),
-        // os-endpoint export is "https://<host>" — strip prefix to get bare host
-        OPENSEARCH_HOST: cdk.Fn.select(2, cdk.Fn.split('/', cdk.Fn.importValue(`${prefix}-os-endpoint`))),
-        BEDROCK_GUARDRAIL_ID: cdk.Fn.importValue(`${prefix}-guardrail-id`),
-        AURORA_SECRET_ARN: cdk.Fn.importValue(`${prefix}-aurora-secret-arn`),
-      },
-    });
-
-    // ==== Services ====
-    // Plan 2 Tasks 26-28: Web image built + pushed; desiredCount 0 → 2.
-    const webService = new ecs.FargateService(this, 'WebService', {
-      serviceName: `${prefix}-web`,
-      cluster: this.cluster,
-      taskDefinition: webTask,
-      desiredCount: 2,
-      securityGroups: [webSg],
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-      assignPublicIp: false,
-    });
     const apiService = new ecs.FargateService(this, 'ApiService', {
-      serviceName: `${prefix}-api`,
-      cluster: this.cluster,
+      cluster,
+      serviceName: 'ontology-gcc-dev-api',
       taskDefinition: apiTask,
       desiredCount: 2,
-      securityGroups: [apiSg],
+      securityGroups: [props.appSg],
+      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
+      assignPublicIp: false,
+    });
+    const webService = new ecs.FargateService(this, 'WebService', {
+      cluster,
+      serviceName: 'ontology-gcc-dev-web',
+      taskDefinition: webTask,
+      desiredCount: 2,
+      securityGroups: [props.appSg],
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       assignPublicIp: false,
     });
 
-    // ==== ALB + Listener + Target Groups ====
     this.alb = new elbv2.ApplicationLoadBalancer(this, 'Alb', {
-      loadBalancerName: `${prefix}-alb`,
-      vpc,
+      vpc: props.vpc,
       internetFacing: true,
-      securityGroup: albSg,
+      securityGroup: props.albSg,
       vpcSubnets: { subnetType: ec2.SubnetType.PUBLIC },
     });
-    const listener = this.alb.addListener('HttpListener', { port: 80, open: false });
+    const listener = this.alb.addListener('Http', { port: 80, open: false });
 
-    listener.addTargets('WebTarget', {
-      targetGroupName: `${prefix}-tg-web`,
-      port: 3000,
-      protocol: elbv2.ApplicationProtocol.HTTP,
-      targets: [webService],
-      healthCheck: { path: '/api/health-web', healthyHttpCodes: '200' },
-    });
-    listener.addTargets('ApiTarget', {
-      targetGroupName: `${prefix}-tg-api`,
+    listener.addTargets('ApiTargets', {
       port: 8000,
-      protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [apiService],
       healthCheck: { path: '/healthz', healthyHttpCodes: '200' },
+      conditions: [elbv2.ListenerCondition.pathPatterns(['/api/*', '/healthz'])],
       priority: 10,
-      conditions: [elbv2.ListenerCondition.pathPatterns(['/api/*'])],
+    });
+    listener.addTargets('WebTargets', {
+      port: 3000,
+      targets: [webService],
+      healthCheck: { path: '/', healthyHttpCodes: '200,307' },
     });
 
-    Tags.of(this).add('Project', projectName);
-    Tags.of(this).add('Env', envName);
+    this.apiServiceArn = apiService.serviceArn;
+    this.webServiceArn = webService.serviceArn;
 
-    new CfnOutput(this, 'AlbDnsName',  { value: this.alb.loadBalancerDnsName, exportName: `${prefix}-alb-dns` });
-    new CfnOutput(this, 'ClusterName', { value: this.cluster.clusterName,     exportName: `${prefix}-cluster-name` });
-    new CfnOutput(this, 'WebRepoUri',  { value: this.webRepo.repositoryUri,   exportName: `${prefix}-web-repo-uri` });
-    new CfnOutput(this, 'ApiRepoUri',  { value: this.apiRepo.repositoryUri,   exportName: `${prefix}-api-repo-uri` });
+    new cdk.CfnOutput(this, 'AlbDnsName', { value: this.alb.loadBalancerDnsName });
   }
 }

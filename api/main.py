@@ -23,7 +23,7 @@ app.add_middleware(CognitoBearerAuth, exempt_paths=["/healthz", "/docs", "/opena
 
 @app.get("/healthz")
 def healthz():
-    return {"status": "ok", "version": app.version}
+    return {"status": "ok"}
 
 
 # Routers registered in Tasks 16-25 — placeholder import here, fail-soft if not yet present

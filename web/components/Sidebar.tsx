@@ -40,6 +40,8 @@ const SECTIONS: Section[] = [
       { href: '/eight-d',      icon: ClipboardList,   label: '8D / RCA',        badge: 'J' },
       { href: '/esg',          icon: Leaf,            label: 'ESG / CBAM',      badge: 'K' },
       { href: '/pdm',          icon: Activity,        label: 'PdM / IoT',       badge: 'L' },
+      { href: '/journey',      icon: MapPin,          label: '고객 통합 여정',  badge: 'M' },
+      { href: '/weather',      icon: Cloud,           label: '날씨 × 주유',     badge: 'N' },
     ],
   },
   {

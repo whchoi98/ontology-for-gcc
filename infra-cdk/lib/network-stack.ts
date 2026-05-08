@@ -1,105 +1,79 @@
-import { Stack, StackProps, CfnOutput, Fn, Tags } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import { Construct } from 'constructs';
 
-export interface NetworkStackProps extends StackProps {
-  projectName: string;
-  envName: string;
-  /** CloudFormation export name from retail's network stack carrying the VPC ID. */
-  retailVpcExportName: string;
-  /** Optional explicit VPC ID (overrides export, useful for tests). */
-  vpcIdOverride?: string;
-  /** AWS-managed prefix list for CloudFront origin-facing IPs. */
-  cloudfrontOriginPrefixListId?: string;
-  /** Optional private subnet IDs (for test contexts where the VPC is a stub). */
-  privateSubnetIds?: string[];
-  /** Optional public subnet IDs (for test contexts where the VPC is a stub). */
-  publicSubnetIds?: string[];
+export interface NetworkStackProps extends cdk.StackProps {
+  retailVpc: {
+    vpcId: string;
+    availabilityZones: string[];
+    publicSubnetIds: string[];
+    privateSubnetIds: string[];
+    isolatedSubnetIds: string[];
+  };
 }
 
-/**
- * NetworkStack imports retail's VPC (no new VPC created) and provisions only
- * the gcc-prefixed security groups used by ALB / ECS / Aurora / Neptune.
- *
- * Spec § D.2 — VPC sharing: same 10.20.0.0/16, same subnets, same NAT.
- * Retail SGs are NOT modified. retail's `vpce-sg` permits VPC CIDR so gcc ENIs
- * automatically reach the existing VPC Endpoints.
- */
-export class NetworkStack extends Stack {
+export class NetworkStack extends cdk.Stack {
   public readonly vpc: ec2.IVpc;
-  public readonly albSg: ec2.SecurityGroup;
-  public readonly webSg: ec2.SecurityGroup;
-  public readonly apiSg: ec2.SecurityGroup;
-  public readonly auroraSg: ec2.SecurityGroup;
+  public readonly appSg: ec2.SecurityGroup;
   public readonly neptuneSg: ec2.SecurityGroup;
+  public readonly osSg: ec2.SecurityGroup;
+  public readonly albSg: ec2.SecurityGroup;
 
   constructor(scope: Construct, id: string, props: NetworkStackProps) {
     super(scope, id, props);
 
-    const { projectName, envName, retailVpcExportName, vpcIdOverride } = props;
-    const cfPrefixListId = props.cloudfrontOriginPrefixListId ?? 'pl-22a6434b';
+    const { retailVpc } = props;
 
-    const vpcId = vpcIdOverride ?? Fn.importValue(retailVpcExportName);
-    // Derive AZ list from the number of subnets provided (retail VPC uses 2 AZs: a + b).
-    const azCount = props.privateSubnetIds?.length ?? props.publicSubnetIds?.length;
-    const availabilityZones = azCount
-      ? ['ap-northeast-2a', 'ap-northeast-2b', 'ap-northeast-2c'].slice(0, azCount)
-      : Fn.getAzs();
     this.vpc = ec2.Vpc.fromVpcAttributes(this, 'RetailVpc', {
-      vpcId,
-      availabilityZones,
-      // Subnets are discovered at deploy time via Vpc.fromLookup in production;
-      // for synth we accept that subnet IDs are not statically required by SG creation.
-      ...(props.privateSubnetIds ? { privateSubnetIds: props.privateSubnetIds } : {}),
-      ...(props.publicSubnetIds  ? { publicSubnetIds:  props.publicSubnetIds  } : {}),
+      vpcId: retailVpc.vpcId,
+      availabilityZones: retailVpc.availabilityZones,
+      publicSubnetIds: retailVpc.publicSubnetIds,
+      privateSubnetIds: retailVpc.privateSubnetIds,
+      isolatedSubnetIds: retailVpc.isolatedSubnetIds,
     });
 
-    this.albSg = new ec2.SecurityGroup(this, 'GccAlbSg', {
+    this.albSg = new ec2.SecurityGroup(this, 'AlbSg', {
       vpc: this.vpc,
-      description: 'gcc-alb-sg: CloudFront origin-facing prefix list ingress',
+      securityGroupName: 'gcc-alb-sg',
+      description: 'GCC ALB — ingress from CloudFront prefix list only',
       allowAllOutbound: true,
+    });
+
+    const cfPrefixList = ec2.PrefixList.fromLookup(this, 'CloudFrontPrefixList', {
+      prefixListName: 'com.amazonaws.global.cloudfront.origin-facing',
     });
     this.albSg.addIngressRule(
-      ec2.Peer.prefixList(cfPrefixListId),
+      ec2.Peer.prefixList(cfPrefixList.prefixListId),
       ec2.Port.tcp(80),
-      'CloudFront to ALB :80',
+      'CloudFront origins',
     );
 
-    this.webSg = new ec2.SecurityGroup(this, 'GccWebSg', {
+    this.appSg = new ec2.SecurityGroup(this, 'AppSg', {
       vpc: this.vpc,
-      description: 'gcc-web-sg: Next.js Fargate :3000',
+      securityGroupName: 'gcc-app-sg',
+      description: 'GCC ECS tasks (api+web)',
       allowAllOutbound: true,
     });
-    this.webSg.addIngressRule(this.albSg, ec2.Port.tcp(3000), 'ALB to web :3000');
+    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(8000), 'ALB → api');
+    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(3000), 'ALB → web');
 
-    this.apiSg = new ec2.SecurityGroup(this, 'GccApiSg', {
+    this.neptuneSg = new ec2.SecurityGroup(this, 'NeptuneSg', {
       vpc: this.vpc,
-      description: 'gcc-api-sg: FastAPI Fargate :8000',
-      allowAllOutbound: true,
+      securityGroupName: 'gcc-neptune-sg',
+      description: 'GCC Neptune — ingress from gcc-app-sg only',
+      allowAllOutbound: false,
     });
-    this.apiSg.addIngressRule(this.albSg, ec2.Port.tcp(8000), 'ALB to api :8000');
+    this.neptuneSg.addIngressRule(this.appSg, ec2.Port.tcp(8182), 'GCC api → Neptune');
 
-    this.auroraSg = new ec2.SecurityGroup(this, 'GccAuroraSg', {
+    this.osSg = new ec2.SecurityGroup(this, 'OsSg', {
       vpc: this.vpc,
-      description: 'gcc-aurora-sg: api to Aurora port 5432',
-      allowAllOutbound: true,
+      securityGroupName: 'gcc-os-sg',
+      description: 'GCC OpenSearch Serverless VPC endpoint',
+      allowAllOutbound: false,
     });
-    this.auroraSg.addIngressRule(this.apiSg, ec2.Port.tcp(5432), 'api to Aurora');
+    this.osSg.addIngressRule(this.appSg, ec2.Port.tcp(443), 'GCC api → OS');
 
-    this.neptuneSg = new ec2.SecurityGroup(this, 'GccNeptuneSg', {
-      vpc: this.vpc,
-      description: 'gcc-neptune-sg: api to Neptune port 8182',
-      allowAllOutbound: true,
-    });
-    this.neptuneSg.addIngressRule(this.apiSg, ec2.Port.tcp(8182), 'api to Neptune Gremlin');
-
-    Tags.of(this).add('Project', projectName);
-    Tags.of(this).add('Env', envName);
-
-    new CfnOutput(this, 'GccApiSgId',     { value: this.apiSg.securityGroupId,     exportName: `${projectName}-${envName}-api-sg-id` });
-    new CfnOutput(this, 'GccAlbSgId',     { value: this.albSg.securityGroupId,     exportName: `${projectName}-${envName}-alb-sg-id` });
-    new CfnOutput(this, 'GccWebSgId',     { value: this.webSg.securityGroupId,     exportName: `${projectName}-${envName}-web-sg-id` });
-    new CfnOutput(this, 'GccAuroraSgId',  { value: this.auroraSg.securityGroupId,  exportName: `${projectName}-${envName}-aurora-sg-id` });
-    new CfnOutput(this, 'GccNeptuneSgId', { value: this.neptuneSg.securityGroupId, exportName: `${projectName}-${envName}-neptune-sg-id` });
+    new cdk.CfnOutput(this, 'GccAppSgId', { value: this.appSg.securityGroupId });
+    new cdk.CfnOutput(this, 'GccNeptuneSgId', { value: this.neptuneSg.securityGroupId });
   }
 }

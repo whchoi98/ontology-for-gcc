@@ -1,135 +1,130 @@
-import { Stack, StackProps, RemovalPolicy, CfnOutput, Tags } from 'aws-cdk-lib';
+import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
-import * as kms from 'aws-cdk-lib/aws-kms';
-import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as rds from 'aws-cdk-lib/aws-rds';
 import * as neptune from 'aws-cdk-lib/aws-neptune';
 import * as oss from 'aws-cdk-lib/aws-opensearchserverless';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as s3 from 'aws-cdk-lib/aws-s3';
 import { Construct } from 'constructs';
 
-export interface DataStackProps extends StackProps {
-  projectName: string;
-  envName: string;
+export interface DataStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
+  appSg: ec2.SecurityGroup;
   neptuneSg: ec2.SecurityGroup;
-  auroraSg: ec2.SecurityGroup;
+  osSg: ec2.SecurityGroup;
 }
 
-export class DataStack extends Stack {
+export class DataStack extends cdk.Stack {
   public readonly neptuneEndpoint: string;
-  public readonly auroraSecretArn: string;
-  public readonly osCollectionEndpoint: string;
-  public readonly buckets: { rawDocs: s3.Bucket; synthetic: s3.Bucket; snapshots: s3.Bucket; uploads: s3.Bucket };
+  public readonly neptuneClusterId: string;
+  public readonly openSearchEndpoint: string;
+  public readonly rawDocsBucket: s3.IBucket;
+  public readonly uploadsBucket: s3.IBucket;
+  public readonly syntheticDataBucket: s3.IBucket;
+  public readonly bulkLoaderRoleArn: string;
 
   constructor(scope: Construct, id: string, props: DataStackProps) {
     super(scope, id, props);
-    const { projectName, envName, vpc, neptuneSg, auroraSg } = props;
-    const prefix = `${projectName}-${envName}`;
 
-    // ==== KMS x5 ====
-    const keyS3      = new kms.Key(this, 'S3Key',      { alias: `${prefix}-s3-key`,      enableKeyRotation: true });
-    const keyAurora  = new kms.Key(this, 'AuroraKey',  { alias: `${prefix}-aurora-key`,  enableKeyRotation: true });
-    const keyNeptune = new kms.Key(this, 'NeptuneKey', { alias: `${prefix}-neptune-key`, enableKeyRotation: true });
-    const keyOs      = new kms.Key(this, 'OsKey',      { alias: `${prefix}-os-key`,      enableKeyRotation: true });
-    new kms.Key(this, 'LogsKey',    { alias: `${prefix}-logs-key`,    enableKeyRotation: true });
-
-    // ==== S3 (4 buckets) ====
-    const mkBucket = (logicalId: string, suffix: string) =>
-      new s3.Bucket(this, logicalId, {
-        bucketName: `${prefix}-${suffix}`,
-        encryption: s3.BucketEncryption.KMS,
-        encryptionKey: keyS3,
-        blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
-        enforceSSL: true,
-        removalPolicy: RemovalPolicy.DESTROY,  // demo env
-        autoDeleteObjects: true,
-        versioned: false,
-      });
-    const rawDocs   = mkBucket('RawDocsBucket',   'raw-docs');
-    const synthetic = mkBucket('SyntheticBucket', 'synthetic');
-    const snapshots = mkBucket('SnapshotsBucket', 'ontology-snapshots');
-    const uploads   = mkBucket('UploadsBucket',   'uploads');
-    this.buckets = { rawDocs, synthetic, snapshots, uploads };
-
-    // ==== Neptune Serverless (2 NCU baseline) ====
-    const neptuneSubnetGroup = new neptune.CfnDBSubnetGroup(this, 'NeptuneSubnetGroup', {
-      dbSubnetGroupName: `${prefix}-neptune-sg-grp`,
-      dbSubnetGroupDescription: 'gcc Neptune subnet group (retail VPC private subnets)',
-      subnetIds: vpc.privateSubnets.map(s => s.subnetId),
+    // ── S3 buckets ─────────────────────────────────────────────────
+    const account = cdk.Stack.of(this).account;
+    this.rawDocsBucket = new s3.Bucket(this, 'RawDocs', {
+      bucketName: `ontology-gcc-dev-raw-docs-${account}`,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
     });
-    const neptuneCluster = new neptune.CfnDBCluster(this, 'NeptuneCluster', {
-      dbClusterIdentifier: `${prefix}-neptune`,
-      dbSubnetGroupName: neptuneSubnetGroup.ref,
-      vpcSecurityGroupIds: [neptuneSg.securityGroupId],
-      kmsKeyId: keyNeptune.keyArn,
-      storageEncrypted: true,
+    this.uploadsBucket = new s3.Bucket(this, 'Uploads', {
+      bucketName: `ontology-gcc-dev-uploads-${account}`,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+    this.syntheticDataBucket = new s3.Bucket(this, 'Synthetic', {
+      bucketName: `ontology-gcc-dev-synthetic-data-${account}`,
+      encryption: s3.BucketEncryption.S3_MANAGED,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+      removalPolicy: cdk.RemovalPolicy.RETAIN,
+    });
+
+    // ── Neptune Bulk Loader IAM (ADR 0003 prep) ────────────────────
+    const bulkLoaderRole = new iam.Role(this, 'NeptuneBulkLoaderRole', {
+      roleName: 'gcc-neptune-bulk-loader-role',
+      assumedBy: new iam.ServicePrincipal('rds.amazonaws.com'),
+    });
+    this.syntheticDataBucket.grantRead(bulkLoaderRole);
+    this.bulkLoaderRoleArn = bulkLoaderRole.roleArn;
+
+    // ── VPC endpoint for S3 (Neptune Loader needs S3 reach) ────────
+    new ec2.GatewayVpcEndpoint(this, 'S3VpcEndpoint', {
+      vpc: props.vpc,
+      service: ec2.GatewayVpcEndpointAwsService.S3,
+      subnets: [{ subnetType: ec2.SubnetType.PRIVATE_ISOLATED }],
+    });
+
+    // ── Neptune ────────────────────────────────────────────────────
+    const subnetGroup = new neptune.CfnDBSubnetGroup(this, 'NeptuneSubnetGroup', {
+      dbSubnetGroupDescription: 'GCC Neptune subnets',
+      subnetIds: props.vpc.selectSubnets({ subnetType: ec2.SubnetType.PRIVATE_ISOLATED }).subnetIds,
+      dbSubnetGroupName: 'gcc-neptune-subnets',
+    });
+
+    const cluster = new neptune.CfnDBCluster(this, 'NeptuneCluster', {
+      dbClusterIdentifier: 'ontology-gcc-dev-neptune',
+      engineVersion: '1.3.2.0',
+      dbSubnetGroupName: subnetGroup.dbSubnetGroupName,
+      vpcSecurityGroupIds: [props.neptuneSg.securityGroupId],
       iamAuthEnabled: true,
-      serverlessScalingConfiguration: { minCapacity: 1, maxCapacity: 8 },
-      engineVersion: '1.4.7.0',
+      associatedRoles: [{ roleArn: bulkLoaderRole.roleArn }],
     });
+    cluster.addDependency(subnetGroup);
+
     new neptune.CfnDBInstance(this, 'NeptuneInstance', {
-      dbClusterIdentifier: neptuneCluster.ref,
-      dbInstanceClass: 'db.serverless',
-      dbInstanceIdentifier: `${prefix}-neptune-1`,
+      dbInstanceClass: 'db.t4g.medium',
+      dbClusterIdentifier: cluster.ref,
+      dbInstanceIdentifier: 'ontology-gcc-dev-neptune-1',
     });
-    this.neptuneEndpoint = neptuneCluster.attrEndpoint;
 
-    // ==== Aurora PostgreSQL Serverless v2 ====
-    const auroraCluster = new rds.DatabaseCluster(this, 'AuroraCluster', {
-      engine: rds.DatabaseClusterEngine.auroraPostgres({ version: rds.AuroraPostgresEngineVersion.VER_15_8 }),
-      vpc, securityGroups: [auroraSg],
-      vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
-      writer: rds.ClusterInstance.serverlessV2('Writer', { autoMinorVersionUpgrade: true }),
-      serverlessV2MinCapacity: 0.5,
-      serverlessV2MaxCapacity: 2,
-      storageEncryptionKey: keyAurora,
-      removalPolicy: RemovalPolicy.DESTROY,
-      defaultDatabaseName: 'gcc',
-      credentials: rds.Credentials.fromGeneratedSecret('gcc_admin', {
-        secretName: `${prefix}-aurora-master`,
-      }),
-    });
-    this.auroraSecretArn = auroraCluster.secret!.secretArn;
+    this.neptuneEndpoint = cluster.attrEndpoint;
+    this.neptuneClusterId = cluster.ref;
 
-    // ==== OpenSearch Serverless (vector + nori) ====
-    // Encryption policy must exist before the collection is created.
-    const osEncPolicy = new oss.CfnSecurityPolicy(this, 'OsEncryptionPolicy', {
-      name: `${prefix}-os-enc`,
+    // ── OpenSearch Serverless ──────────────────────────────────────
+    const securityPolicy = new oss.CfnSecurityPolicy(this, 'OsSecurityPolicy', {
+      name: 'gcc-os-encryption',
       type: 'encryption',
       policy: JSON.stringify({
-        Rules: [{ ResourceType: 'collection', Resource: [`collection/${prefix}-search`] }],
-        AWSOwnedKey: false,
-        KmsARN: keyOs.keyArn,
+        Rules: [{ ResourceType: 'collection', Resource: ['collection/ontology-gcc-dev'] }],
+        AWSOwnedKey: true,
       }),
     });
-    // Network policy: public access allowed for dev (no VPCE yet).
-    // AllowFromPublic must be true when SourceVPCEs is absent/empty.
-    const osNetPolicy = new oss.CfnSecurityPolicy(this, 'OsNetworkPolicy', {
-      name: `${prefix}-os-net`,
+
+    const networkPolicy = new oss.CfnSecurityPolicy(this, 'OsNetworkPolicy', {
+      name: 'gcc-os-network',
       type: 'network',
-      policy: JSON.stringify([{
-        Rules: [{ ResourceType: 'collection', Resource: [`collection/${prefix}-search`] }],
-        AllowFromPublic: true,
-      }]),
+      policy: JSON.stringify([
+        {
+          Rules: [
+            { ResourceType: 'collection', Resource: ['collection/ontology-gcc-dev'] },
+            { ResourceType: 'dashboard', Resource: ['collection/ontology-gcc-dev'] },
+          ],
+          AllowFromPublic: false,
+          SourceVPCEs: [],  // VPC endpoint added below
+        },
+      ]),
     });
-    const osCollection = new oss.CfnCollection(this, 'OsCollection', {
-      name: `${prefix}-search`,
+
+    const collection = new oss.CfnCollection(this, 'OsCollection', {
+      name: 'ontology-gcc-dev',
       type: 'VECTORSEARCH',
-      description: 'gcc hybrid Nori BM25 KNN Telemetry timeseries',
     });
-    // Ensure policies are created before the collection.
-    osCollection.addDependency(osEncPolicy);
-    osCollection.addDependency(osNetPolicy);
-    this.osCollectionEndpoint = osCollection.attrCollectionEndpoint;
+    collection.addDependency(securityPolicy);
+    collection.addDependency(networkPolicy);
 
-    Tags.of(this).add('Project', projectName);
-    Tags.of(this).add('Env', envName);
+    this.openSearchEndpoint = collection.attrCollectionEndpoint;
 
-    new CfnOutput(this, 'NeptuneEndpoint',      { value: this.neptuneEndpoint,      exportName: `${prefix}-neptune-endpoint` });
-    new CfnOutput(this, 'AuroraSecretArn',      { value: this.auroraSecretArn,      exportName: `${prefix}-aurora-secret-arn` });
-    new CfnOutput(this, 'OsCollectionEndpoint', { value: this.osCollectionEndpoint, exportName: `${prefix}-os-endpoint` });
-    new CfnOutput(this, 'RawDocsBucketName',    { value: rawDocs.bucketName,        exportName: `${prefix}-raw-docs-bucket` });
-    new CfnOutput(this, 'UploadsBucketName',    { value: uploads.bucketName,        exportName: `${prefix}-uploads-bucket` });
-    new CfnOutput(this, 'OsCollectionArn',      { value: osCollection.attrArn,      exportName: `${prefix}-os-collection-arn` });
+    // ── Outputs ────────────────────────────────────────────────────
+    new cdk.CfnOutput(this, 'NeptuneEndpoint', { value: this.neptuneEndpoint });
+    new cdk.CfnOutput(this, 'OpenSearchEndpoint', { value: this.openSearchEndpoint });
+    new cdk.CfnOutput(this, 'BulkLoaderRoleArn', { value: this.bulkLoaderRoleArn });
+    new cdk.CfnOutput(this, 'SyntheticBucketName', { value: this.syntheticDataBucket.bucketName });
   }
 }

@@ -1416,7 +1416,7 @@ exports[`GCC stacks snapshot data stack matches snapshot 1`] = `
         ],
         "DBClusterIdentifier": "ontology-gcc-dev-neptune",
         "DBSubnetGroupName": "gcc-neptune-subnets",
-        "EngineVersion": "1.3.2.0",
+        "EngineVersion": "1.4.7.0",
         "IamAuthEnabled": true,
         "VpcSecurityGroupIds": [
           {

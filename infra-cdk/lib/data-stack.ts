@@ -70,7 +70,7 @@ export class DataStack extends cdk.Stack {
 
     const cluster = new neptune.CfnDBCluster(this, 'NeptuneCluster', {
       dbClusterIdentifier: 'ontology-gcc-dev-neptune',
-      engineVersion: '1.3.2.0',
+      engineVersion: '1.4.7.0',
       dbSubnetGroupName: subnetGroup.dbSubnetGroupName,
       vpcSecurityGroupIds: [props.neptuneSg.securityGroupId],
       iamAuthEnabled: true,

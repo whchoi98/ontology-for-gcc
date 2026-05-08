@@ -10,7 +10,7 @@ from api.services.lane_router import simulate_reroute
 from api.services.carbon_calc import cbam_calc
 
 router = APIRouter(tags=["scm_lane"])
-log = logging.getLogger("mfg.scm_lane")
+log = logging.getLogger("gcc.scm_lane")
 
 _REGIONS = ["KR", "CN", "VN", "MX", "PL", "US", "IN"]
 _MODES = ["SEA", "AIR", "RAIL", "ROAD"]

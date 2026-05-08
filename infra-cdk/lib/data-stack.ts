@@ -54,7 +54,7 @@ export class DataStack extends Stack {
     // ==== Neptune Serverless (2 NCU baseline) ====
     const neptuneSubnetGroup = new neptune.CfnDBSubnetGroup(this, 'NeptuneSubnetGroup', {
       dbSubnetGroupName: `${prefix}-neptune-sg-grp`,
-      dbSubnetGroupDescription: 'mfg Neptune subnet group (retail VPC private subnets)',
+      dbSubnetGroupDescription: 'gcc Neptune subnet group (retail VPC private subnets)',
       subnetIds: vpc.privateSubnets.map(s => s.subnetId),
     });
     const neptuneCluster = new neptune.CfnDBCluster(this, 'NeptuneCluster', {
@@ -84,8 +84,8 @@ export class DataStack extends Stack {
       serverlessV2MaxCapacity: 2,
       storageEncryptionKey: keyAurora,
       removalPolicy: RemovalPolicy.DESTROY,
-      defaultDatabaseName: 'mfg',
-      credentials: rds.Credentials.fromGeneratedSecret('mfg_admin', {
+      defaultDatabaseName: 'gcc',
+      credentials: rds.Credentials.fromGeneratedSecret('gcc_admin', {
         secretName: `${prefix}-aurora-master`,
       }),
     });
@@ -115,7 +115,7 @@ export class DataStack extends Stack {
     const osCollection = new oss.CfnCollection(this, 'OsCollection', {
       name: `${prefix}-search`,
       type: 'VECTORSEARCH',
-      description: 'mfg hybrid Nori BM25 KNN Telemetry timeseries',
+      description: 'gcc hybrid Nori BM25 KNN Telemetry timeseries',
     });
     // Ensure policies are created before the collection.
     osCollection.addDependency(osEncPolicy);

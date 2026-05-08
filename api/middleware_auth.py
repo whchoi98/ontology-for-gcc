@@ -13,7 +13,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 from api.config import settings
 
-log = logging.getLogger("mfg.auth")
+log = logging.getLogger("gcc.auth")
 
 
 class CognitoBearerAuth(BaseHTTPMiddleware):
@@ -26,13 +26,13 @@ class CognitoBearerAuth(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if any(request.url.path.startswith(p) for p in self.exempt):
             return await call_next(request)
-        # Accept either Authorization: Bearer <token> OR mfg_id_token cookie
+        # Accept either Authorization: Bearer <token> OR gcc_id_token cookie
         auth = request.headers.get("authorization", "")
         token: str | None = None
         if auth.lower().startswith("bearer "):
             token = auth[7:].strip()
         if not token:
-            token = request.cookies.get("mfg_id_token")
+            token = request.cookies.get("gcc_id_token")
         if not token:
             log.warning("auth: no token for %s %s (cookies: %s)", request.method, request.url.path, list(request.cookies.keys()))
             return JSONResponse({"error": "authentication required"}, status_code=401)

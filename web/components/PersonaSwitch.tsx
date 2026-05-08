@@ -1,7 +1,7 @@
 'use client';
 
 // Global persona-switch widget rendered top-right of layout.
-// 5 fixed mfg personas (buyer / engineer / quality / scm / plant).
+// 5 fixed gcc personas (buyer / engineer / quality / scm / plant).
 // No API call — list is hardcoded.
 
 import { useRef, useState } from 'react';

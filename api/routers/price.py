@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from api.services.neptune import get_neptune
 
 router = APIRouter(tags=["price"])
-log = logging.getLogger("mfg.price")
+log = logging.getLogger("gcc.price")
 
 
 class PriceRequest(BaseModel):

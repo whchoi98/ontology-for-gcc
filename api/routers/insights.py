@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from api.services.neptune import get_neptune
 
 router = APIRouter(tags=["insights"])
-log = logging.getLogger("mfg.insights")
+log = logging.getLogger("gcc.insights")
 
 
 class InsightsRequest(BaseModel):

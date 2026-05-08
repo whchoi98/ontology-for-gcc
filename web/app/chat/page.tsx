@@ -74,7 +74,7 @@ export default function ChatPage() {
 
   // Generate a stable session id on mount (client-only — crypto.randomUUID is browser-safe in Next 14).
   useEffect(() => {
-    setSessionId(`mfg_${active}_${(globalThis.crypto?.randomUUID?.() ?? Date.now().toString(36))}`);
+    setSessionId(`gcc_${active}_${(globalThis.crypto?.randomUUID?.() ?? Date.now().toString(36))}`);
   }, [active]);
 
   // Auto-scroll to bottom as new tokens arrive
@@ -186,7 +186,7 @@ export default function ChatPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `mfg-chat-${sessionId.replace(/^mfg_/, "")}-${Date.now()}.md`;
+    a.download = `gcc-chat-${sessionId.replace(/^gcc_/, "")}-${Date.now()}.md`;
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -299,7 +299,7 @@ export default function ChatPage() {
         pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      pdf.save(`mfg-chat-${sessionId.replace(/^mfg_/, "")}-${Date.now()}.pdf`);
+      pdf.save(`gcc-chat-${sessionId.replace(/^gcc_/, "")}-${Date.now()}.pdf`);
     } finally {
       host.remove();
     }

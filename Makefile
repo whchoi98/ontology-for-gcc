@@ -40,7 +40,7 @@ load-graph:
 	NEPTUNE_ENDPOINT="$(NEPTUNE_ENDPOINT)" python3 -m data.load_graph --bom-edges
 
 load-search:
-	@echo "Indexing components into OpenSearch Serverless (mfg-search)..."
+	@echo "Indexing components into OpenSearch Serverless (gcc-search)..."
 	OPENSEARCH_HOST="$(OPENSEARCH_HOST)" AWS_REGION="$(AWS_REGION)" python3 -m data.load_search
 
 # ── verification queries (run from inside VPC after load) ────────────────────

@@ -1,6 +1,6 @@
 "use client";
 
-// PersonaContext — global "active persona" for the mfg demo.
+// PersonaContext — global "active persona" for the gcc demo.
 // 5 fixed personas (buyer / engineer / quality / scm / plant).
 // PersonaSwitch in the topbar writes; scenario pages read.
 // Backed by localStorage so choice survives reload.

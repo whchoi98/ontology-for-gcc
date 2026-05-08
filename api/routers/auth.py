@@ -19,7 +19,7 @@ CLIENT_ID = os.environ.get("COGNITO_CLIENT_ID", "422o42g8odcmv21860cu2jta4")
 APP_BASE = os.environ.get("APP_BASE_URL", "https://gcc-ontology.whchoi.net")
 CALLBACK_URL = f"{APP_BASE}/api/auth/callback"
 LOGOUT_URL = f"{APP_BASE}/api/auth/logout"
-COOKIE_NAME = "mfg_id_token"
+COOKIE_NAME = "gcc_id_token"
 
 
 @router.get("/login")
@@ -90,7 +90,7 @@ async def logout() -> RedirectResponse:
 
 @router.get("/whoami")
 async def whoami(request: Request) -> JSONResponse:
-    """Return auth status by inspecting the mfg_id_token cookie.
+    """Return auth status by inspecting the gcc_id_token cookie.
 
     This endpoint is exempt from the auth middleware (path startswith /api/auth).
     Returns { authenticated: true, email, sub } or { authenticated: false }.

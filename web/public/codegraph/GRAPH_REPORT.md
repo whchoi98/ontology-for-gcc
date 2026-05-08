@@ -219,7 +219,7 @@ Nodes (31): A(), b(), be(), C(), coerceApiParameters(), constructor(), F(), fe()
 
 ### Community 6 - "프로젝트 기초 구성"
 Cohesion: 0.07
-Nodes (27): code:bash (cd /home/ec2-user/my-project/ontology-for-gcc), code:bash (git add .), code:python ("""Validate that all 22 ontology classes have pydantic schem), code:bash (pytest tests/data/test_schemas.py -v), code:python ("""Pydantic schemas for 22 ontology classes (mfg).), code:bash (pytest tests/data/test_schemas.py -v), code:bash (git add data/schemas.py tests/data/test_schemas.py), code:python ("""Mock-only test — actual Bedrock calls are made by generat) (+19 more)
+Nodes (27): code:bash (cd /home/ec2-user/my-project/ontology-for-gcc), code:bash (git add .), code:python ("""Validate that all 22 ontology classes have pydantic schem), code:bash (pytest tests/data/test_schemas.py -v), code:python ("""Pydantic schemas for 22 ontology classes (gcc).), code:bash (pytest tests/data/test_schemas.py -v), code:bash (git add data/schemas.py tests/data/test_schemas.py), code:python ("""Mock-only test — actual Bedrock calls are made by generat) (+19 more)
 
 ### Community 7 - "인사이트 대시보드 페이지"
 Cohesion: 0.15
@@ -315,7 +315,7 @@ Nodes (9): test_customers_30_segments(), test_lanes_120_multimodal(), test_plant
 
 ### Community 30 - "커뮤니티 협업 플랫폼"
 Cohesion: 0.17
-Nodes (11): 13.1 mfg 특이 위험, 13.2 retail 공통 위험 (재사용), 13. Risk Register, 15. Out of Scope / Future Cards, 16. Open Questions / Default Assumptions, 2. Audience, 3. Decision Log, 9.1 ECS / ECR / KMS 명명 규약 (+3 more)
+Nodes (11): 13.1 gcc 특이 위험, 13.2 retail 공통 위험 (재사용), 13. Risk Register, 15. Out of Scope / Future Cards, 16. Open Questions / Default Assumptions, 2. Audience, 3. Decision Log, 9.1 ECS / ECR / KMS 명명 규약 (+3 more)
 
 ### Community 31 - "Neptune 온톨로지 업로더"
 Cohesion: 0.24
@@ -363,7 +363,7 @@ Nodes (6): handler(), https, renderResponse(), submitResponse(), url, withRetrie
 
 ### Community 42 - "인증 라우터"
 Cohesion: 0.2
-Nodes (9): callback(), login(), logout(), Cognito OAuth callback — exchanges auth code for tokens, sets cookie, redirects, Manual login entrypoint — redirects to Cognito Hosted UI., Exchange auth code for id_token, set cookie, redirect to home., Clear cookie and redirect to Cognito logout.      Cognito requires `logout_uri`, Return auth status by inspecting the mfg_id_token cookie.      This endpoint is (+1 more)
+Nodes (9): callback(), login(), logout(), Cognito OAuth callback — exchanges auth code for tokens, sets cookie, redirects, Manual login entrypoint — redirects to Cognito Hosted UI., Exchange auth code for id_token, set cookie, redirect to home., Clear cookie and redirect to Cognito logout.      Cognito requires `logout_uri`, Return auth status by inspecting the gcc_id_token cookie.      This endpoint is (+1 more)
 
 ### Community 43 - "8D 리포트 생성기"
 Cohesion: 0.2
@@ -503,7 +503,7 @@ Nodes (5): test_cbam_cn_codes(), test_cbam_regulation(), load_cbam_cn_codes(), l
 
 ### Community 77 - "제조 네트워크 아키텍처"
 Cohesion: 0.29
-Nodes (7): 5.1 시스템 다이어그램, 5.2 Network/Edge Topology (retail 공유), 5.3 Security Group Matrix (mfg 신규), 5.4 ALB Listener Rules (mfg 전용 ALB), 5. Architecture, code:block2 ([User · Browser]), code:block3 (Listener :80)
+Nodes (7): 5.1 시스템 다이어그램, 5.2 Network/Edge Topology (retail 공유), 5.3 Security Group Matrix (gcc 신규), 5.4 ALB Listener Rules (gcc 전용 ALB), 5. Architecture, code:block2 ([User · Browser]), code:block3 (Listener :80)
 
 ### Community 78 - "Bedrock 지식베이스 서비스"
 Cohesion: 0.29
@@ -543,11 +543,11 @@ Nodes (5): CarbonScope, ESGIndicator, generate_esg(), main(), ESGIndicator (100)
 
 ### Community 88 - "커뮤니티 그래프 엔진"
 Cohesion: 0.33
-Nodes (6): 4.1 시나리오 정의 (retail 8 변환 + mfg 4 신규), 4.2 페르소나 × 시나리오 매트릭스 (● Primary, ○ Secondary), 4.3 60분 타임라인 (시연자 안내), 4.4 핵심 wow 모멘트, 4. Demo Flow (60분 권장), code:block1 ([0:00–0:03] 오프닝 — AMZN Tech 5 페르소나 / 5 제품 라인 / 4 사업부 구조 소개)
+Nodes (6): 4.1 시나리오 정의 (retail 8 변환 + gcc 4 신규), 4.2 페르소나 × 시나리오 매트릭스 (● Primary, ○ Secondary), 4.3 60분 타임라인 (시연자 안내), 4.4 핵심 wow 모멘트, 4. Demo Flow (60분 권장), code:block1 ([0:00–0:03] 오프닝 — AMZN Tech 5 페르소나 / 5 제품 라인 / 4 사업부 구조 소개)
 
 ### Community 89 - "커뮤니티 협업 플랫폼"
 Cohesion: 0.33
-Nodes (6): 6.1 Edge / Auth (mfg 신규), 6.2 Compute (mfg 신규), 6.3 Data (mfg 신규), 6.4 AWS AI, 6.5 Observability / Security (mfg 신규), 6. Component Catalog
+Nodes (6): 6.1 Edge / Auth (gcc 신규), 6.2 Compute (gcc 신규), 6.3 Data (gcc 신규), 6.4 AWS AI, 6.5 Observability / Security (gcc 신규), 6. Component Catalog
 
 ### Community 90 - "운영 ESG 합성 데이터 생성기"
 Cohesion: 0.33
@@ -559,11 +559,11 @@ Nodes (6): code:python (# tests/data/test_customers_plants_lanes_gen.py), code:p
 
 ### Community 92 - "네트워크 스택 테스트"
 Cohesion: 0.33
-Nodes (6): code:typescript (// infra-cdk/test/network-stack.test.ts), code:bash (cd infra-cdk && npm test), code:typescript (import { Stack, StackProps, CfnOutput, Fn, Tags } from 'aws-), code:bash (cd infra-cdk && npm test -- network-stack), code:bash (git add infra-cdk/lib/network-stack.ts infra-cdk/test/networ), Task 28: NetworkStack — import retail VPC + create mfg SGs
+Nodes (6): code:typescript (// infra-cdk/test/network-stack.test.ts), code:bash (cd infra-cdk && npm test), code:typescript (import { Stack, StackProps, CfnOutput, Fn, Tags } from 'aws-), code:bash (cd infra-cdk && npm test -- network-stack), code:bash (git add infra-cdk/lib/network-stack.ts infra-cdk/test/networ), Task 28: NetworkStack — import retail VPC + create gcc SGs
 
 ### Community 93 - "소매 회귀 검증 로더"
 Cohesion: 0.33
-Nodes (6): code:bash (# Hit retail's existing CloudFront domain), code:bash (# Snapshot ingress rules of retail's apiSg before/after mfg ), code:bash (# Generate), code:bash (# Run a sanity openCypher), code:bash (git add docs/deploy-logs/), Task 37: retail demo regression check + run loaders end-to-end
+Nodes (6): code:bash (# Hit retail's existing CloudFront domain), code:bash (# Snapshot ingress rules of retail's apiSg before/after gcc ), code:bash (# Generate), code:bash (# Run a sanity openCypher), code:bash (git add docs/deploy-logs/), Task 37: retail demo regression check + run loaders end-to-end
 
 ### Community 94 - "CDK 배포 자동화"
 Cohesion: 0.33
@@ -703,7 +703,7 @@ Nodes (4): code:bash (pip install opensearch-py requests-aws4auth), code:python 
 
 ### Community 133 - "CDK 네트워크 합성"
 Cohesion: 0.5
-Nodes (4): code:bash (cd infra-cdk), code:bash (grep -A1 "RetailVpcId" /tmp/mfg-network-synth.yaml || \), code:bash (mkdir -p infra-cdk/test/__snapshots__), Task 29: cdk synth dry-run (NetworkStack only)
+Nodes (4): code:bash (cd infra-cdk), code:bash (grep -A1 "RetailVpcId" /tmp/gcc-network-synth.yaml || \), code:bash (mkdir -p infra-cdk/test/__snapshots__), Task 29: cdk synth dry-run (NetworkStack only)
 
 ### Community 134 - "무역협정 경로 재설정기"
 Cohesion: 0.5
@@ -758,7 +758,7 @@ Cohesion: 0.67
 Nodes (3): code:bash (for path in /api/search /api/chat /api/insights /api/spec-ma), code:bash (echo "Plan 2 deploy completed: $(date -u +%Y-%m-%dT%H:%M:%SZ), Task 28: Plan 2 self-review + handoff to Plan 3
 
 ## Knowledge Gaps
-- **658 isolated node(s):** `Pydantic schemas for 22 ontology classes (mfg).  Mirrors ontology spec § 8.1. Ea`, `Load synthetic NDJSON files into Neptune via openCypher batch MERGE.  Idempotent`, `Form an idempotent MERGE for one node. Param keys = props keys.`, `Return (frozen_credentials, region) for Neptune SigV4 signing.`, `POST to Neptune with botocore SigV4 signing.` (+653 more)
+- **658 isolated node(s):** `Pydantic schemas for 22 ontology classes (gcc).  Mirrors ontology spec § 8.1. Ea`, `Load synthetic NDJSON files into Neptune via openCypher batch MERGE.  Idempotent`, `Form an idempotent MERGE for one node. Param keys = props keys.`, `Return (frozen_credentials, region) for Neptune SigV4 signing.`, `POST to Neptune with botocore SigV4 signing.` (+653 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -775,7 +775,7 @@ _Questions this graph is uniquely positioned to answer:_
   _`len` has 62 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 18 inferred relationships involving `get_neptune()` (e.g. with `search()` and `_tool_neptune()`) actually correct?**
   _`get_neptune()` has 18 INFERRED edges - model-reasoned connections that need verification._
-- **What connects `Pydantic schemas for 22 ontology classes (mfg).  Mirrors ontology spec § 8.1. Ea`, `Load synthetic NDJSON files into Neptune via openCypher batch MERGE.  Idempotent`, `Form an idempotent MERGE for one node. Param keys = props keys.` to the rest of the system?**
+- **What connects `Pydantic schemas for 22 ontology classes (gcc).  Mirrors ontology spec § 8.1. Ea`, `Load synthetic NDJSON files into Neptune via openCypher batch MERGE.  Idempotent`, `Form an idempotent MERGE for one node. Param keys = props keys.` to the rest of the system?**
   _658 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
   _Cohesion score 0.06 - nodes in this community are weakly interconnected._

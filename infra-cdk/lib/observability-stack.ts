@@ -17,21 +17,21 @@ export class ObservabilityStack extends Stack {
     const prefix = `${projectName}-${envName}`;
 
     // ==== Custom metric definitions used by API ====
-    const ns = 'MfgDemo';
+    const ns = 'GccDemo';
     const searchP95 = new cw.Metric({
-      namespace: ns, metricName: 'mfg.search.latency.p95',
+      namespace: ns, metricName: 'gcc.search.latency.p95',
       statistic: 'Average', period: Duration.minutes(5),
     });
     const agentFirstToken = new cw.Metric({
-      namespace: ns, metricName: 'mfg.agent.first_token_ms',
+      namespace: ns, metricName: 'gcc.agent.first_token_ms',
       statistic: 'Average', period: Duration.minutes(5),
     });
     const guardrailBlocks = new cw.Metric({
-      namespace: ns, metricName: 'mfg.guardrails.blocks.count',
+      namespace: ns, metricName: 'gcc.guardrails.blocks.count',
       statistic: 'Sum', period: Duration.minutes(5),
     });
     const reranker = new cw.Metric({
-      namespace: ns, metricName: 'mfg.reranker.latency',
+      namespace: ns, metricName: 'gcc.reranker.latency',
       statistic: 'Average', period: Duration.minutes(5),
     });
 

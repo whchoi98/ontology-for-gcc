@@ -17,18 +17,18 @@ describe('NetworkStack', () => {
     template = Template.fromStack(stack);
   });
 
-  test('creates 5 mfg-prefixed security groups', () => {
+  test('creates 5 gcc-prefixed security groups', () => {
     template.resourceCountIs('AWS::EC2::SecurityGroup', 5);
   });
 
   test('alb-sg ingress from CloudFront prefix list', () => {
     template.hasResourceProperties('AWS::EC2::SecurityGroup', {
-      GroupDescription: Match.stringLikeRegexp('mfg-alb'),
+      GroupDescription: Match.stringLikeRegexp('gcc-alb'),
     });
   });
 
-  test('exports MfgApiSgId', () => {
-    template.hasOutput('MfgApiSgId', {});
+  test('exports GccApiSgId', () => {
+    template.hasOutput('GccApiSgId', {});
   });
 
   test('does NOT create a new VPC', () => {

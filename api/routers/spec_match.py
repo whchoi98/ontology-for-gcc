@@ -9,7 +9,7 @@ from api.services.search import get_search
 from api.services.reranker import rerank
 
 router = APIRouter(tags=["spec_match"])
-log = logging.getLogger("mfg.spec_match")
+log = logging.getLogger("gcc.spec_match")
 
 
 class SpecRequest(BaseModel):

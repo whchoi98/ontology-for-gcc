@@ -1,6 +1,6 @@
 """Suppliers (Tier-1: 100) + SubSuppliers (Tier-2: 50). Deterministic.
 
-Region distribution biased toward CN/KR (typical hi-tech mfg supply chain),
+Region distribution biased toward CN/KR (typical hi-tech gcc supply chain),
 with smaller presence in VN/MX/PL/US/IN.
 
 Run: python -m data.synthetic.suppliers

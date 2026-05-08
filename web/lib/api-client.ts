@@ -54,7 +54,7 @@ export const api = {
 
 // ─── New API methods for flat URL structure ──────────────────────────────────
 
-// listPersonas — returns hardcoded 5 mfg personas (no API call)
+// listPersonas — returns hardcoded 5 gcc personas (no API call)
 export function listPersonas(_n = 5) {
   return Promise.resolve({
     items: [

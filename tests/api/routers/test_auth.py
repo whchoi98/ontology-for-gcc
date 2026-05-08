@@ -30,7 +30,7 @@ def test_callback_exchanges_code_and_sets_cookie(mock_client_cls):
     r = client.get("/api/auth/callback?code=AUTH_CODE", follow_redirects=False)
     assert r.status_code in (302, 307)
     # If the mock wiring is tricky at test time, just verify it redirects
-    # assert "mfg_id_token" in r.headers.get("set-cookie", "")  # uncomment once mock confirmed
+    # assert "gcc_id_token" in r.headers.get("set-cookie", "")  # uncomment once mock confirmed
 
 
 def test_logout_clears_cookie():
@@ -39,4 +39,4 @@ def test_logout_clears_cookie():
     assert r.status_code in (302, 307)
     assert "amazoncognito.com" in r.headers["location"]
     cookies = r.headers.get("set-cookie", "")
-    assert "mfg_id_token" in cookies and "Max-Age=0" in cookies
+    assert "gcc_id_token" in cookies and "Max-Age=0" in cookies

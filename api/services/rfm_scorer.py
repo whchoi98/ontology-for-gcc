@@ -1,5 +1,5 @@
 # api/services/rfm_scorer.py
-"""Supplier RFM (Recency / Frequency / Monetary) -- adapted for mfg as
+"""Supplier RFM (Recency / Frequency / Monetary) -- adapted for gcc as
 Reliability (OTD) / Frequency (consistency = inverse defect rate) / Monetary
 (responsiveness). Composite is geometric mean to penalize any-axis weakness.
 """

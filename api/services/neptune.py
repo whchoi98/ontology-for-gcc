@@ -21,7 +21,7 @@ from botocore.awsrequest import AWSRequest
 from typing import Any
 from api.config import settings
 
-log = logging.getLogger("mfg.neptune")
+log = logging.getLogger("gcc.neptune")
 
 
 class NeptuneClient:

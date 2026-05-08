@@ -19,10 +19,10 @@ export interface NetworkStackProps extends StackProps {
 
 /**
  * NetworkStack imports retail's VPC (no new VPC created) and provisions only
- * the mfg-prefixed security groups used by ALB / ECS / Aurora / Neptune.
+ * the gcc-prefixed security groups used by ALB / ECS / Aurora / Neptune.
  *
  * Spec § D.2 — VPC sharing: same 10.20.0.0/16, same subnets, same NAT.
- * Retail SGs are NOT modified. retail's `vpce-sg` permits VPC CIDR so mfg ENIs
+ * Retail SGs are NOT modified. retail's `vpce-sg` permits VPC CIDR so gcc ENIs
  * automatically reach the existing VPC Endpoints.
  */
 export class NetworkStack extends Stack {
@@ -54,9 +54,9 @@ export class NetworkStack extends Stack {
       ...(props.publicSubnetIds  ? { publicSubnetIds:  props.publicSubnetIds  } : {}),
     });
 
-    this.albSg = new ec2.SecurityGroup(this, 'MfgAlbSg', {
+    this.albSg = new ec2.SecurityGroup(this, 'GccAlbSg', {
       vpc: this.vpc,
-      description: 'mfg-alb-sg: CloudFront origin-facing prefix list ingress',
+      description: 'gcc-alb-sg: CloudFront origin-facing prefix list ingress',
       allowAllOutbound: true,
     });
     this.albSg.addIngressRule(
@@ -65,30 +65,30 @@ export class NetworkStack extends Stack {
       'CloudFront to ALB :80',
     );
 
-    this.webSg = new ec2.SecurityGroup(this, 'MfgWebSg', {
+    this.webSg = new ec2.SecurityGroup(this, 'GccWebSg', {
       vpc: this.vpc,
-      description: 'mfg-web-sg: Next.js Fargate :3000',
+      description: 'gcc-web-sg: Next.js Fargate :3000',
       allowAllOutbound: true,
     });
     this.webSg.addIngressRule(this.albSg, ec2.Port.tcp(3000), 'ALB to web :3000');
 
-    this.apiSg = new ec2.SecurityGroup(this, 'MfgApiSg', {
+    this.apiSg = new ec2.SecurityGroup(this, 'GccApiSg', {
       vpc: this.vpc,
-      description: 'mfg-api-sg: FastAPI Fargate :8000',
+      description: 'gcc-api-sg: FastAPI Fargate :8000',
       allowAllOutbound: true,
     });
     this.apiSg.addIngressRule(this.albSg, ec2.Port.tcp(8000), 'ALB to api :8000');
 
-    this.auroraSg = new ec2.SecurityGroup(this, 'MfgAuroraSg', {
+    this.auroraSg = new ec2.SecurityGroup(this, 'GccAuroraSg', {
       vpc: this.vpc,
-      description: 'mfg-aurora-sg: api to Aurora port 5432',
+      description: 'gcc-aurora-sg: api to Aurora port 5432',
       allowAllOutbound: true,
     });
     this.auroraSg.addIngressRule(this.apiSg, ec2.Port.tcp(5432), 'api to Aurora');
 
-    this.neptuneSg = new ec2.SecurityGroup(this, 'MfgNeptuneSg', {
+    this.neptuneSg = new ec2.SecurityGroup(this, 'GccNeptuneSg', {
       vpc: this.vpc,
-      description: 'mfg-neptune-sg: api to Neptune port 8182',
+      description: 'gcc-neptune-sg: api to Neptune port 8182',
       allowAllOutbound: true,
     });
     this.neptuneSg.addIngressRule(this.apiSg, ec2.Port.tcp(8182), 'api to Neptune Gremlin');
@@ -96,10 +96,10 @@ export class NetworkStack extends Stack {
     Tags.of(this).add('Project', projectName);
     Tags.of(this).add('Env', envName);
 
-    new CfnOutput(this, 'MfgApiSgId',     { value: this.apiSg.securityGroupId,     exportName: `${projectName}-${envName}-api-sg-id` });
-    new CfnOutput(this, 'MfgAlbSgId',     { value: this.albSg.securityGroupId,     exportName: `${projectName}-${envName}-alb-sg-id` });
-    new CfnOutput(this, 'MfgWebSgId',     { value: this.webSg.securityGroupId,     exportName: `${projectName}-${envName}-web-sg-id` });
-    new CfnOutput(this, 'MfgAuroraSgId',  { value: this.auroraSg.securityGroupId,  exportName: `${projectName}-${envName}-aurora-sg-id` });
-    new CfnOutput(this, 'MfgNeptuneSgId', { value: this.neptuneSg.securityGroupId, exportName: `${projectName}-${envName}-neptune-sg-id` });
+    new CfnOutput(this, 'GccApiSgId',     { value: this.apiSg.securityGroupId,     exportName: `${projectName}-${envName}-api-sg-id` });
+    new CfnOutput(this, 'GccAlbSgId',     { value: this.albSg.securityGroupId,     exportName: `${projectName}-${envName}-alb-sg-id` });
+    new CfnOutput(this, 'GccWebSgId',     { value: this.webSg.securityGroupId,     exportName: `${projectName}-${envName}-web-sg-id` });
+    new CfnOutput(this, 'GccAuroraSgId',  { value: this.auroraSg.securityGroupId,  exportName: `${projectName}-${envName}-aurora-sg-id` });
+    new CfnOutput(this, 'GccNeptuneSgId', { value: this.neptuneSg.securityGroupId, exportName: `${projectName}-${envName}-neptune-sg-id` });
   }
 }

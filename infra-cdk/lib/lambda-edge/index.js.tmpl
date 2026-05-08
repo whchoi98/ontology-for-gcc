@@ -10,7 +10,7 @@ exports.handler = async (event) => {
   const request = event.Records[0].cf.request;
   const headers = request.headers;
   const cookieHeader = headers.cookie ? headers.cookie[0].value : '';
-  const hasIdToken = /(?:^|;\s*)mfg_id_token=/.test(cookieHeader);
+  const hasIdToken = /(?:^|;\s*)gcc_id_token=/.test(cookieHeader);
 
   if (request.uri.startsWith('/api/auth/callback') || request.uri.startsWith('/api/auth/logout')) {
     return request;

@@ -10,7 +10,7 @@ import logging
 from api.aws_clients import bedrock_runtime
 from api.config import settings
 
-log = logging.getLogger("mfg.reranker")
+log = logging.getLogger("gcc.reranker")
 
 
 def rerank(query: str, documents: list[dict], top_n: int = 10,

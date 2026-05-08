@@ -20,7 +20,7 @@ from collections import Counter
 from fastapi import APIRouter, HTTPException, Path, Query
 from api.services.neptune import get_neptune
 
-log = logging.getLogger("mfg.objects")
+log = logging.getLogger("gcc.objects")
 
 # 22 ontology classes from spec § 8.1 — frozen set for O(1) lookup.
 _ALLOWED_LABELS: frozenset[str] = frozenset({

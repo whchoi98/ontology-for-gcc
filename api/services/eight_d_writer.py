@@ -10,7 +10,7 @@ import logging
 from api.aws_clients import bedrock_runtime
 from api.config import settings
 
-log = logging.getLogger("mfg.eight_d_writer")
+log = logging.getLogger("gcc.eight_d_writer")
 
 _TOOL_INPUT_SCHEMA = {
     "type": "object",

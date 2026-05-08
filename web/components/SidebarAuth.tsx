@@ -1,7 +1,7 @@
 'use client';
 
 // Sidebar footer auth widget — fetches /api/auth/whoami to determine login state.
-// Reads mfg_id_token cookie presence via whoami endpoint response.
+// Reads gcc_id_token cookie presence via whoami endpoint response.
 
 import { useEffect, useState } from 'react';
 import { LogIn, LogOut, User as UserIcon } from 'lucide-react';

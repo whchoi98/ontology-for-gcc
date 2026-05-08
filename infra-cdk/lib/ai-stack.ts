@@ -57,10 +57,10 @@ export class AIStack extends Stack {
     const { projectName, envName, rawDocsBucketArn, osCollectionArn } = props;
     const prefix = `${projectName}-${envName}`;
 
-    // ==== Bedrock Guardrails (4 mfg topics) ====
+    // ==== Bedrock Guardrails (4 gcc topics) ====
     const guardrail = new bedrock.CfnGuardrail(this, 'Guardrail', {
       name: `${prefix}-guardrail`,
-      description: 'mfg 4-topic guardrail: IP / Competitor / Regulation / HazardousChemical',
+      description: 'gcc 4-topic guardrail: IP / Competitor / Regulation / HazardousChemical',
       blockedInputMessaging: '죄송합니다. 이 요청은 AMZN Tech 정책에 따라 응답할 수 없습니다.',
       blockedOutputsMessaging: '죄송합니다. 이 응답은 AMZN Tech 정책에 따라 차단되었습니다.',
       topicPolicyConfig: {
@@ -131,7 +131,7 @@ export class AIStack extends Stack {
     // NOTE: Bedrock KnowledgeBase (CfnKnowledgeBase) requires the vector index to exist
     // in the AOSS collection BEFORE the KB is created. CloudFormation cannot create
     // AOSS indexes natively. The KB must be created as a post-deploy step:
-    //   1. Create vector index 'mfg-kb' in collection ontology-gcc-dev-search
+    //   1. Create vector index 'gcc-kb' in collection ontology-gcc-dev-search
     //   2. aws bedrock-agent create-knowledge-base ...
     // KB role + data access policy are provisioned here so the KB can be added later.
     this.knowledgeBaseId = 'pending-post-deploy';

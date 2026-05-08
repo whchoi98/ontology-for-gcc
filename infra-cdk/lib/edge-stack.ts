@@ -43,7 +43,7 @@ export class EdgeStack extends Stack {
       new cognito.CfnUserPoolGroup(this, `Group${g}`, {
         userPoolId: this.userPool.userPoolId,
         groupName: g,
-        description: `mfg ${g} persona`,
+        description: `gcc ${g} persona`,
       });
     }
 

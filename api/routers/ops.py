@@ -50,12 +50,12 @@ def _memory_data() -> dict:
     sessions = []
     for i in range(8):
         sessions.append({
-            "session_id": f"mfg-{['engineer','quality','buyer','scm','plant'][i % 5]}-{rng.randint(10**12, 10**13)}",
+            "session_id": f"gcc-{['engineer','quality','buyer','scm','plant'][i % 5]}-{rng.randint(10**12, 10**13)}",
             "persona": ['Engineer','Quality','Buyer','SCM','Plant'][i % 5],
             "facts": rng.randint(2, 12),
             "last_active": (datetime.utcnow() - timedelta(hours=rng.randint(1, 72))).isoformat() + "Z",
         })
-    return {"summary": "AgentCore Memory namespace `mfg`. 단기(세션) + 장기(7일) 양쪽 활성. DynamoDB 폴백 사용 중.",
+    return {"summary": "AgentCore Memory namespace `gcc`. 단기(세션) + 장기(7일) 양쪽 활성. DynamoDB 폴백 사용 중.",
             "sessions": sessions, "total_sessions": len(sessions)}
 
 

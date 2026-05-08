@@ -2,7 +2,7 @@
 """Text embedding via Bedrock.
 
 Model is configured via MFG_EMBED_MODEL_ID env var (default: amazon.titan-embed-text-v2:0).
-The AOSS mfg-search index was created with 1024 dimensions, which Titan v2 matches.
+The AOSS gcc-search index was created with 1024 dimensions, which Titan v2 matches.
 
 Response shape differences:
   - Titan v2: {"embedding": [...1024 floats...], "inputTextTokenCount": N}
@@ -14,7 +14,7 @@ import logging
 import boto3
 from api.config import settings
 
-log = logging.getLogger("mfg.embed")
+log = logging.getLogger("gcc.embed")
 
 
 def embed_text(text: str) -> list[float]:

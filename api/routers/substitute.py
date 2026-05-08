@@ -14,7 +14,7 @@ from pydantic import BaseModel
 from api.services.neptune import get_neptune
 
 router = APIRouter(tags=["substitute"])
-log = logging.getLogger("mfg.substitute")
+log = logging.getLogger("gcc.substitute")
 
 
 class SubstituteRequest(BaseModel):

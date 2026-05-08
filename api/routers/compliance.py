@@ -10,7 +10,7 @@ from api.services.compliance_engine import check_component
 from api.services.neptune import get_neptune
 
 router = APIRouter(tags=["compliance"])
-log = logging.getLogger("mfg.compliance")
+log = logging.getLogger("gcc.compliance")
 
 
 class ComplianceRequest(BaseModel):

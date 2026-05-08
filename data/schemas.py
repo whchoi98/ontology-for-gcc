@@ -1,4 +1,4 @@
-"""Pydantic schemas for 22 ontology classes (mfg).
+"""Pydantic schemas for 22 ontology classes (gcc).
 
 Mirrors ontology spec § 8.1. Each class corresponds to one Neptune label.
 """

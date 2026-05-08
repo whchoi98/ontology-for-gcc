@@ -7,7 +7,7 @@ from api.config import settings
 from api.middleware_auth import CognitoBearerAuth
 
 logging.basicConfig(level=settings.log_level)
-log = logging.getLogger("mfg.api")
+log = logging.getLogger("gcc.api")
 
 app = FastAPI(title="ontology-gcc api", version="0.2.0")
 

@@ -2,7 +2,7 @@
 
 Source: EU Regulation 2023/956. Transitional period 2023-10 to 2025-12,
 definitive period from 2026-01 (importer pays CBAM certificates).
-Subset chosen to cover hi-tech mfg upstream (steel/aluminium for chassis,
+Subset chosen to cover hi-tech gcc upstream (steel/aluminium for chassis,
 hydrogen/fertilizer not directly relevant but kept for completeness).
 """
 from __future__ import annotations

@@ -13,7 +13,7 @@ from typing import Callable, Generator
 from api.aws_clients import bedrock_runtime
 from api.config import settings
 
-log = logging.getLogger("mfg.agent")
+log = logging.getLogger("gcc.agent")
 
 
 class AgentRunner:

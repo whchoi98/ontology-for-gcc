@@ -21,7 +21,7 @@ _BEDROCK_POOL = concurrent.futures.ThreadPoolExecutor(
 )
 
 router = APIRouter(tags=["eight_d"])
-log = logging.getLogger("mfg.eight_d")
+log = logging.getLogger("gcc.eight_d")
 
 
 class EightDRequest(BaseModel):

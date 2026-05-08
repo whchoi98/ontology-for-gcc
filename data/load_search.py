@@ -1,6 +1,6 @@
 """OpenSearch Serverless index seeder for components + standards + incidents.
 
-Index name: `mfg-search` (collection: `ontology-gcc-dev`).
+Index name: `gcc-search` (collection: `ontology-gcc-dev`).
 Document shape: { id, label, name, category, text (searchable), standards[], embedding[] }.
 
 The Bedrock Knowledge Base for unstructured RAG (sample sheets, 8D PDFs) is
@@ -72,7 +72,7 @@ def _iter_ndjson(path: Path) -> Iterable[dict]:
             yield json.loads(line)
 
 
-def index_components(*, host: str, region: str, index_name: str = "mfg-search") -> int:
+def index_components(*, host: str, region: str, index_name: str = "gcc-search") -> int:
     """Bulk-index components. Embeddings deferred — first pass is BM25 only."""
     from opensearchpy import OpenSearch, RequestsHttpConnection
     from requests_aws4auth import AWS4Auth
@@ -115,7 +115,7 @@ def main() -> None:
     if not args.host:
         raise SystemExit("Set OPENSEARCH_HOST or pass --host")
     n = index_components(host=args.host, region=args.region)
-    print(f"indexed {n} components into mfg-search")
+    print(f"indexed {n} components into gcc-search")
 
 
 if __name__ == "__main__":

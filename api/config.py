@@ -8,7 +8,7 @@ class Settings(BaseModel):
     aws_region: str = os.environ.get("AWS_REGION", "ap-northeast-2")
     neptune_endpoint: str = os.environ.get("NEPTUNE_ENDPOINT", "")
     opensearch_host: str = os.environ.get("OPENSEARCH_HOST", "")
-    opensearch_index: str = os.environ.get("OPENSEARCH_INDEX", "mfg-search")
+    opensearch_index: str = os.environ.get("OPENSEARCH_INDEX", "gcc-search")
     aurora_secret_arn: str = os.environ.get("AURORA_SECRET_ARN", "")
     bedrock_guardrail_id: str = os.environ.get("BEDROCK_GUARDRAIL_ID", "356xcbgyqcpq")
     bedrock_kb_id: str = os.environ.get("BEDROCK_KB_ID", "")

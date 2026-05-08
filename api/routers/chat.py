@@ -64,7 +64,7 @@ _TOOLS = [
     ),
     (
         "neptune_query",
-        "Run an openCypher query on the mfg knowledge graph (22 classes — Component/Supplier/Plant/TradeLane/Standard/etc.).",
+        "Run an openCypher query on the gcc knowledge graph (22 classes — Component/Supplier/Plant/TradeLane/Standard/etc.).",
         _tool_neptune,
         {
             "type": "object",

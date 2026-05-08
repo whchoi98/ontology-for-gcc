@@ -18,7 +18,7 @@ const pretendard = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: 'Ontology MFG — AMZN Tech Hi-Tech 데모',
+  title: 'Ontology GCC — AMZN Tech Hi-Tech 데모',
   description: 'AWS Bedrock + AgentCore + Neptune 기반 의미 검색 / 대화형 에이전트 / 12 시나리오 × 5 페르소나',
   robots: { index: false, follow: false },
 };

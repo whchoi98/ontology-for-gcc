@@ -1,4 +1,4 @@
-# Graph Report - ontology-for-mfg  (2026-05-07)
+# Graph Report - ontology-for-gcc  (2026-05-07)
 
 ## Corpus Check
 - 220 files · ~98,590 words
@@ -172,7 +172,7 @@
 2. `api` - 37 edges
 3. `get_neptune()` - 20 edges
 4. `Phase 3 — API Backend (Tasks 1–28)` - 19 edges
-5. `Ontology Demo for Korean Hi-Tech MFG — Design Spec` - 18 edges
+5. `Ontology Demo for Korean Hi-Tech GCC — Design Spec` - 18 edges
 6. `useActivePersona()` - 16 edges
 7. `Phase 1 — Synthetic Data + Ontology (Tasks 14–26)` - 14 edges
 8. `Phase 2 — CDK Infrastructure (Tasks 27–37)` - 12 edges
@@ -211,7 +211,7 @@ Nodes (36): added, dropped, Highlights, [hover, setHover], isAdded, isDropped, l
 
 ### Community 4 - "검증 평가 테스트 스위트"
 Cohesion: 0.06
-Nodes (35): code:json ([), code:bash (cd tests/e2e), code:ts (import { defineConfig } from "@playwright/test";), code:ts (// tests/e2e/demo-flow.spec.ts), code:bash (cd tests/e2e), code:block14 (# Search p95 latency last 1h), code:bash (LOG_GROUP=/aws/ecs/ontology-mfg-dev-api), code:bash (aws ce get-cost-and-usage \) (+27 more)
+Nodes (35): code:json ([), code:bash (cd tests/e2e), code:ts (import { defineConfig } from "@playwright/test";), code:ts (// tests/e2e/demo-flow.spec.ts), code:bash (cd tests/e2e), code:block14 (# Search p95 latency last 1h), code:bash (LOG_GROUP=/aws/ecs/ontology-gcc-dev-api), code:bash (aws ce get-cost-and-usage \) (+27 more)
 
 ### Community 5 - "API 파라미터 강제 변환기"
 Cohesion: 0.13
@@ -219,7 +219,7 @@ Nodes (31): A(), b(), be(), C(), coerceApiParameters(), constructor(), F(), fe()
 
 ### Community 6 - "프로젝트 기초 구성"
 Cohesion: 0.07
-Nodes (27): code:bash (cd /home/ec2-user/my-project/ontology-for-mfg), code:bash (git add .), code:python ("""Validate that all 22 ontology classes have pydantic schem), code:bash (pytest tests/data/test_schemas.py -v), code:python ("""Pydantic schemas for 22 ontology classes (mfg).), code:bash (pytest tests/data/test_schemas.py -v), code:bash (git add data/schemas.py tests/data/test_schemas.py), code:python ("""Mock-only test — actual Bedrock calls are made by generat) (+19 more)
+Nodes (27): code:bash (cd /home/ec2-user/my-project/ontology-for-gcc), code:bash (git add .), code:python ("""Validate that all 22 ontology classes have pydantic schem), code:bash (pytest tests/data/test_schemas.py -v), code:python ("""Pydantic schemas for 22 ontology classes (mfg).), code:bash (pytest tests/data/test_schemas.py -v), code:bash (git add data/schemas.py tests/data/test_schemas.py), code:python ("""Mock-only test — actual Bedrock calls are made by generat) (+19 more)
 
 ### Community 7 - "인사이트 대시보드 페이지"
 Cohesion: 0.15
@@ -455,7 +455,7 @@ Nodes (6): test_rohs_count_10(), test_rohs_includes_lead_and_dehp(), test_rohs_r
 
 ### Community 65 - "REACH SVHC 규제 데이터"
 Cohesion: 0.29
-Nodes (6): Substance, test_load_svhc(), test_reach_regulation(), load_reach_regulation(), load_svhc_substances(), ECHA REACH-SVHC candidate list — curated 50-entry subset for hi-tech MFG demo.
+Nodes (6): Substance, test_load_svhc(), test_reach_regulation(), load_reach_regulation(), load_svhc_substances(), ECHA REACH-SVHC candidate list — curated 50-entry subset for hi-tech GCC demo.
 
 ### Community 66 - "온톨로지 데이터 모델"
 Cohesion: 0.25
@@ -567,7 +567,7 @@ Nodes (6): code:bash (# Hit retail's existing CloudFront domain), code:bash (# S
 
 ### Community 94 - "CDK 배포 자동화"
 Cohesion: 0.33
-Nodes (6): code:bash (cd infra-cdk), code:bash (ACCOUNT=$(aws sts get-caller-identity --query Account --outp), code:bash (npx cdk deploy ontology-mfg-dev-network --require-approval n), code:bash (aws cloudformation describe-stacks --stack-name ontology-mfg), code:bash (mkdir -p docs/deploy-logs), Task 36: cdk synth all + bootstrap + deploy dev
+Nodes (6): code:bash (cd infra-cdk), code:bash (ACCOUNT=$(aws sts get-caller-identity --query Account --outp), code:bash (npx cdk deploy ontology-gcc-dev-network --require-approval n), code:bash (aws cloudformation describe-stacks --stack-name ontology-gcc), code:bash (mkdir -p docs/deploy-logs), Task 36: cdk synth all + bootstrap + deploy dev
 
 ### Community 95 - "엣지 스택 인증"
 Cohesion: 0.33
@@ -575,7 +575,7 @@ Nodes (6): code:typescript (// infra-cdk/test/edge-stack.test.ts), code:javascri
 
 ### Community 96 - "ECS 배포 자동화"
 Cohesion: 0.33
-Nodes (6): code:bash (ACCOUNT=061525506239), code:bash (cd infra-cdk), code:bash (aws ecs describe-services --cluster ontology-mfg-dev-cluster), code:bash (ALB=$(aws cloudformation describe-stacks --stack-name ontolo), code:bash (git add infra-cdk/lib/compute-stack.ts), Task 18: API Docker build + ECR push + ECS service update
+Nodes (6): code:bash (ACCOUNT=061525506239), code:bash (cd infra-cdk), code:bash (aws ecs describe-services --cluster ontology-gcc-dev-cluster), code:bash (ALB=$(aws cloudformation describe-stacks --stack-name ontolo), code:bash (git add infra-cdk/lib/compute-stack.ts), Task 18: API Docker build + ECR push + ECS service update
 
 ### Community 97 - "검색 및 대화 라우터"
 Cohesion: 0.33
@@ -603,7 +603,7 @@ Nodes (5): 표준 / 규제, 17. References, 시각화 / 프론트, 도메인 데
 
 ### Community 104 - "관찰성 메트릭 대시보드"
 Cohesion: 0.4
-Nodes (5): 12.1 Custom Metrics, 12.2 CloudWatch Dashboard "MFG Demo Health", 12.3 Alarms, 12.4 Tool-Call Trace (시나리오 B 시연 전용), 12. Observability
+Nodes (5): 12.1 Custom Metrics, 12.2 CloudWatch Dashboard "GCC Demo Health", 12.3 Alarms, 12.4 Tool-Call Trace (시나리오 B 시연 전용), 12. Observability
 
 ### Community 105 - "프로퍼티 그래프 로더"
 Cohesion: 0.4
@@ -647,7 +647,7 @@ Nodes (5): code:bash (mkdir -p web/components), code:tsx (// web/components/Pers
 
 ### Community 115 - "CloudFront ALB 도메인 연결"
 Cohesion: 0.4
-Nodes (5): code:bash (ZONE_ID=$(aws route53 list-hosted-zones-by-name --dns-name w), code:bash (aws acm request-certificate --domain-name mfg-ontology.whcho), code:bash (curl -sI https://mfg-ontology.whchoi.net  # expect 302 → Cog), code:bash (git add infra-cdk/lib/edge-stack.ts), Task 27: CloudFront origin = ALB + custom domain wiring
+Nodes (5): code:bash (ZONE_ID=$(aws route53 list-hosted-zones-by-name --dns-name w), code:bash (aws acm request-certificate --domain-name gcc-ontology.whcho), code:bash (curl -sI https://gcc-ontology.whchoi.net  # expect 302 → Cog), code:bash (git add infra-cdk/lib/edge-stack.ts), Task 27: CloudFront origin = ALB + custom domain wiring
 
 ### Community 116 - "제조 공급망 시각화"
 Cohesion: 0.4
@@ -739,7 +739,7 @@ Nodes (4): code:bash (ACCOUNT=061525506239), code:bash (ALB=$(aws cloudformation
 
 ### Community 142 - "커뮤니티 협업 플랫폼"
 Cohesion: 0.5
-Nodes (3): Execution Handoff, Ontology MFG — Plan 2: Application Implementation Plan, Self-Review
+Nodes (3): Execution Handoff, Ontology GCC — Plan 2: Application Implementation Plan, Self-Review
 
 ### Community 148 - "비용 최적화 관리자"
 Cohesion: 0.67

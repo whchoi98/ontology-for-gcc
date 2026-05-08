@@ -9,11 +9,11 @@ from api.middleware_auth import CognitoBearerAuth
 logging.basicConfig(level=settings.log_level)
 log = logging.getLogger("mfg.api")
 
-app = FastAPI(title="ontology-mfg api", version="0.2.0")
+app = FastAPI(title="ontology-gcc api", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://mfg-ontology.whchoi.net", "http://localhost:3000"],
+    allow_origins=["https://gcc-ontology.whchoi.net", "http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

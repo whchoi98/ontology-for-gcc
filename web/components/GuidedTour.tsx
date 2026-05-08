@@ -11,7 +11,7 @@ import {
   ClipboardList, Leaf, Activity, BookOpen, Map,
 } from 'lucide-react';
 
-const STORAGE_KEY = 'ontology-mfg.tour-seen';
+const STORAGE_KEY = 'ontology-gcc.tour-seen';
 
 type Step = {
   badge: string;
@@ -29,7 +29,7 @@ const STEPS: Step[] = [
     ko: '60분 가이드 투어',
     href: '/',
     icon: Map,
-    pitch: 'AMZN Tech Hi-Tech MFG 온톨로지 데모입니다 — Bedrock + AgentCore + Neptune 위에 12개 시나리오(A-L)가 올라갑니다. 5개 페르소나(Buyer·Engineer·Quality·SCM·Plant)가 동일한 그래프를 다른 시점에서 봅니다.',
+    pitch: 'AMZN Tech Hi-Tech GCC 온톨로지 데모입니다 — Bedrock + AgentCore + Neptune 위에 12개 시나리오(A-L)가 올라갑니다. 5개 페르소나(Buyer·Engineer·Quality·SCM·Plant)가 동일한 그래프를 다른 시점에서 봅니다.',
     try_it: '우상단 페르소나 버튼으로 역할을 선택해두면 모든 시나리오가 해당 페르소나 시점을 반영합니다.',
     tech: 'Next.js 14 + FastAPI + Bedrock Sonnet 4.6 + AgentCore Memory/Code Interpreter + Neptune + OpenSearch Serverless',
   },

@@ -9,9 +9,9 @@ describe('AIStack', () => {
     const app = new cdk.App();
     const stack = new AIStack(app, 'TestAI', {
       env: { account: '111111111111', region: 'ap-northeast-2' },
-      projectName: 'ontology-mfg',
+      projectName: 'ontology-gcc',
       envName: 'dev',
-      rawDocsBucketArn: 'arn:aws:s3:::ontology-mfg-dev-raw-docs',
+      rawDocsBucketArn: 'arn:aws:s3:::ontology-gcc-dev-raw-docs',
       osCollectionArn:  'arn:aws:aoss:ap-northeast-2:111111111111:collection/test',
     });
     template = Template.fromStack(stack);

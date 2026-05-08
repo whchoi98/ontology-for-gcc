@@ -1,6 +1,6 @@
 """OpenSearch Serverless index seeder for components + standards + incidents.
 
-Index name: `mfg-search` (collection: `ontology-mfg-dev`).
+Index name: `mfg-search` (collection: `ontology-gcc-dev`).
 Document shape: { id, label, name, category, text (searchable), standards[], embedding[] }.
 
 The Bedrock Knowledge Base for unstructured RAG (sample sheets, 8D PDFs) is

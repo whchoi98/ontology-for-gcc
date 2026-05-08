@@ -14,9 +14,9 @@ from fastapi.responses import JSONResponse, RedirectResponse
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-COGNITO_DOMAIN = os.environ.get("COGNITO_DOMAIN", "ontology-mfg-dev.auth.us-east-1.amazoncognito.com")
+COGNITO_DOMAIN = os.environ.get("COGNITO_DOMAIN", "ontology-gcc-dev.auth.us-east-1.amazoncognito.com")
 CLIENT_ID = os.environ.get("COGNITO_CLIENT_ID", "422o42g8odcmv21860cu2jta4")
-APP_BASE = os.environ.get("APP_BASE_URL", "https://mfg-ontology.whchoi.net")
+APP_BASE = os.environ.get("APP_BASE_URL", "https://gcc-ontology.whchoi.net")
 CALLBACK_URL = f"{APP_BASE}/api/auth/callback"
 LOGOUT_URL = f"{APP_BASE}/api/auth/logout"
 COOKIE_NAME = "mfg_id_token"
@@ -74,7 +74,7 @@ async def logout() -> RedirectResponse:
 
     Cognito requires `logout_uri` to exact-string-match one of the App
     Client's registered LogoutURLs — trailing slash and all. The pool has
-    `https://mfg-ontology.whchoi.net/` registered (with slash), so we strip
+    `https://gcc-ontology.whchoi.net/` registered (with slash), so we strip
     any trailing slash from APP_BASE and re-add exactly one to avoid drift
     if APP_BASE_URL ever changes shape.
     """

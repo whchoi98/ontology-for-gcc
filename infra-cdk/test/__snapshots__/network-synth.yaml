@@ -1,4 +1,4 @@
-[Warning at /ontology-mfg-dev-network/RetailVpc] fromVpcAttributes: 'availabilityZones' is a list token: the imported VPC will not work with constructs that require a list of subnets at synthesis time. Use 'Vpc.fromLookup()' or 'Fn.importListValue' instead. [ack: @aws-cdk/aws-ec2:vpcAttributeIsListTokenavailabilityZones]
+[Warning at /ontology-gcc-dev-network/RetailVpc] fromVpcAttributes: 'availabilityZones' is a list token: the imported VPC will not work with constructs that require a list of subnets at synthesis time. Use 'Vpc.fromLookup()' or 'Fn.importListValue' instead. [ack: @aws-cdk/aws-ec2:vpcAttributeIsListTokenavailabilityZones]
 Resources:
   MfgAlbSg4C917963:
     Type: AWS::EC2::SecurityGroup
@@ -12,11 +12,11 @@ Resources:
         - Key: Env
           Value: dev
         - Key: Project
-          Value: ontology-mfg
+          Value: ontology-gcc
       VpcId:
         Fn::ImportValue: ontology-retail-dev-vpc-id
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgAlbSg/Resource
+      aws:cdk:path: ontology-gcc-dev-network/MfgAlbSg/Resource
   MfgAlbSgfrompl22a6434b80BBF1F013:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -30,7 +30,7 @@ Resources:
       SourcePrefixListId: pl-22a6434b
       ToPort: 80
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgAlbSg/from pl-22a6434b:80
+      aws:cdk:path: ontology-gcc-dev-network/MfgAlbSg/from pl-22a6434b:80
   MfgWebSg071A8B7A:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -43,11 +43,11 @@ Resources:
         - Key: Env
           Value: dev
         - Key: Project
-          Value: ontology-mfg
+          Value: ontology-gcc
       VpcId:
         Fn::ImportValue: ontology-retail-dev-vpc-id
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgWebSg/Resource
+      aws:cdk:path: ontology-gcc-dev-network/MfgWebSg/Resource
   MfgWebSgfromontologymfgdevnetworkMfgAlbSg297384E63000FF0219BA:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -64,7 +64,7 @@ Resources:
           - GroupId
       ToPort: 3000
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgWebSg/from ontologymfgdevnetworkMfgAlbSg297384E6:3000
+      aws:cdk:path: ontology-gcc-dev-network/MfgWebSg/from ontologymfgdevnetworkMfgAlbSg297384E6:3000
   MfgApiSgC4CAFE86:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -77,11 +77,11 @@ Resources:
         - Key: Env
           Value: dev
         - Key: Project
-          Value: ontology-mfg
+          Value: ontology-gcc
       VpcId:
         Fn::ImportValue: ontology-retail-dev-vpc-id
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgApiSg/Resource
+      aws:cdk:path: ontology-gcc-dev-network/MfgApiSg/Resource
   MfgApiSgfromontologymfgdevnetworkMfgAlbSg297384E680009A25E8AF:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -98,7 +98,7 @@ Resources:
           - GroupId
       ToPort: 8000
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgApiSg/from ontologymfgdevnetworkMfgAlbSg297384E6:8000
+      aws:cdk:path: ontology-gcc-dev-network/MfgApiSg/from ontologymfgdevnetworkMfgAlbSg297384E6:8000
   MfgAuroraSgAAAF44D9:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -111,11 +111,11 @@ Resources:
         - Key: Env
           Value: dev
         - Key: Project
-          Value: ontology-mfg
+          Value: ontology-gcc
       VpcId:
         Fn::ImportValue: ontology-retail-dev-vpc-id
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgAuroraSg/Resource
+      aws:cdk:path: ontology-gcc-dev-network/MfgAuroraSg/Resource
   MfgAuroraSgfromontologymfgdevnetworkMfgApiSg62A6D08454328D27FB85:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -132,7 +132,7 @@ Resources:
           - GroupId
       ToPort: 5432
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgAuroraSg/from ontologymfgdevnetworkMfgApiSg62A6D084:5432
+      aws:cdk:path: ontology-gcc-dev-network/MfgAuroraSg/from ontologymfgdevnetworkMfgApiSg62A6D084:5432
   MfgNeptuneSg400FB2D8:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -145,11 +145,11 @@ Resources:
         - Key: Env
           Value: dev
         - Key: Project
-          Value: ontology-mfg
+          Value: ontology-gcc
       VpcId:
         Fn::ImportValue: ontology-retail-dev-vpc-id
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgNeptuneSg/Resource
+      aws:cdk:path: ontology-gcc-dev-network/MfgNeptuneSg/Resource
   MfgNeptuneSgfromontologymfgdevnetworkMfgApiSg62A6D08481820CBC5F13:
     Type: AWS::EC2::SecurityGroupIngress
     Properties:
@@ -166,13 +166,13 @@ Resources:
           - GroupId
       ToPort: 8182
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/MfgNeptuneSg/from ontologymfgdevnetworkMfgApiSg62A6D084:8182
+      aws:cdk:path: ontology-gcc-dev-network/MfgNeptuneSg/from ontologymfgdevnetworkMfgApiSg62A6D084:8182
   CDKMetadata:
     Type: AWS::CDK::Metadata
     Properties:
       Analytics: v2:deflate64:H4sIAAAAAAAA/33JQQrCMBBA0bN0n4xxwBO4EFdCe4ASp6NMq0nJZCxSencR964+vI+AB4TQxEU9DZN/yBXWrkaaXMuarRC7uGjPhLB2TFakvk8l2+yOt/QfzuleWHX7jovV2ermUh4YRt29MAAG2DejivhiqcqTof31A/tX2H2VAAAA
     Metadata:
-      aws:cdk:path: ontology-mfg-dev-network/CDKMetadata/Default
+      aws:cdk:path: ontology-gcc-dev-network/CDKMetadata/Default
 Outputs:
   MfgApiSgId:
     Value:
@@ -180,35 +180,35 @@ Outputs:
         - MfgApiSgC4CAFE86
         - GroupId
     Export:
-      Name: ontology-mfg-dev-api-sg-id
+      Name: ontology-gcc-dev-api-sg-id
   MfgAlbSgId:
     Value:
       Fn::GetAtt:
         - MfgAlbSg4C917963
         - GroupId
     Export:
-      Name: ontology-mfg-dev-alb-sg-id
+      Name: ontology-gcc-dev-alb-sg-id
   MfgWebSgId:
     Value:
       Fn::GetAtt:
         - MfgWebSg071A8B7A
         - GroupId
     Export:
-      Name: ontology-mfg-dev-web-sg-id
+      Name: ontology-gcc-dev-web-sg-id
   MfgAuroraSgId:
     Value:
       Fn::GetAtt:
         - MfgAuroraSgAAAF44D9
         - GroupId
     Export:
-      Name: ontology-mfg-dev-aurora-sg-id
+      Name: ontology-gcc-dev-aurora-sg-id
   MfgNeptuneSgId:
     Value:
       Fn::GetAtt:
         - MfgNeptuneSg400FB2D8
         - GroupId
     Export:
-      Name: ontology-mfg-dev-neptune-sg-id
+      Name: ontology-gcc-dev-neptune-sg-id
 Parameters:
   BootstrapVersion:
     Type: AWS::SSM::Parameter::Value<String>

@@ -11,13 +11,13 @@ describe('ComputeStack', () => {
     const app = new cdk.App();
     const env = { account: '111111111111', region: 'ap-northeast-2' };
     const network = new NetworkStack(app, 'TestNetwork', {
-      env, projectName: 'ontology-mfg', envName: 'dev',
+      env, projectName: 'ontology-gcc', envName: 'dev',
       retailVpcExportName: 'ontology-retail-dev-vpc-id',
       privateSubnetIds: ['subnet-priv1', 'subnet-priv2', 'subnet-priv3'],
       publicSubnetIds:  ['subnet-pub1',  'subnet-pub2',  'subnet-pub3'],
     });
     const compute = new ComputeStack(app, 'TestCompute', {
-      env, projectName: 'ontology-mfg', envName: 'dev',
+      env, projectName: 'ontology-gcc', envName: 'dev',
       vpc: network.vpc, albSg: network.albSg, webSg: network.webSg, apiSg: network.apiSg,
     });
     template = Template.fromStack(compute);

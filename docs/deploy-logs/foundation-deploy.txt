@@ -1,4 +1,4 @@
-ONTOLOGY-MFG FOUNDATION DEPLOY LOG
+ONTOLOGY-GCC FOUNDATION DEPLOY LOG
 ================================================================================
 Date      : 2026-05-05
 Account   : 061525506239
@@ -12,8 +12,8 @@ Subnets   : private: subnet-07b1e65682847dce9, subnet-095297380cd45e1eb
 STACK DEPLOY SUMMARY
 ================================================================================
 
-1. ontology-mfg-dev-network  (ap-northeast-2)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-mfg-dev-network/67019a40-485e-11f1-86e5-02583de391fb
+1. ontology-gcc-dev-network  (ap-northeast-2)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-gcc-dev-network/67019a40-485e-11f1-86e5-02583de391fb
    Outputs:
      MfgAlbSgId     = sg-048915a9291970f71
      MfgApiSgId     = sg-0fd62a078673349b5
@@ -21,54 +21,54 @@ STACK DEPLOY SUMMARY
      MfgAuroraSgId  = sg-0a036ddb6525f69b7
      MfgNeptuneSgId = sg-0e8f16f83ff4f6b28
 
-2. ontology-mfg-dev-data  (ap-northeast-2)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-mfg-dev-data/e0472d10-485f-11f1-90af-027e801d01e1
+2. ontology-gcc-dev-data  (ap-northeast-2)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-gcc-dev-data/e0472d10-485f-11f1-90af-027e801d01e1
    Outputs:
-     NeptuneEndpoint      = ontology-mfg-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com
-     AuroraSecretArn      = arn:aws:secretsmanager:ap-northeast-2:061525506239:secret:ontology-mfg-dev-aurora-master-31d4d9
+     NeptuneEndpoint      = ontology-gcc-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com
+     AuroraSecretArn      = arn:aws:secretsmanager:ap-northeast-2:061525506239:secret:ontology-gcc-dev-aurora-master-31d4d9
      OsCollectionEndpoint = https://klhxy9avzighd1u2ugth.ap-northeast-2.aoss.amazonaws.com
      OsCollectionArn      = arn:aws:aoss:ap-northeast-2:061525506239:collection/klhxy9avzighd1u2ugth
-     RawDocsBucketName    = ontology-mfg-dev-raw-docs
-     UploadsBucketName    = ontology-mfg-dev-uploads
+     RawDocsBucketName    = ontology-gcc-dev-raw-docs
+     UploadsBucketName    = ontology-gcc-dev-uploads
 
-3. ontology-mfg-dev-ai  (ap-northeast-2)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-mfg-dev-ai/[see console]
+3. ontology-gcc-dev-ai  (ap-northeast-2)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-gcc-dev-ai/[see console]
    Outputs:
      GuardrailId  = 356xcbgyqcpq
-     KbRoleArn    = arn:aws:iam::061525506239:role/ontology-mfg-dev-bedrock-kb-role
+     KbRoleArn    = arn:aws:iam::061525506239:role/ontology-gcc-dev-bedrock-kb-role
    NOTE: KnowledgeBase deferred to post-deploy (requires AOSS vector index pre-creation).
          Post-deploy steps:
            1. Create AOSS vector index 'mfg-kb' in collection klhxy9avzighd1u2ugth
            2. aws bedrock-agent create-knowledge-base \
-                --name ontology-mfg-dev-kb \
-                --role-arn arn:aws:iam::061525506239:role/ontology-mfg-dev-bedrock-kb-role \
+                --name ontology-gcc-dev-kb \
+                --role-arn arn:aws:iam::061525506239:role/ontology-gcc-dev-bedrock-kb-role \
                 --knowledge-base-configuration '{"type":"VECTOR","vectorKnowledgeBaseConfiguration":{"embeddingModelArn":"arn:aws:bedrock:ap-northeast-2::foundation-model/amazon.titan-embed-text-v1"}}' \
                 --storage-configuration '{"type":"OPENSEARCH_SERVERLESS","opensearchServerlessConfiguration":{"collectionArn":"arn:aws:aoss:ap-northeast-2:061525506239:collection/klhxy9avzighd1u2ugth","vectorIndexName":"mfg-kb","fieldMapping":{"vectorField":"embedding","textField":"text","metadataField":"metadata"}}}'
 
-4. ontology-mfg-dev-compute  (ap-northeast-2)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-mfg-dev-compute/167f5030-4872-11f1-a3e1-02e0337bb819
+4. ontology-gcc-dev-compute  (ap-northeast-2)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-gcc-dev-compute/167f5030-4872-11f1-a3e1-02e0337bb819
    Outputs:
-     AlbDnsName  = ontology-mfg-dev-alb-420189527.ap-northeast-2.elb.amazonaws.com
-     WebRepoUri  = 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-mfg-dev-web
-     ApiRepoUri  = 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-mfg-dev-api
-     ClusterName = ontology-mfg-dev-cluster
+     AlbDnsName  = ontology-gcc-dev-alb-420189527.ap-northeast-2.elb.amazonaws.com
+     WebRepoUri  = 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-gcc-dev-web
+     ApiRepoUri  = 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-gcc-dev-api
+     ClusterName = ontology-gcc-dev-cluster
    NOTE: ECS services deployed with desiredCount=0 (no images in ECR yet).
          Plan 2 (image build) will push images and update services to desiredCount=2.
 
-5. ontology-mfg-dev-edge  (us-east-1)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:us-east-1:061525506239:stack/ontology-mfg-dev-edge/dac0f140-4874-11f1-ba79-0afffb7187cf
+5. ontology-gcc-dev-edge  (us-east-1)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:us-east-1:061525506239:stack/ontology-gcc-dev-edge/dac0f140-4874-11f1-ba79-0afffb7187cf
    Outputs:
      CloudFrontDomainName = d2talte8jtmza3.cloudfront.net
      UserPoolId           = us-east-1_zQZZJRYer
      UserPoolClientId     = 422o42g8odcmv21860cu2jta4
    Seed users: admin@whchoi.net (group: admin), demo@whchoi.net (group: buyer)
    Password:   !234Qwer (set via Cognito adminSetUserPassword custom resource)
-   Cognito domain: ontology-mfg-dev.auth.us-east-1.amazoncognito.com
+   Cognito domain: ontology-gcc-dev.auth.us-east-1.amazoncognito.com
 
-6. ontology-mfg-dev-observability  (ap-northeast-2)  CREATE_COMPLETE
-   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-mfg-dev-observability/66544bd0-4875-11f1-a808-062b41a27251
+6. ontology-gcc-dev-observability  (ap-northeast-2)  CREATE_COMPLETE
+   ARN: arn:aws:cloudformation:ap-northeast-2:061525506239:stack/ontology-gcc-dev-observability/66544bd0-4875-11f1-a808-062b41a27251
    Outputs:
-     DashboardName = ontology-mfg-dev-demo-health
+     DashboardName = ontology-gcc-dev-demo-health
 
 ================================================================================
 ISSUES ENCOUNTERED AND RESOLUTIONS
@@ -137,12 +137,12 @@ B) Create Bedrock Knowledge Base (after vector index exists):
    See KB creation command in stack 3 notes above.
 
 C) Push Docker images to ECR (Plan 2):
-   web: 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-mfg-dev-web:latest
-   api: 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-mfg-dev-api:latest
+   web: 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-gcc-dev-web:latest
+   api: 061525506239.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-gcc-dev-api:latest
    After push: update ECS services to desiredCount=2.
 
 D) Add custom domain to CloudFront (requires Route53 delegation to whchoi.net):
-   Target domain: mfg-ontology.whchoi.net
+   Target domain: gcc-ontology.whchoi.net
    CloudFront: d2talte8jtmza3.cloudfront.net
 
 ================================================================================

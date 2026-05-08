@@ -98,7 +98,7 @@ export default function ChatPage() {
     cancelRef.current = chatStream(trimmed, sessionId, active, (event) => {
       const ev = event as { type: string; [k: string]: unknown };
 
-      // Map MFG event vocabulary → retail-style phase chips + tool log
+      // Map GCC event vocabulary → retail-style phase chips + tool log
       if (ev.type === "guardrail") {
         const name = String(ev.name ?? "");
         const phaseName = name === "output_check" ? "guardrail-out" : "guardrail";
@@ -150,7 +150,7 @@ export default function ChatPage() {
   function buildMarkdown(): string {
     const stamp = new Date().toISOString().replace("T", " ").slice(0, 19);
     const lines: string[] = [
-      `# 대화형 에이전트 대화 기록 (MFG)`,
+      `# 대화형 에이전트 대화 기록 (GCC)`,
       ``,
       `- 세션: \`${sessionId}\``,
       `- 페르소나: ${PERSONA_LABEL[active]}`,
@@ -213,7 +213,7 @@ export default function ChatPage() {
     host.style.lineHeight = "1.65";
 
     const h1 = document.createElement("h1");
-    h1.textContent = `MFG 대화 기록 — ${sessionId}`;
+    h1.textContent = `GCC 대화 기록 — ${sessionId}`;
     h1.style.fontSize = "18px";
     h1.style.borderBottom = "2px solid #444";
     h1.style.paddingBottom = "6px";

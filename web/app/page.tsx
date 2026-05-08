@@ -122,11 +122,11 @@ export default function HomePage() {
       <div className="flex-1 px-8 py-10 max-w-7xl mx-auto w-full">
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-400 mb-2 font-semibold">
-            AMZN Tech 온톨로지 데모 · Hi-Tech MFG · 12 시나리오 × 5 페르소나
+            AMZN Tech 온톨로지 데모 · Hi-Tech GCC · 12 시나리오 × 5 페르소나
           </p>
           <h1 className="text-4xl font-bold text-ink-50 leading-tight mb-3">
             부품·공급망·표준·품질 데이터를<br />
-            <span className="text-accent-300">온톨로지 그래프</span>로 풀어내는 MFG 데모
+            <span className="text-accent-300">온톨로지 그래프</span>로 풀어내는 GCC 데모
           </h1>
           <p className="text-ink-300 max-w-3xl leading-relaxed">
             JEDEC / IPC / AEC-Q / IATF 16949 / ISO 9001 + REACH / RoHS / CBAM / IRA / USMCA 표준에

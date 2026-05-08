@@ -9,10 +9,10 @@ describe('EdgeStack', () => {
     const app = new cdk.App();
     const stack = new EdgeStack(app, 'TestEdge', {
       env: { account: '111111111111', region: 'us-east-1' },  // EdgeStack runs in us-east-1
-      projectName: 'ontology-mfg',
+      projectName: 'ontology-gcc',
       envName: 'dev',
       albDnsName: 'mfg-dev-alb-1234.elb.amazonaws.com',
-      domainName: 'mfg-ontology.whchoi.net',
+      domainName: 'gcc-ontology.whchoi.net',
       hostedZoneName: 'whchoi.net',
     });
     template = Template.fromStack(stack);

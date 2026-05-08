@@ -22,7 +22,7 @@ class AgentRunner:
     - 4-tuple: (name, description, fn, input_schema_dict) — passes the schema to Bedrock
     """
     def __init__(self, tools: list[tuple] | None = None,
-                 system: str = "You are a Korean Hi-Tech MFG copilot.",
+                 system: str = "You are a Korean Hi-Tech GCC copilot.",
                  max_rounds: int = 8):
         self.tools = tools or []
         self.system = system

@@ -117,7 +117,7 @@ export function Sidebar() {
             <Network className="w-4 h-4 text-ink-950" />
           </div>
           <div>
-            <div className="text-sm font-semibold text-ink-100 leading-tight">Ontology MFG</div>
+            <div className="text-sm font-semibold text-ink-100 leading-tight">Ontology GCC</div>
             <div className="text-[10px] text-ink-400 leading-tight">AMZN Tech v0.2.0</div>
           </div>
         </div>

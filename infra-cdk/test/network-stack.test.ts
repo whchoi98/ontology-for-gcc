@@ -10,7 +10,7 @@ describe('NetworkStack', () => {
     const app = new cdk.App();
     const stack = new NetworkStack(app, 'TestNetwork', {
       env: { account: '111111111111', region: 'ap-northeast-2' },
-      projectName: 'ontology-mfg',
+      projectName: 'ontology-gcc',
       envName: 'dev',
       retailVpcExportName: 'ontology-retail-dev-vpc-id',
     });

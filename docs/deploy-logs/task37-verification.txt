@@ -18,7 +18,7 @@ Deferred manual steps (run from inside retail VPC):
     - SSM Session Manager port-forward through a bastion in the VPC
 
   From inside retail VPC (or equivalent):
-    cd /home/ec2-user/my-project/ontology-for-mfg
+    cd /home/ec2-user/my-project/ontology-for-gcc
 
     # Option A: run all steps via Makefile
     make load
@@ -32,7 +32,7 @@ Deferred manual steps (run from inside retail VPC):
     make verify-graph
 
   Environment variables needed:
-    NEPTUNE_ENDPOINT=https://ontology-mfg-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
+    NEPTUNE_ENDPOINT=https://ontology-gcc-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
     OPENSEARCH_HOST=klhxy9avzighd1u2ugth.ap-northeast-2.aoss.amazonaws.com
     AWS_REGION=ap-northeast-2
 
@@ -47,4 +47,4 @@ Note: If AOSS permissions fail with the IAM role running the task, add the calle
 principal to the data access policy:
   aws opensearchserverless create-access-policy --name mfg-loader-access \
     --type data \
-    --policy '[{"Rules":[{"Resource":["index/ontology-mfg-dev-search/*"],"Permission":["aoss:CreateIndex","aoss:WriteDocument","aoss:UpdateIndex"]}],"Principal":["<task-role-arn>"]}]'
+    --policy '[{"Rules":[{"Resource":["index/ontology-gcc-dev-search/*"],"Permission":["aoss:CreateIndex","aoss:WriteDocument","aoss:UpdateIndex"]}],"Principal":["<task-role-arn>"]}]'

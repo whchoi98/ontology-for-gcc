@@ -9,15 +9,15 @@ describe('ObservabilityStack', () => {
     const app = new cdk.App();
     const stack = new ObservabilityStack(app, 'TestObs', {
       env: { account: '111111111111', region: 'ap-northeast-2' },
-      projectName: 'ontology-mfg', envName: 'dev',
-      clusterName: 'ontology-mfg-dev-cluster',
-      apiServiceName: 'ontology-mfg-dev-api',
-      webServiceName: 'ontology-mfg-dev-web',
+      projectName: 'ontology-gcc', envName: 'dev',
+      clusterName: 'ontology-gcc-dev-cluster',
+      apiServiceName: 'ontology-gcc-dev-api',
+      webServiceName: 'ontology-gcc-dev-web',
     });
     template = Template.fromStack(stack);
   });
 
-  test('Dashboard "MFG Demo Health"', () => {
+  test('Dashboard "GCC Demo Health"', () => {
     template.resourceCountIs('AWS::CloudWatch::Dashboard', 1);
   });
 

@@ -1,5 +1,5 @@
 {
-  "name": "ontology-mfg-infra",
+  "name": "ontology-gcc-infra",
   "version": "0.1.0",
   "private": true,
   "bin": { "app": "bin/app.js" },

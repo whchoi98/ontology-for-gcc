@@ -8,4 +8,4 @@ def test_4_manufacturers():
     # Note: INNOTEK and MAGNA are unified under "INNOTEK" division for the
     # 4 사업부 (가전 H&A / TV HE / VS 전장 / 부품 = Innotek + Magna JV)
     assert divs == {"HA", "HE", "VS", "INNOTEK"}
-    assert all(m.id.startswith("AMZN-MFG-") for m in out)
+    assert all(m.id.startswith("AMZN-GCC-") for m in out)

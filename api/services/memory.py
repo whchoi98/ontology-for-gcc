@@ -14,7 +14,7 @@ from api.config import settings
 def save_fact(session_id: str, key: str, value: str) -> None:
     client = boto3.client("dynamodb", region_name=settings.aws_region)
     client.put_item(
-        TableName="ontology-mfg-dev-memory",  # provisioned in Plan 2 Task 12 if not present
+        TableName="ontology-gcc-dev-memory",  # provisioned in Plan 2 Task 12 if not present
         Item={
             "session_id": {"S": session_id},
             "key": {"S": key},
@@ -27,7 +27,7 @@ def save_fact(session_id: str, key: str, value: str) -> None:
 def recall_facts(session_id: str, top_k: int = 10) -> list[dict]:
     client = boto3.client("dynamodb", region_name=settings.aws_region)
     res = client.query(
-        TableName="ontology-mfg-dev-memory",
+        TableName="ontology-gcc-dev-memory",
         KeyConditionExpression="session_id = :s",
         ExpressionAttributeValues={":s": {"S": session_id}},
         Limit=top_k,

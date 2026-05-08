@@ -10,10 +10,10 @@ from data.schemas import Manufacturer
 OUTPUT = Path(__file__).resolve().parents[1] / "output" / "manufacturers.ndjson"
 
 _RAW: list[tuple[str, str, str]] = [
-    ("AMZN-MFG-HA",      "AMZN Tech Home Appliance",   "HA"),
-    ("AMZN-MFG-HE",      "AMZN Tech Home Entertainment", "HE"),
-    ("AMZN-MFG-VS",      "AMZN Tech Vehicle Solutions", "VS"),
-    ("AMZN-MFG-INNOTEK", "AMZN Tech Innotek + Magna ePT JV", "INNOTEK"),
+    ("AMZN-GCC-HA",      "AMZN Tech Home Appliance",   "HA"),
+    ("AMZN-GCC-HE",      "AMZN Tech Home Entertainment", "HE"),
+    ("AMZN-GCC-VS",      "AMZN Tech Vehicle Solutions", "VS"),
+    ("AMZN-GCC-INNOTEK", "AMZN Tech Innotek + Magna ePT JV", "INNOTEK"),
 ]
 
 

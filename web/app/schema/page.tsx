@@ -45,7 +45,7 @@ export default function SchemaPage() {
     <div className="min-h-screen flex flex-col">
       <header className="h-14 border-b border-ink-700 bg-ink-900 flex items-center px-6">
         <div className="text-xs text-ink-400">메타 · 온톨로지 스키마</div>
-        <span className="ml-3 text-[10px] text-ink-500">22 클래스 · 합성 Hi-Tech MFG</span>
+        <span className="ml-3 text-[10px] text-ink-500">22 클래스 · 합성 Hi-Tech GCC</span>
       </header>
       <div className="flex-1 p-6">
         <h1 className="text-2xl font-bold text-ink-50 mb-1 flex items-center gap-2">

@@ -12,7 +12,7 @@
     "@aws-cdk/aws-codepipeline:crossAccountKeyAliasStackSafeResourceName": true,
     "@aws-cdk/aws-s3:createDefaultLoggingPolicy": true,
     "@aws-cdk/aws-sns-subscriptions:restrictSqsDescryption": true,
-    "projectName": "ontology-mfg",
+    "projectName": "ontology-gcc",
     "envName": "dev",
     "retailVpcExportName": "ontology-retail-dev-vpc-id"
   }

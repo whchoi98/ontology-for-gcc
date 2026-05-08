@@ -177,7 +177,7 @@ export class EdgeStack extends Stack {
       },
       domainNames: [props.domainName],
       certificate: cert,
-      comment: `${prefix} mfg-ontology distribution`,
+      comment: `${prefix} gcc-ontology distribution`,
     });
 
     Tags.of(this).add('Project', projectName);

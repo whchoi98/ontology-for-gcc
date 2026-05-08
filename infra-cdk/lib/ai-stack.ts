@@ -131,7 +131,7 @@ export class AIStack extends Stack {
     // NOTE: Bedrock KnowledgeBase (CfnKnowledgeBase) requires the vector index to exist
     // in the AOSS collection BEFORE the KB is created. CloudFormation cannot create
     // AOSS indexes natively. The KB must be created as a post-deploy step:
-    //   1. Create vector index 'mfg-kb' in collection ontology-mfg-dev-search
+    //   1. Create vector index 'mfg-kb' in collection ontology-gcc-dev-search
     //   2. aws bedrock-agent create-knowledge-base ...
     // KB role + data access policy are provisioned here so the KB can be added later.
     this.knowledgeBaseId = 'pending-post-deploy';

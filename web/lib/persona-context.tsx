@@ -8,7 +8,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { Persona } from "./types";
 
-const STORAGE_KEY = "ontology-mfg.active-persona";
+const STORAGE_KEY = "ontology-gcc.active-persona";
 
 interface Ctx {
   active: Persona;

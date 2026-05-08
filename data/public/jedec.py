@@ -1,4 +1,4 @@
-"""JEDEC reliability/packaging standards subset for hi-tech MFG demo.
+"""JEDEC reliability/packaging standards subset for hi-tech GCC demo.
 
 Source: https://www.jedec.org/ (public titles, no member-only docs).
 """

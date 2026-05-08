@@ -9,7 +9,7 @@ import { EdgeStack }          from '../lib/edge-stack';
 import { ObservabilityStack } from '../lib/observability-stack';
 
 const app = new cdk.App();
-const projectName = app.node.tryGetContext('projectName') ?? 'ontology-mfg';
+const projectName = app.node.tryGetContext('projectName') ?? 'ontology-gcc';
 const envName     = app.node.tryGetContext('envName') ?? 'dev';
 const retailVpcExportName = app.node.tryGetContext('retailVpcExportName')
   ?? 'ontology-retail-dev-vpc-id';
@@ -67,7 +67,7 @@ const edge = new EdgeStack(app, `${prefix}-edge`, {
   env: envUsEast, crossRegionReferences: true,
   projectName, envName,
   albDnsName: albDnsNameOverride ?? compute.alb.loadBalancerDnsName,
-  domainName: 'mfg-ontology.whchoi.net',
+  domainName: 'gcc-ontology.whchoi.net',
   hostedZoneName: 'whchoi.net',
 });
 edge.addDependency(compute);

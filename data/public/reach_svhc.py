@@ -1,4 +1,4 @@
-"""ECHA REACH-SVHC candidate list — curated 50-entry subset for hi-tech MFG demo.
+"""ECHA REACH-SVHC candidate list — curated 50-entry subset for hi-tech GCC demo.
 
 Full list (244+ as of 2026): https://echa.europa.eu/candidate-list-table.
 Subset chosen to cover plasticizers, flame retardants, heavy metals relevant to

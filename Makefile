@@ -20,11 +20,11 @@ data:
 # or via SSM port-forward. They CANNOT be run from a public internet host.
 #
 # Required env vars:
-#   NEPTUNE_ENDPOINT   https://ontology-mfg-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
+#   NEPTUNE_ENDPOINT   https://ontology-gcc-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
 #   OPENSEARCH_HOST    klhxy9avzighd1u2ugth.ap-northeast-2.aoss.amazonaws.com
 #   AWS_REGION         ap-northeast-2
 
-NEPTUNE_ENDPOINT ?= https://ontology-mfg-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
+NEPTUNE_ENDPOINT ?= https://ontology-gcc-dev-neptune.cluster-cd4nhqgutps9.ap-northeast-2.neptune.amazonaws.com:8182
 OPENSEARCH_HOST  ?= klhxy9avzighd1u2ugth.ap-northeast-2.aoss.amazonaws.com
 AWS_REGION       ?= ap-northeast-2
 

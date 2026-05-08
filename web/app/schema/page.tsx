@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { GitBranch } from "lucide-react";
 
-const MFG_CLASSES = [
+const GCC_CLASSES = [
   // BOM
   { name: "Product",     group: "BOM",     desc: "완제품 — 최종 판매 단위 (LG 전자 TV/모니터 등)", color: "#60a5fa" },
   { name: "Module",      group: "BOM",     desc: "제조 모듈 — 복수 Component 집합", color: "#34d399" },
@@ -38,8 +38,8 @@ const GROUPS = ["BOM", "Supply", "Geo", "Standards", "Quality", "Ops/ESG"];
 export default function SchemaPage() {
   const [filter, setFilter] = useState("");
   const filtered = filter
-    ? MFG_CLASSES.filter((c) => c.name.toLowerCase().includes(filter.toLowerCase()) || c.desc.includes(filter))
-    : MFG_CLASSES;
+    ? GCC_CLASSES.filter((c) => c.name.toLowerCase().includes(filter.toLowerCase()) || c.desc.includes(filter))
+    : GCC_CLASSES;
 
   return (
     <div className="min-h-screen flex flex-col">

@@ -1,7 +1,7 @@
 # api/services/embedding.py
 """Text embedding via Bedrock.
 
-Model is configured via MFG_EMBED_MODEL_ID env var (default: amazon.titan-embed-text-v2:0).
+Model is configured via GCC_EMBED_MODEL_ID env var (default: amazon.titan-embed-text-v2:0).
 The AOSS gcc-search index was created with 1024 dimensions, which Titan v2 matches.
 
 Response shape differences:

@@ -60,5 +60,5 @@ def call_with_tool(
     return []
 
 
-DEFAULT_SONNET = os.environ.get("MFG_SONNET_MODEL_ID", "anthropic.claude-sonnet-4-6-v1:0")
-DEFAULT_HAIKU = os.environ.get("MFG_HAIKU_MODEL_ID", "anthropic.claude-haiku-4-5-20251001-v1:0")
+DEFAULT_SONNET = os.environ.get("GCC_SONNET_MODEL_ID", "anthropic.claude-sonnet-4-6-v1:0")
+DEFAULT_HAIKU = os.environ.get("GCC_HAIKU_MODEL_ID", "anthropic.claude-haiku-4-5-20251001-v1:0")

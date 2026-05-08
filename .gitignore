@@ -25,3 +25,7 @@ cdk.out/
 
 # harness-eval cache (latest.json은 commit, cache는 제외)
 .harness-eval/cache/
+
+# Claude Code harness: personal/runtime files
+.claude/settings.local.json
+.claude/scheduled_tasks.lock

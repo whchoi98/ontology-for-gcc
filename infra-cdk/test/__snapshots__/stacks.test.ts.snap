@@ -1,0 +1,2219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GCC stacks snapshot ai stack matches snapshot 1`] = `
+{
+  "Outputs": {
+    "ExportsOutputFnGetAttGuardrailGuardrailId78EA463E": {
+      "Export": {
+        "Name": "t-ai:ExportsOutputFnGetAttGuardrailGuardrailId78EA463E",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "Guardrail",
+          "GuardrailId",
+        ],
+      },
+    },
+    "GuardrailId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Guardrail",
+          "GuardrailId",
+        ],
+      },
+    },
+    "KbIdRef": {
+      "Value": {
+        "Fn::ImportValue": "GccBedrockKbId",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "Guardrail": {
+      "Properties": {
+        "BlockedInputMessaging": "입력에 차단된 콘텐츠가 포함되어 있습니다.",
+        "BlockedOutputsMessaging": "출력에 차단된 콘텐츠가 포함되어 있습니다.",
+        "ContentPolicyConfig": {
+          "FiltersConfig": [
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "HIGH",
+              "Type": "SEXUAL",
+            },
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "HIGH",
+              "Type": "VIOLENCE",
+            },
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "HIGH",
+              "Type": "HATE",
+            },
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "HIGH",
+              "Type": "INSULTS",
+            },
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "HIGH",
+              "Type": "MISCONDUCT",
+            },
+            {
+              "InputStrength": "HIGH",
+              "OutputStrength": "NONE",
+              "Type": "PROMPT_ATTACK",
+            },
+          ],
+        },
+        "Name": "ontology-gcc-dev-guardrail",
+        "SensitiveInformationPolicyConfig": {
+          "PiiEntitiesConfig": [
+            {
+              "Action": "ANONYMIZE",
+              "Type": "PHONE",
+            },
+            {
+              "Action": "ANONYMIZE",
+              "Type": "EMAIL",
+            },
+            {
+              "Action": "BLOCK",
+              "Type": "CREDIT_DEBIT_CARD_NUMBER",
+            },
+          ],
+        },
+      },
+      "Type": "AWS::Bedrock::Guardrail",
+    },
+    "KbRoleDE09CC9A": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "bedrock.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "KbRoleDefaultPolicy43751C83": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "t-data:ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "bedrock:InvokeModel",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "KbRoleDefaultPolicy43751C83",
+        "Roles": [
+          {
+            "Ref": "KbRoleDE09CC9A",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GCC stacks snapshot compute stack matches snapshot 1`] = `
+{
+  "Outputs": {
+    "AlbDnsName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "Alb16C2F182",
+          "DNSName",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "Alb16C2F182": {
+      "Properties": {
+        "LoadBalancerAttributes": [
+          {
+            "Key": "deletion_protection.enabled",
+            "Value": "false",
+          },
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Fn::ImportValue": "t-network:ExportsOutputFnGetAttAlbSg1155C1BEGroupIdF2A72E65",
+          },
+        ],
+        "Subnets": [
+          "subnet-pub1",
+          "subnet-pub2",
+        ],
+        "Type": "application",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::LoadBalancer",
+    },
+    "AlbHttp7966E42E": {
+      "Properties": {
+        "DefaultActions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "AlbHttpWebTargetsGroup28DAD88B",
+            },
+            "Type": "forward",
+          },
+        ],
+        "LoadBalancerArn": {
+          "Ref": "Alb16C2F182",
+        },
+        "Port": 80,
+        "Protocol": "HTTP",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::Listener",
+    },
+    "AlbHttpApiTargetsGroupF03D1176": {
+      "Properties": {
+        "HealthCheckPath": "/healthz",
+        "Matcher": {
+          "HttpCode": "200",
+        },
+        "Port": 8000,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "AlbHttpApiTargetsRule0B11721D": {
+      "Properties": {
+        "Actions": [
+          {
+            "TargetGroupArn": {
+              "Ref": "AlbHttpApiTargetsGroupF03D1176",
+            },
+            "Type": "forward",
+          },
+        ],
+        "Conditions": [
+          {
+            "Field": "path-pattern",
+            "PathPatternConfig": {
+              "Values": [
+                "/api/*",
+                "/healthz",
+              ],
+            },
+          },
+        ],
+        "ListenerArn": {
+          "Ref": "AlbHttp7966E42E",
+        },
+        "Priority": 10,
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::ListenerRule",
+    },
+    "AlbHttpWebTargetsGroup28DAD88B": {
+      "Properties": {
+        "HealthCheckPath": "/",
+        "Matcher": {
+          "HttpCode": "200,307",
+        },
+        "Port": 3000,
+        "Protocol": "HTTP",
+        "TargetGroupAttributes": [
+          {
+            "Key": "stickiness.enabled",
+            "Value": "false",
+          },
+        ],
+        "TargetType": "ip",
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::ElasticLoadBalancingV2::TargetGroup",
+    },
+    "ApiRepoEFA7BA97": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RepositoryName": "ontology-gcc-dev-api",
+      },
+      "Type": "AWS::ECR::Repository",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ApiServiceC9037CF0": {
+      "DependsOn": [
+        "AlbHttpApiTargetsRule0B11721D",
+        "TaskRoleDefaultPolicy07FC53DE",
+        "TaskRole30FC0FBB",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 2,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "api",
+            "ContainerPort": 8000,
+            "TargetGroupArn": {
+              "Ref": "AlbHttpApiTargetsGroupF03D1176",
+            },
+          },
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::ImportValue": "t-network:ExportsOutputFnGetAttAppSg898BCA4EGroupId325D937C",
+              },
+            ],
+            "Subnets": [
+              "subnet-pri1",
+              "subnet-pri2",
+            ],
+          },
+        },
+        "ServiceName": "ontology-gcc-dev-api",
+        "TaskDefinition": {
+          "Ref": "ApiTask011D0955",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "ApiTask011D0955": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "AWS_REGION",
+                "Value": "ap-northeast-2",
+              },
+              {
+                "Name": "NEPTUNE_ENDPOINT",
+                "Value": {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttNeptuneClusterEndpoint547806ED",
+                },
+              },
+              {
+                "Name": "OPENSEARCH_ENDPOINT",
+                "Value": {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttOsCollectionCollectionEndpoint29BD0121",
+                },
+              },
+              {
+                "Name": "OPENSEARCH_INDEX",
+                "Value": "ontology-gcc-dev-kb-index",
+              },
+              {
+                "Name": "BEDROCK_CHAT_MODEL_ID",
+                "Value": "global.anthropic.claude-sonnet-4-6",
+              },
+              {
+                "Name": "BEDROCK_EMBED_MODEL_ID",
+                "Value": "global.cohere.embed-v4:0",
+              },
+              {
+                "Name": "BEDROCK_KB_ID",
+                "Value": {
+                  "Fn::ImportValue": "GccBedrockKbId",
+                },
+              },
+              {
+                "Name": "BEDROCK_GUARDRAIL_ID",
+                "Value": {
+                  "Fn::ImportValue": "t-ai:ExportsOutputFnGetAttGuardrailGuardrailId78EA463E",
+                },
+              },
+              {
+                "Name": "AGENTCORE_MEMORY_ID",
+                "Value": "pending-agentcore-memory-id",
+              },
+              {
+                "Name": "RAW_DOCS_BUCKET",
+                "Value": {
+                  "Fn::ImportValue": "t-data:ExportsOutputRefRawDocs7861B565541B0A43",
+                },
+              },
+              {
+                "Name": "UPLOADS_BUCKET",
+                "Value": {
+                  "Fn::ImportValue": "t-data:ExportsOutputRefUploads4F6EB0FDCD8CB653",
+                },
+              },
+              {
+                "Name": "SYNTHETIC_DATA_BUCKET",
+                "Value": {
+                  "Fn::ImportValue": "t-data:ExportsOutputRefSynthetic84BD070820345639",
+                },
+              },
+              {
+                "Name": "ONTOLOGY_ENV",
+                "Value": "dev",
+              },
+              {
+                "Name": "DEMO_PUBLIC_MODE",
+                "Value": "false",
+              },
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Select": [
+                      4,
+                      {
+                        "Fn::Split": [
+                          ":",
+                          {
+                            "Fn::GetAtt": [
+                              "ApiRepoEFA7BA97",
+                              "Arn",
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Fn::Select": [
+                      3,
+                      {
+                        "Fn::Split": [
+                          ":",
+                          {
+                            "Fn::GetAtt": [
+                              "ApiRepoEFA7BA97",
+                              "Arn",
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/",
+                  {
+                    "Ref": "ApiRepoEFA7BA97",
+                  },
+                  ":latest",
+                ],
+              ],
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "ApiTaskapiLogGroupB3F8CE89",
+                },
+                "awslogs-region": "ap-northeast-2",
+                "awslogs-stream-prefix": "api",
+              },
+            },
+            "Name": "api",
+            "PortMappings": [
+              {
+                "ContainerPort": 8000,
+                "Protocol": "tcp",
+              },
+            ],
+            "Secrets": [
+              {
+                "Name": "ORIGIN_AUTH_TOKEN",
+                "ValueFrom": {
+                  "Ref": "OriginAuthSecretB2468950",
+                },
+              },
+            ],
+          },
+        ],
+        "Cpu": "1024",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "ApiTaskExecutionRoleC2344606",
+            "Arn",
+          ],
+        },
+        "Family": "tcomputeApiTask73506DFC",
+        "Memory": "2048",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "TaskRole30FC0FBB",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "ApiTaskExecutionRoleC2344606": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ApiTaskExecutionRoleDefaultPolicyB5439AFC": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiRepoEFA7BA97",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "ApiTaskapiLogGroupB3F8CE89",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "OriginAuthSecretB2468950",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "ApiTaskExecutionRoleDefaultPolicyB5439AFC",
+        "Roles": [
+          {
+            "Ref": "ApiTaskExecutionRoleC2344606",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "ApiTaskapiLogGroupB3F8CE89": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "ClusterEB0386A7": {
+      "Properties": {
+        "ClusterName": "ontology-gcc-dev-cluster",
+        "ClusterSettings": [
+          {
+            "Name": "containerInsights",
+            "Value": "enabled",
+          },
+        ],
+      },
+      "Type": "AWS::ECS::Cluster",
+    },
+    "CustomCrossRegionExportWriterCustomResourceProviderHandlerD8786E8A": {
+      "DependsOn": [
+        "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-111122223333-ap-northeast-2",
+          "S3Key": "d2191f6f199b95d1c044799f514b1ceca87200b3014c43c34839aad03dc69b8c.zip",
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:DeleteParameters",
+                    "ssm:ListTagsForResource",
+                    "ssm:GetParameters",
+                    "ssm:PutParameter",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": [
+                    {
+                      "Fn::Join": [
+                        "",
+                        [
+                          "arn:",
+                          {
+                            "Ref": "AWS::Partition",
+                          },
+                          ":ssm:us-east-1:111122223333:parameter/cdk/exports/*",
+                        ],
+                      ],
+                    },
+                  ],
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "ExportsWriteruseast10F67B507DDE2E818": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportWriterCustomResourceProviderHandlerD8786E8A",
+            "Arn",
+          ],
+        },
+        "WriterProps": {
+          "exports": {
+            "/cdk/exports/t-edge/tcomputeapnortheast2FnGetAttAlb16C2F182DNSNameFBF8C5A6": {
+              "Fn::GetAtt": [
+                "Alb16C2F182",
+                "DNSName",
+              ],
+            },
+          },
+          "region": "us-east-1",
+        },
+      },
+      "Type": "Custom::CrossRegionExportWriter",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "OriginAuthSecretB2468950": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "GenerateSecretString": {
+          "ExcludePunctuation": true,
+          "PasswordLength": 48,
+        },
+        "Name": "ontology-gcc-dev/origin-auth",
+      },
+      "Type": "AWS::SecretsManager::Secret",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "TaskRole30FC0FBB": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/NeptuneFullAccess",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "TaskRoleDefaultPolicy07FC53DE": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "bedrock:InvokeModel",
+                "bedrock:Converse",
+                "bedrock:Retrieve",
+                "bedrock:ApplyGuardrail",
+                "aoss:APIAccessAll",
+              ],
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "t-data:ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttUploads4F6EB0FDArn5513CBEA",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "t-data:ExportsOutputFnGetAttUploads4F6EB0FDArn5513CBEA",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:PutObjectLegalHold",
+                "s3:PutObjectRetention",
+                "s3:PutObjectTagging",
+                "s3:PutObjectVersionTagging",
+                "s3:Abort*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::ImportValue": "t-data:ExportsOutputFnGetAttSynthetic84BD0708Arn0B8ADF1F",
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::ImportValue": "t-data:ExportsOutputFnGetAttSynthetic84BD0708Arn0B8ADF1F",
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": [
+                "secretsmanager:GetSecretValue",
+                "secretsmanager:DescribeSecret",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Ref": "OriginAuthSecretB2468950",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "TaskRoleDefaultPolicy07FC53DE",
+        "Roles": [
+          {
+            "Ref": "TaskRole30FC0FBB",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "WebRepo9D56C0A3": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RepositoryName": "ontology-gcc-dev-web",
+      },
+      "Type": "AWS::ECR::Repository",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "WebService7F8A1763": {
+      "DependsOn": [
+        "AlbHttpApiTargetsGroupF03D1176",
+        "AlbHttpApiTargetsRule0B11721D",
+        "AlbHttp7966E42E",
+        "AlbHttpWebTargetsGroup28DAD88B",
+        "WebTaskTaskRole6A095794",
+      ],
+      "Properties": {
+        "Cluster": {
+          "Ref": "ClusterEB0386A7",
+        },
+        "DeploymentConfiguration": {
+          "Alarms": {
+            "AlarmNames": [],
+            "Enable": false,
+            "Rollback": false,
+          },
+          "MaximumPercent": 200,
+          "MinimumHealthyPercent": 50,
+        },
+        "DesiredCount": 2,
+        "EnableECSManagedTags": false,
+        "HealthCheckGracePeriodSeconds": 60,
+        "LaunchType": "FARGATE",
+        "LoadBalancers": [
+          {
+            "ContainerName": "web",
+            "ContainerPort": 3000,
+            "TargetGroupArn": {
+              "Ref": "AlbHttpWebTargetsGroup28DAD88B",
+            },
+          },
+        ],
+        "NetworkConfiguration": {
+          "AwsvpcConfiguration": {
+            "AssignPublicIp": "DISABLED",
+            "SecurityGroups": [
+              {
+                "Fn::ImportValue": "t-network:ExportsOutputFnGetAttAppSg898BCA4EGroupId325D937C",
+              },
+            ],
+            "Subnets": [
+              "subnet-pri1",
+              "subnet-pri2",
+            ],
+          },
+        },
+        "ServiceName": "ontology-gcc-dev-web",
+        "TaskDefinition": {
+          "Ref": "WebTask51ED7374",
+        },
+      },
+      "Type": "AWS::ECS::Service",
+    },
+    "WebTask51ED7374": {
+      "Properties": {
+        "ContainerDefinitions": [
+          {
+            "Environment": [
+              {
+                "Name": "NEXT_PUBLIC_API_BASE",
+                "Value": "/api",
+              },
+            ],
+            "Essential": true,
+            "Image": {
+              "Fn::Join": [
+                "",
+                [
+                  {
+                    "Fn::Select": [
+                      4,
+                      {
+                        "Fn::Split": [
+                          ":",
+                          {
+                            "Fn::GetAtt": [
+                              "WebRepo9D56C0A3",
+                              "Arn",
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".dkr.ecr.",
+                  {
+                    "Fn::Select": [
+                      3,
+                      {
+                        "Fn::Split": [
+                          ":",
+                          {
+                            "Fn::GetAtt": [
+                              "WebRepo9D56C0A3",
+                              "Arn",
+                            ],
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix",
+                  },
+                  "/",
+                  {
+                    "Ref": "WebRepo9D56C0A3",
+                  },
+                  ":latest",
+                ],
+              ],
+            },
+            "LogConfiguration": {
+              "LogDriver": "awslogs",
+              "Options": {
+                "awslogs-group": {
+                  "Ref": "WebTaskwebLogGroup4728B49D",
+                },
+                "awslogs-region": "ap-northeast-2",
+                "awslogs-stream-prefix": "web",
+              },
+            },
+            "Name": "web",
+            "PortMappings": [
+              {
+                "ContainerPort": 3000,
+                "Protocol": "tcp",
+              },
+            ],
+          },
+        ],
+        "Cpu": "512",
+        "ExecutionRoleArn": {
+          "Fn::GetAtt": [
+            "WebTaskExecutionRole28FA0566",
+            "Arn",
+          ],
+        },
+        "Family": "tcomputeWebTask61D35640",
+        "Memory": "1024",
+        "NetworkMode": "awsvpc",
+        "RequiresCompatibilities": [
+          "FARGATE",
+        ],
+        "RuntimePlatform": {
+          "CpuArchitecture": "ARM64",
+          "OperatingSystemFamily": "LINUX",
+        },
+        "TaskRoleArn": {
+          "Fn::GetAtt": [
+            "WebTaskTaskRole6A095794",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::ECS::TaskDefinition",
+    },
+    "WebTaskExecutionRole28FA0566": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WebTaskExecutionRoleDefaultPolicy20822D46": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ecr:BatchCheckLayerAvailability",
+                "ecr:GetDownloadUrlForLayer",
+                "ecr:BatchGetImage",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WebRepo9D56C0A3",
+                  "Arn",
+                ],
+              },
+            },
+            {
+              "Action": "ecr:GetAuthorizationToken",
+              "Effect": "Allow",
+              "Resource": "*",
+            },
+            {
+              "Action": [
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "WebTaskwebLogGroup4728B49D",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "WebTaskExecutionRoleDefaultPolicy20822D46",
+        "Roles": [
+          {
+            "Ref": "WebTaskExecutionRole28FA0566",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "WebTaskTaskRole6A095794": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ecs-tasks.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "WebTaskwebLogGroup4728B49D": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "RetentionInDays": 30,
+      },
+      "Type": "AWS::Logs::LogGroup",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GCC stacks snapshot data stack matches snapshot 1`] = `
+{
+  "Outputs": {
+    "BulkLoaderRoleArn": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NeptuneBulkLoaderRoleA532BD5E",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttNeptuneClusterEndpoint547806ED": {
+      "Export": {
+        "Name": "t-data:ExportsOutputFnGetAttNeptuneClusterEndpoint547806ED",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "NeptuneCluster",
+          "Endpoint",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttOsCollectionCollectionEndpoint29BD0121": {
+      "Export": {
+        "Name": "t-data:ExportsOutputFnGetAttOsCollectionCollectionEndpoint29BD0121",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "OsCollection",
+          "CollectionEndpoint",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8": {
+      "Export": {
+        "Name": "t-data:ExportsOutputFnGetAttRawDocs7861B565Arn8DF859F8",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "RawDocs7861B565",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttSynthetic84BD0708Arn0B8ADF1F": {
+      "Export": {
+        "Name": "t-data:ExportsOutputFnGetAttSynthetic84BD0708Arn0B8ADF1F",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "Synthetic84BD0708",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttUploads4F6EB0FDArn5513CBEA": {
+      "Export": {
+        "Name": "t-data:ExportsOutputFnGetAttUploads4F6EB0FDArn5513CBEA",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "Uploads4F6EB0FD",
+          "Arn",
+        ],
+      },
+    },
+    "ExportsOutputRefNeptuneClusterF0D32436": {
+      "Export": {
+        "Name": "t-data:ExportsOutputRefNeptuneClusterF0D32436",
+      },
+      "Value": {
+        "Ref": "NeptuneCluster",
+      },
+    },
+    "ExportsOutputRefRawDocs7861B565541B0A43": {
+      "Export": {
+        "Name": "t-data:ExportsOutputRefRawDocs7861B565541B0A43",
+      },
+      "Value": {
+        "Ref": "RawDocs7861B565",
+      },
+    },
+    "ExportsOutputRefSynthetic84BD070820345639": {
+      "Export": {
+        "Name": "t-data:ExportsOutputRefSynthetic84BD070820345639",
+      },
+      "Value": {
+        "Ref": "Synthetic84BD0708",
+      },
+    },
+    "ExportsOutputRefUploads4F6EB0FDCD8CB653": {
+      "Export": {
+        "Name": "t-data:ExportsOutputRefUploads4F6EB0FDCD8CB653",
+      },
+      "Value": {
+        "Ref": "Uploads4F6EB0FD",
+      },
+    },
+    "NeptuneEndpoint": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NeptuneCluster",
+          "Endpoint",
+        ],
+      },
+    },
+    "OpenSearchEndpoint": {
+      "Value": {
+        "Fn::GetAtt": [
+          "OsCollection",
+          "CollectionEndpoint",
+        ],
+      },
+    },
+    "SyntheticBucketName": {
+      "Value": {
+        "Ref": "Synthetic84BD0708",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "NeptuneBulkLoaderRoleA532BD5E": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "rds.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "RoleName": "gcc-neptune-bulk-loader-role",
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "NeptuneBulkLoaderRoleDefaultPolicyD0EF87D4": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "Synthetic84BD0708",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "Synthetic84BD0708",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "NeptuneBulkLoaderRoleDefaultPolicyD0EF87D4",
+        "Roles": [
+          {
+            "Ref": "NeptuneBulkLoaderRoleA532BD5E",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "NeptuneCluster": {
+      "DependsOn": [
+        "NeptuneSubnetGroup",
+      ],
+      "Properties": {
+        "AssociatedRoles": [
+          {
+            "RoleArn": {
+              "Fn::GetAtt": [
+                "NeptuneBulkLoaderRoleA532BD5E",
+                "Arn",
+              ],
+            },
+          },
+        ],
+        "DBClusterIdentifier": "ontology-gcc-dev-neptune",
+        "DBSubnetGroupName": "gcc-neptune-subnets",
+        "EngineVersion": "1.3.2.0",
+        "IamAuthEnabled": true,
+        "VpcSecurityGroupIds": [
+          {
+            "Fn::ImportValue": "t-network:ExportsOutputFnGetAttNeptuneSg69803EEEGroupIdEF0D9D08",
+          },
+        ],
+      },
+      "Type": "AWS::Neptune::DBCluster",
+    },
+    "NeptuneInstance": {
+      "Properties": {
+        "DBClusterIdentifier": {
+          "Ref": "NeptuneCluster",
+        },
+        "DBInstanceClass": "db.t4g.medium",
+        "DBInstanceIdentifier": "ontology-gcc-dev-neptune-1",
+      },
+      "Type": "AWS::Neptune::DBInstance",
+    },
+    "NeptuneSubnetGroup": {
+      "Properties": {
+        "DBSubnetGroupDescription": "GCC Neptune subnets",
+        "DBSubnetGroupName": "gcc-neptune-subnets",
+        "SubnetIds": [
+          "subnet-iso1",
+          "subnet-iso2",
+        ],
+      },
+      "Type": "AWS::Neptune::DBSubnetGroup",
+    },
+    "OsCollection": {
+      "DependsOn": [
+        "OsNetworkPolicy",
+        "OsSecurityPolicy",
+      ],
+      "Properties": {
+        "Name": "ontology-gcc-dev",
+        "Type": "VECTORSEARCH",
+      },
+      "Type": "AWS::OpenSearchServerless::Collection",
+    },
+    "OsNetworkPolicy": {
+      "Properties": {
+        "Name": "gcc-os-network",
+        "Policy": "[{"Rules":[{"ResourceType":"collection","Resource":["collection/ontology-gcc-dev"]},{"ResourceType":"dashboard","Resource":["collection/ontology-gcc-dev"]}],"AllowFromPublic":false,"SourceVPCEs":[]}]",
+        "Type": "network",
+      },
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+    },
+    "OsSecurityPolicy": {
+      "Properties": {
+        "Name": "gcc-os-encryption",
+        "Policy": "{"Rules":[{"ResourceType":"collection","Resource":["collection/ontology-gcc-dev"]}],"AWSOwnedKey":true}",
+        "Type": "encryption",
+      },
+      "Type": "AWS::OpenSearchServerless::SecurityPolicy",
+    },
+    "RawDocs7861B565": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "BucketName": "ontology-gcc-dev-raw-docs-111122223333",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "Synthetic84BD0708": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "BucketName": "ontology-gcc-dev-synthetic-data-111122223333",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "Uploads4F6EB0FD": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "AES256",
+              },
+            },
+          ],
+        },
+        "BucketName": "ontology-gcc-dev-uploads-111122223333",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GCC stacks snapshot edge stack matches snapshot 1`] = `
+{
+  "Outputs": {
+    "CloudFrontDomainName": {
+      "Value": {
+        "Fn::GetAtt": [
+          "DistB3B78991",
+          "DomainName",
+        ],
+      },
+    },
+    "UserPoolId": {
+      "Value": {
+        "Ref": "UserPool6BA7E5F2",
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68": {
+      "DependsOn": [
+        "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-111122223333-us-east-1",
+          "S3Key": "f06f7035054cb2aada184c7c251ec5cb31fb6b5e975284939b9ff097603ea769.zip",
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs22.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": [
+                    "ssm:AddTagsToResource",
+                    "ssm:RemoveTagsFromResource",
+                    "ssm:GetParameters",
+                  ],
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":ssm:us-east-1:111122223333:parameter/cdk/exports/t-edge/*",
+                      ],
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DistB3B78991": {
+      "Properties": {
+        "DistributionConfig": {
+          "DefaultCacheBehavior": {
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "Compress": true,
+            "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
+            "TargetOriginId": "tedgeDistOrigin1C3262E61",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "http-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2",
+                ],
+              },
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "ExportsReader8B249524",
+                  "/cdk/exports/t-edge/tcomputeapnortheast2FnGetAttAlb16C2F182DNSNameFBF8C5A6",
+                ],
+              },
+              "Id": "tedgeDistOrigin1C3262E61",
+            },
+          ],
+          "PriceClass": "PriceClass_200",
+        },
+      },
+      "Type": "AWS::CloudFront::Distribution",
+    },
+    "ExportsReader8B249524": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ReaderProps": {
+          "imports": {
+            "/cdk/exports/t-edge/tcomputeapnortheast2FnGetAttAlb16C2F182DNSNameFBF8C5A6": "{{resolve:ssm:/cdk/exports/t-edge/tcomputeapnortheast2FnGetAttAlb16C2F182DNSNameFBF8C5A6}}",
+          },
+          "prefix": "t-edge",
+          "region": "us-east-1",
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::CrossRegionExportReader",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "UserPool6BA7E5F2": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "AccountRecoverySetting": {
+          "RecoveryMechanisms": [
+            {
+              "Name": "verified_phone_number",
+              "Priority": 1,
+            },
+            {
+              "Name": "verified_email",
+              "Priority": 2,
+            },
+          ],
+        },
+        "AdminCreateUserConfig": {
+          "AllowAdminCreateUserOnly": true,
+        },
+        "AutoVerifiedAttributes": [
+          "email",
+        ],
+        "EmailVerificationMessage": "The verification code to your new account is {####}",
+        "EmailVerificationSubject": "Verify your new account",
+        "Policies": {
+          "PasswordPolicy": {
+            "MinimumLength": 8,
+            "RequireLowercase": true,
+            "RequireNumbers": true,
+            "RequireSymbols": true,
+            "RequireUppercase": true,
+          },
+        },
+        "SmsVerificationMessage": "The verification code to your new account is {####}",
+        "UserPoolName": "ontology-gcc-dev-userpool",
+        "UsernameAttributes": [
+          "email",
+        ],
+        "VerificationMessageTemplate": {
+          "DefaultEmailOption": "CONFIRM_WITH_CODE",
+          "EmailMessage": "The verification code to your new account is {####}",
+          "EmailSubject": "Verify your new account",
+          "SmsMessage": "The verification code to your new account is {####}",
+        },
+      },
+      "Type": "AWS::Cognito::UserPool",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "UserPoolClient2F5918F7": {
+      "Properties": {
+        "AllowedOAuthFlows": [
+          "code",
+        ],
+        "AllowedOAuthFlowsUserPoolClient": true,
+        "AllowedOAuthScopes": [
+          "email",
+          "openid",
+        ],
+        "CallbackURLs": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Fn::GetAtt": [
+                    "DistB3B78991",
+                    "DomainName",
+                  ],
+                },
+                "/auth/callback",
+              ],
+            ],
+          },
+        ],
+        "ExplicitAuthFlows": [
+          "ALLOW_USER_PASSWORD_AUTH",
+          "ALLOW_REFRESH_TOKEN_AUTH",
+        ],
+        "GenerateSecret": true,
+        "LogoutURLs": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "https://",
+                {
+                  "Fn::GetAtt": [
+                    "DistB3B78991",
+                    "DomainName",
+                  ],
+                },
+              ],
+            ],
+          },
+        ],
+        "SupportedIdentityProviders": [
+          "COGNITO",
+        ],
+        "UserPoolId": {
+          "Ref": "UserPool6BA7E5F2",
+        },
+      },
+      "Type": "AWS::Cognito::UserPoolClient",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
+{
+  "Outputs": {
+    "ExportsOutputFnGetAttAlbSg1155C1BEGroupIdF2A72E65": {
+      "Export": {
+        "Name": "t-network:ExportsOutputFnGetAttAlbSg1155C1BEGroupIdF2A72E65",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "AlbSg1155C1BE",
+          "GroupId",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttAppSg898BCA4EGroupId325D937C": {
+      "Export": {
+        "Name": "t-network:ExportsOutputFnGetAttAppSg898BCA4EGroupId325D937C",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "AppSg898BCA4E",
+          "GroupId",
+        ],
+      },
+    },
+    "ExportsOutputFnGetAttNeptuneSg69803EEEGroupIdEF0D9D08": {
+      "Export": {
+        "Name": "t-network:ExportsOutputFnGetAttNeptuneSg69803EEEGroupIdEF0D9D08",
+      },
+      "Value": {
+        "Fn::GetAtt": [
+          "NeptuneSg69803EEE",
+          "GroupId",
+        ],
+      },
+    },
+    "GccAppSgId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "AppSg898BCA4E",
+          "GroupId",
+        ],
+      },
+    },
+    "GccNeptuneSgId": {
+      "Value": {
+        "Fn::GetAtt": [
+          "NeptuneSg69803EEE",
+          "GroupId",
+        ],
+      },
+    },
+  },
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "AlbSg1155C1BE": {
+      "Properties": {
+        "GroupDescription": "GCC ALB — ingress from CloudFront prefix list only",
+        "GroupName": "gcc-alb-sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AlbSgfromplxxxxxxxx8039F4074C": {
+      "Properties": {
+        "Description": "CloudFront origins",
+        "FromPort": 80,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AlbSg1155C1BE",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourcePrefixListId": "pl-xxxxxxxx",
+        "ToPort": 80,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AppSg898BCA4E": {
+      "Properties": {
+        "GroupDescription": "GCC ECS tasks (api+web)",
+        "GroupName": "gcc-app-sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "Description": "Allow all outbound traffic by default",
+            "IpProtocol": "-1",
+          },
+        ],
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "AppSgfromtnetworkAlbSgCE10065930005183B6E5": {
+      "Properties": {
+        "Description": "ALB → web",
+        "FromPort": 3000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AppSg898BCA4E",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AlbSg1155C1BE",
+            "GroupId",
+          ],
+        },
+        "ToPort": 3000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "AppSgfromtnetworkAlbSgCE1006598000F1515CAB": {
+      "Properties": {
+        "Description": "ALB → api",
+        "FromPort": 8000,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "AppSg898BCA4E",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AlbSg1155C1BE",
+            "GroupId",
+          ],
+        },
+        "ToPort": 8000,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "NeptuneSg69803EEE": {
+      "Properties": {
+        "GroupDescription": "GCC Neptune — ingress from gcc-app-sg only",
+        "GroupName": "gcc-neptune-sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "NeptuneSgfromtnetworkAppSg2EC9D7428182D21BFBA8": {
+      "Properties": {
+        "Description": "GCC api → Neptune",
+        "FromPort": 8182,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "NeptuneSg69803EEE",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AppSg898BCA4E",
+            "GroupId",
+          ],
+        },
+        "ToPort": 8182,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+    "OsSg89C9FF77": {
+      "Properties": {
+        "GroupDescription": "GCC OpenSearch Serverless VPC endpoint",
+        "GroupName": "gcc-os-sg",
+        "SecurityGroupEgress": [
+          {
+            "CidrIp": "255.255.255.255/32",
+            "Description": "Disallow all traffic",
+            "FromPort": 252,
+            "IpProtocol": "icmp",
+            "ToPort": 86,
+          },
+        ],
+        "VpcId": "vpc-fake",
+      },
+      "Type": "AWS::EC2::SecurityGroup",
+    },
+    "OsSgfromtnetworkAppSg2EC9D74244325199CCC": {
+      "Properties": {
+        "Description": "GCC api → OS",
+        "FromPort": 443,
+        "GroupId": {
+          "Fn::GetAtt": [
+            "OsSg89C9FF77",
+            "GroupId",
+          ],
+        },
+        "IpProtocol": "tcp",
+        "SourceSecurityGroupId": {
+          "Fn::GetAtt": [
+            "AppSg898BCA4E",
+            "GroupId",
+          ],
+        },
+        "ToPort": 443,
+      },
+      "Type": "AWS::EC2::SecurityGroupIngress",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;
+
+exports[`GCC stacks snapshot obs stack matches snapshot 1`] = `
+{
+  "Parameters": {
+    "BootstrapVersion": {
+      "Default": "/cdk-bootstrap/hnb659fds/version",
+      "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]",
+      "Type": "AWS::SSM::Parameter::Value<String>",
+    },
+  },
+  "Resources": {
+    "ApiHighCpu5B111836": {
+      "Properties": {
+        "AlarmName": "gcc-api-high-cpu",
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "Dimensions": [
+          {
+            "Name": "ClusterName",
+            "Value": "ontology-gcc-dev-cluster",
+          },
+          {
+            "Name": "ServiceName",
+            "Value": "ontology-gcc-dev-api",
+          },
+        ],
+        "EvaluationPeriods": 3,
+        "MetricName": "CPUUtilization",
+        "Namespace": "AWS/ECS",
+        "Period": 300,
+        "Statistic": "Average",
+        "Threshold": 85,
+        "TreatMissingData": "notBreaching",
+      },
+      "Type": "AWS::CloudWatch::Alarm",
+    },
+    "Dashboard9E4231ED": {
+      "Properties": {
+        "DashboardBody": {
+          "Fn::Join": [
+            "",
+            [
+              "{"widgets":[{"type":"metric","width":6,"height":6,"x":0,"y":0,"properties":{"view":"timeSeries","title":"ECS API CPU/Memory","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","metrics":[["AWS/ECS","CPUUtilization","ClusterName","ontology-gcc-dev-cluster","ServiceName","ontology-gcc-dev-api"],["AWS/ECS","MemoryUtilization","ClusterName","ontology-gcc-dev-cluster","ServiceName","ontology-gcc-dev-api"]],"yAxis":{}}},{"type":"metric","width":6,"height":6,"x":6,"y":0,"properties":{"view":"timeSeries","title":"Neptune CPU/Connections","region":"",
+              {
+                "Ref": "AWS::Region",
+              },
+              "","metrics":[["AWS/Neptune","CPUUtilization","DBClusterIdentifier","",
+              {
+                "Fn::ImportValue": "t-data:ExportsOutputRefNeptuneClusterF0D32436",
+              },
+              ""],["AWS/Neptune","TotalRequestsPerSec","DBClusterIdentifier","",
+              {
+                "Fn::ImportValue": "t-data:ExportsOutputRefNeptuneClusterF0D32436",
+              },
+              ""]],"yAxis":{}}}]}",
+            ],
+          ],
+        },
+        "DashboardName": "ontology-gcc-dev",
+      },
+      "Type": "AWS::CloudWatch::Dashboard",
+    },
+  },
+  "Rules": {
+    "CheckBootstrapVersion": {
+      "Assertions": [
+        {
+          "Assert": {
+            "Fn::Not": [
+              {
+                "Fn::Contains": [
+                  [
+                    "1",
+                    "2",
+                    "3",
+                    "4",
+                    "5",
+                  ],
+                  {
+                    "Ref": "BootstrapVersion",
+                  },
+                ],
+              },
+            ],
+          },
+          "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI.",
+        },
+      ],
+    },
+  },
+}
+`;

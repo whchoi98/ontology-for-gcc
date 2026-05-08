@@ -1,0 +1,27 @@
+# raw_data: PII (de-identified지만 비공개 자산), KMS S3로 별도 보관
+raw_data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+.next/
+*.tsbuildinfo
+
+# CDK
+cdk.out/
+.cdk.staging/
+
+# Misc
+*.log
+.DS_Store
+.env
+!.env.example
+
+# harness-eval cache (latest.json은 commit, cache는 제외)
+.harness-eval/cache/

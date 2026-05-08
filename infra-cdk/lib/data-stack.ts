@@ -100,14 +100,15 @@ export class DataStack extends cdk.Stack {
     const networkPolicy = new oss.CfnSecurityPolicy(this, 'OsNetworkPolicy', {
       name: 'gcc-os-network',
       type: 'network',
+      // Plan 1: AllowFromPublic=true; access control via IAM/aoss:APIAccessAll.
+      // Plan 5 polish: tighten with VPC endpoint + SourceVPCEs.
       policy: JSON.stringify([
         {
           Rules: [
             { ResourceType: 'collection', Resource: ['collection/ontology-gcc-dev'] },
             { ResourceType: 'dashboard', Resource: ['collection/ontology-gcc-dev'] },
           ],
-          AllowFromPublic: false,
-          SourceVPCEs: [],  // VPC endpoint added below
+          AllowFromPublic: true,
         },
       ]),
     });

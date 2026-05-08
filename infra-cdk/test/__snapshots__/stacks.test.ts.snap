@@ -1461,7 +1461,7 @@ exports[`GCC stacks snapshot data stack matches snapshot 1`] = `
     "OsNetworkPolicy": {
       "Properties": {
         "Name": "gcc-os-network",
-        "Policy": "[{"Rules":[{"ResourceType":"collection","Resource":["collection/ontology-gcc-dev"]},{"ResourceType":"dashboard","Resource":["collection/ontology-gcc-dev"]}],"AllowFromPublic":false,"SourceVPCEs":[]}]",
+        "Policy": "[{"Rules":[{"ResourceType":"collection","Resource":["collection/ontology-gcc-dev"]},{"ResourceType":"dashboard","Resource":["collection/ontology-gcc-dev"]}],"AllowFromPublic":true}]",
         "Type": "network",
       },
       "Type": "AWS::OpenSearchServerless::SecurityPolicy",

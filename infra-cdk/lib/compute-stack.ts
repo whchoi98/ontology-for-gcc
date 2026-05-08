@@ -149,6 +149,7 @@ export class ComputeStack extends cdk.Stack {
 
     listener.addTargets('ApiTargets', {
       port: 8000,
+      protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [apiService],
       healthCheck: { path: '/healthz', healthyHttpCodes: '200' },
       conditions: [elbv2.ListenerCondition.pathPatterns(['/api/*', '/healthz'])],
@@ -156,6 +157,7 @@ export class ComputeStack extends cdk.Stack {
     });
     listener.addTargets('WebTargets', {
       port: 3000,
+      protocol: elbv2.ApplicationProtocol.HTTP,
       targets: [webService],
       healthCheck: { path: '/', healthyHttpCodes: '200,307' },
     });

@@ -14,7 +14,7 @@ GCC 합성 데이터 규모는 ~100만 노드 + ~350만 엣지. 직접 openCyphe
 1. IAM Role `gcc-neptune-bulk-loader-role` — Neptune cluster의 `IamRoles` 속성으로 attach.
    - `AssumeRolePolicyDocument`: `rds.amazonaws.com` (Neptune trust).
    - `Policies`: `s3:GetObject`·`s3:ListBucket` on `synthetic-data` bucket.
-2. VPC endpoint `com.amazonaws.<region>.s3` (Gateway type) — Neptune이 S3로 GetObject할 수 있도록 isolated subnet route table에 attach.
+2. ~~VPC endpoint (S3 Gateway)~~ — **Deferred** (Plan 1 dry-run): `Vpc.fromVpcAttributes` does not expose `routeTableIds`, so the gateway endpoint cannot be installed from `gcc-data-stack`. Will be added out-of-band on retail's network stack before Plan 2 Bulk Loader run, or replaced with NAT egress (slower but functional).
 3. CFN Output: `BulkLoaderRoleArn` — Plan 2 loader가 `aws s3 cp ...` 후 Neptune Loader API 호출 시 사용.
 
 ## Consequences

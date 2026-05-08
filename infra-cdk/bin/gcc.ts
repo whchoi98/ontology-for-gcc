@@ -54,6 +54,7 @@ const ai = new AiStack(app, `${projectPrefix}-ai`, {
 
 const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   env, tags,
+  crossRegionReferences: true,
   vpc: network.vpc,
   appSg: network.appSg,
   albSg: network.albSg,
@@ -70,6 +71,7 @@ const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
 const edge = new EdgeStack(app, `${projectPrefix}-edge`, {
   env: { ...env, region: 'us-east-1' },
   tags,
+  crossRegionReferences: true,
   alb: compute.alb,
   domainName: app.node.tryGetContext('domain') as string | undefined,
 });

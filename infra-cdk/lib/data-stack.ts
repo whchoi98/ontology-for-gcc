@@ -54,12 +54,12 @@ export class DataStack extends cdk.Stack {
     this.syntheticDataBucket.grantRead(bulkLoaderRole);
     this.bulkLoaderRoleArn = bulkLoaderRole.roleArn;
 
-    // ── VPC endpoint for S3 (Neptune Loader needs S3 reach) ────────
-    new ec2.GatewayVpcEndpoint(this, 'S3VpcEndpoint', {
-      vpc: props.vpc,
-      service: ec2.GatewayVpcEndpointAwsService.S3,
-      subnets: [{ subnetType: ec2.SubnetType.PRIVATE_ISOLATED }],
-    });
+    // ── S3 VPC endpoint: deferred to retail-side out-of-band ─────────
+    // Vpc.fromVpcAttributes does not populate routeTableIds so a Gateway
+    // endpoint cannot be installed from this stack. Per ADR 0003, the
+    // S3 gateway endpoint will be added on retail's network stack
+    // (or via direct AWS CLI / console) before Plan 2 Bulk Loader runs.
+    // Until then, Neptune reaches S3 via NAT egress in private subnets.
 
     // ── Neptune ────────────────────────────────────────────────────
     const subnetGroup = new neptune.CfnDBSubnetGroup(this, 'NeptuneSubnetGroup', {

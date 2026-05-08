@@ -35,7 +35,7 @@ export class NetworkStack extends cdk.Stack {
     this.albSg = new ec2.SecurityGroup(this, 'AlbSg', {
       vpc: this.vpc,
       securityGroupName: 'gcc-alb-sg',
-      description: 'GCC ALB — ingress from CloudFront prefix list only',
+      description: 'GCC ALB - ingress from CloudFront prefix list only',
       allowAllOutbound: true,
     });
 
@@ -54,16 +54,16 @@ export class NetworkStack extends cdk.Stack {
       description: 'GCC ECS tasks (api+web)',
       allowAllOutbound: true,
     });
-    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(8000), 'ALB → api');
-    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(3000), 'ALB → web');
+    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(8000), 'ALB to api');
+    this.appSg.addIngressRule(this.albSg, ec2.Port.tcp(3000), 'ALB to web');
 
     this.neptuneSg = new ec2.SecurityGroup(this, 'NeptuneSg', {
       vpc: this.vpc,
       securityGroupName: 'gcc-neptune-sg',
-      description: 'GCC Neptune — ingress from gcc-app-sg only',
+      description: 'GCC Neptune - ingress from gcc-app-sg only',
       allowAllOutbound: false,
     });
-    this.neptuneSg.addIngressRule(this.appSg, ec2.Port.tcp(8182), 'GCC api → Neptune');
+    this.neptuneSg.addIngressRule(this.appSg, ec2.Port.tcp(8182), 'GCC api to Neptune');
 
     this.osSg = new ec2.SecurityGroup(this, 'OsSg', {
       vpc: this.vpc,
@@ -71,7 +71,7 @@ export class NetworkStack extends cdk.Stack {
       description: 'GCC OpenSearch Serverless VPC endpoint',
       allowAllOutbound: false,
     });
-    this.osSg.addIngressRule(this.appSg, ec2.Port.tcp(443), 'GCC api → OS');
+    this.osSg.addIngressRule(this.appSg, ec2.Port.tcp(443), 'GCC api to OS');
 
     new cdk.CfnOutput(this, 'GccAppSgId', { value: this.appSg.securityGroupId });
     new cdk.CfnOutput(this, 'GccNeptuneSgId', { value: this.neptuneSg.securityGroupId });

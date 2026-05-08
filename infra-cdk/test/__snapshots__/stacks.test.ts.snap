@@ -1926,7 +1926,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
   "Resources": {
     "AlbSg1155C1BE": {
       "Properties": {
-        "GroupDescription": "GCC ALB — ingress from CloudFront prefix list only",
+        "GroupDescription": "GCC ALB - ingress from CloudFront prefix list only",
         "GroupName": "gcc-alb-sg",
         "SecurityGroupEgress": [
           {
@@ -1972,7 +1972,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
     },
     "AppSgfromtnetworkAlbSgCE10065930005183B6E5": {
       "Properties": {
-        "Description": "ALB → web",
+        "Description": "ALB to web",
         "FromPort": 3000,
         "GroupId": {
           "Fn::GetAtt": [
@@ -1993,7 +1993,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
     },
     "AppSgfromtnetworkAlbSgCE1006598000F1515CAB": {
       "Properties": {
-        "Description": "ALB → api",
+        "Description": "ALB to api",
         "FromPort": 8000,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2014,7 +2014,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
     },
     "NeptuneSg69803EEE": {
       "Properties": {
-        "GroupDescription": "GCC Neptune — ingress from gcc-app-sg only",
+        "GroupDescription": "GCC Neptune - ingress from gcc-app-sg only",
         "GroupName": "gcc-neptune-sg",
         "SecurityGroupEgress": [
           {
@@ -2031,7 +2031,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
     },
     "NeptuneSgfromtnetworkAppSg2EC9D7428182D21BFBA8": {
       "Properties": {
-        "Description": "GCC api → Neptune",
+        "Description": "GCC api to Neptune",
         "FromPort": 8182,
         "GroupId": {
           "Fn::GetAtt": [
@@ -2069,7 +2069,7 @@ exports[`GCC stacks snapshot network stack matches snapshot 1`] = `
     },
     "OsSgfromtnetworkAppSg2EC9D74244325199CCC": {
       "Properties": {
-        "Description": "GCC api → OS",
+        "Description": "GCC api to OS",
         "FromPort": 443,
         "GroupId": {
           "Fn::GetAtt": [

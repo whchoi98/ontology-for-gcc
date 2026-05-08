@@ -1,0 +1,80 @@
+{"id":"AMZN-INNOTEK-FC-BGA-002","name":"AMZN FC-BGA Gen5 Pro","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-002"}
+{"id":"AMZN-INNOTEK-FC-BGA-016","name":"AMZN FC-BGA RFFE R1","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-016"}
+{"id":"AMZN-HE-VisionOLED-008","name":"AMZN VisionOLED 75 Pro","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-008"}
+{"id":"AMZN-INNOTEK-FC-BGA-003","name":"AMZN FC-BGA Gen5 HPC","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-003"}
+{"id":"AMZN-HE-VisionOLED-015","name":"AMZN VisionOLED 48 Frame","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-015"}
+{"id":"AMZN-INNOTEK-FC-BGA-008","name":"AMZN FC-BGA Gen4 Mobile","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-008"}
+{"id":"AMZN-HA-SmartFridge-009","name":"AMZN SmartFridge Bottom-Freezer X9","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-009"}
+{"id":"AMZN-VS-AutoCockpit-015","name":"AMZN AutoCockpit Telematics T1","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-015"}
+{"id":"AMZN-INNOTEK-FC-BGA-010","name":"AMZN FC-BGA CIS-108MP M11","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-010"}
+{"id":"AMZN-VS-AutoCockpit-008","name":"AMZN AutoCockpit Cluster A5","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-008"}
+{"id":"AMZN-HA-SmartFridge-016","name":"AMZN SmartFridge Inverter X7","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-016"}
+{"id":"AMZN-MAGNA-eDrive-009","name":"AMZN eDrive Reducer R1","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-009"}
+{"id":"AMZN-INNOTEK-FC-BGA-012","name":"AMZN FC-BGA MotorDrive M3","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-012"}
+{"id":"AMZN-VS-AutoCockpit-007","name":"AMZN AutoCockpit Cluster A3","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-007"}
+{"id":"AMZN-VS-AutoCockpit-011","name":"AMZN AutoCockpit ADAS Bundle 2","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-011"}
+{"id":"AMZN-INNOTEK-FC-BGA-015","name":"AMZN FC-BGA PMIC P2","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-015"}
+{"id":"AMZN-HE-VisionOLED-010","name":"AMZN VisionOLED 55 Pro","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-010"}
+{"id":"AMZN-INNOTEK-FC-BGA-009","name":"AMZN FC-BGA CIS-50MP M9","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-009"}
+{"id":"AMZN-MAGNA-eDrive-013","name":"AMZN eDrive BMS B2","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-013"}
+{"id":"AMZN-HA-SmartFridge-002","name":"AMZN SmartFridge X9 Pro","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-002"}
+{"id":"AMZN-MAGNA-eDrive-007","name":"AMZN eDrive Inverter Pro 800V","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-007"}
+{"id":"AMZN-INNOTEK-FC-BGA-006","name":"AMZN FC-BGA Gen4","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-006"}
+{"id":"AMZN-HE-VisionOLED-003","name":"AMZN VisionOLED 65","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-003"}
+{"id":"AMZN-MAGNA-eDrive-004","name":"AMZN eDrive 200iPT Compact","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-004"}
+{"id":"AMZN-HE-VisionOLED-004","name":"AMZN VisionOLED 55","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-004"}
+{"id":"AMZN-HE-VisionOLED-005","name":"AMZN VisionOLED 48 Game","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-005"}
+{"id":"AMZN-VS-AutoCockpit-012","name":"AMZN AutoCockpit ADAS Bundle 3","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-012"}
+{"id":"AMZN-VS-AutoCockpit-016","name":"AMZN AutoCockpit Telematics T2","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-016"}
+{"id":"AMZN-VS-AutoCockpit-002","name":"AMZN AutoCockpit C7 Pro","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-002"}
+{"id":"AMZN-INNOTEK-FC-BGA-014","name":"AMZN FC-BGA PMIC P1","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-014"}
+{"id":"AMZN-VS-AutoCockpit-001","name":"AMZN AutoCockpit C7","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-001"}
+{"id":"AMZN-HA-SmartFridge-008","name":"AMZN SmartFridge Mini X3","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-008"}
+{"id":"AMZN-MAGNA-eDrive-002","name":"AMZN eDrive 350iPT Pro","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-002"}
+{"id":"AMZN-HA-SmartFridge-003","name":"AMZN SmartFridge X8","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-003"}
+{"id":"AMZN-HE-VisionOLED-001","name":"AMZN VisionOLED 88","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-001"}
+{"id":"AMZN-VS-AutoCockpit-005","name":"AMZN AutoCockpit C3","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-005"}
+{"id":"AMZN-HE-VisionOLED-007","name":"AMZN VisionOLED 83 Cinema","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-007"}
+{"id":"AMZN-VS-AutoCockpit-009","name":"AMZN AutoCockpit InfoDrive 5","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-009"}
+{"id":"AMZN-HE-VisionOLED-009","name":"AMZN VisionOLED 65 Pro","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-009"}
+{"id":"AMZN-HA-SmartFridge-006","name":"AMZN SmartFridge X6","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-006"}
+{"id":"AMZN-HA-SmartFridge-007","name":"AMZN SmartFridge X5","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-007"}
+{"id":"AMZN-INNOTEK-FC-BGA-013","name":"AMZN FC-BGA MotorDrive M5","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-013"}
+{"id":"AMZN-MAGNA-eDrive-010","name":"AMZN eDrive Reducer R2","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-010"}
+{"id":"AMZN-HA-SmartFridge-010","name":"AMZN SmartFridge French-Door X9","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-010"}
+{"id":"AMZN-INNOTEK-FC-BGA-005","name":"AMZN FC-BGA Gen5 Comm","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-005"}
+{"id":"AMZN-HE-VisionOLED-006","name":"AMZN VisionOLED 97 Wallpaper","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-006"}
+{"id":"AMZN-MAGNA-eDrive-003","name":"AMZN eDrive 200iPT","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-003"}
+{"id":"AMZN-INNOTEK-FC-BGA-011","name":"AMZN FC-BGA CIS-12MP M5","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-011"}
+{"id":"AMZN-HA-SmartFridge-011","name":"AMZN SmartFridge Side-by-Side X8","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-011"}
+{"id":"AMZN-INNOTEK-FC-BGA-001","name":"AMZN FC-BGA Gen5","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-001"}
+{"id":"AMZN-HA-SmartFridge-001","name":"AMZN SmartFridge X9","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-001"}
+{"id":"AMZN-INNOTEK-FC-BGA-004","name":"AMZN FC-BGA Gen5 Auto","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-004"}
+{"id":"AMZN-MAGNA-eDrive-011","name":"AMZN eDrive Inverter Pro 1200V","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-011"}
+{"id":"AMZN-VS-AutoCockpit-006","name":"AMZN AutoCockpit C3 Eco","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-006"}
+{"id":"AMZN-MAGNA-eDrive-012","name":"AMZN eDrive BMS B1","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-012"}
+{"id":"AMZN-MAGNA-eDrive-016","name":"AMZN eDrive ePT Bundle X3","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-016"}
+{"id":"AMZN-HE-VisionOLED-011","name":"AMZN VisionOLED 42 Smart","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-011"}
+{"id":"AMZN-VS-AutoCockpit-003","name":"AMZN AutoCockpit C5","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-003"}
+{"id":"AMZN-VS-AutoCockpit-013","name":"AMZN AutoCockpit AR-HUD H1","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-013"}
+{"id":"AMZN-VS-AutoCockpit-010","name":"AMZN AutoCockpit InfoDrive 7","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-010"}
+{"id":"AMZN-VS-AutoCockpit-014","name":"AMZN AutoCockpit AR-HUD H2","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-014"}
+{"id":"AMZN-HA-SmartFridge-013","name":"AMZN SmartFridge Built-In X9","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-013"}
+{"id":"AMZN-MAGNA-eDrive-014","name":"AMZN eDrive Charger C1 11kW","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-014"}
+{"id":"AMZN-MAGNA-eDrive-005","name":"AMZN eDrive 150eMotor","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-005"}
+{"id":"AMZN-MAGNA-eDrive-001","name":"AMZN eDrive 350iPT","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-001"}
+{"id":"AMZN-HE-VisionOLED-014","name":"AMZN VisionOLED 65 Frame","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-014"}
+{"id":"AMZN-HE-VisionOLED-012","name":"AMZN VisionOLED 32 Smart","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-012"}
+{"id":"AMZN-MAGNA-eDrive-008","name":"AMZN eDrive Inverter Std 400V","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-008"}
+{"id":"AMZN-MAGNA-eDrive-015","name":"AMZN eDrive Charger C2 22kW","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-015"}
+{"id":"AMZN-HA-SmartFridge-005","name":"AMZN SmartFridge X7 Slim","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-005"}
+{"id":"AMZN-INNOTEK-FC-BGA-007","name":"AMZN FC-BGA Gen4 Auto","line":"FC-BGA","division":"INNOTEK","brand":"AMZN Tech","sku_code":"AMZN-INNOTEK-FC-BGA-007"}
+{"id":"AMZN-HA-SmartFridge-012","name":"AMZN SmartFridge Compact X4","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-012"}
+{"id":"AMZN-MAGNA-eDrive-006","name":"AMZN eDrive 150eMotor Lite","line":"eDrive","division":"MAGNA","brand":"AMZN Tech","sku_code":"AMZN-MAGNA-eDrive-006"}
+{"id":"AMZN-HA-SmartFridge-014","name":"AMZN SmartFridge Wine Cellar X6","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-014"}
+{"id":"AMZN-HE-VisionOLED-002","name":"AMZN VisionOLED 77","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-002"}
+{"id":"AMZN-HE-VisionOLED-013","name":"AMZN VisionOLED 75 Frame","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-013"}
+{"id":"AMZN-HE-VisionOLED-016","name":"AMZN VisionOLED 32 Compact","line":"VisionOLED","division":"HE","brand":"AMZN Tech","sku_code":"AMZN-HE-VisionOLED-016"}
+{"id":"AMZN-VS-AutoCockpit-004","name":"AMZN AutoCockpit C5 Lite","line":"AutoCockpit","division":"VS","brand":"AMZN Tech","sku_code":"AMZN-VS-AutoCockpit-004"}
+{"id":"AMZN-HA-SmartFridge-004","name":"AMZN SmartFridge X7","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-004"}
+{"id":"AMZN-HA-SmartFridge-015","name":"AMZN SmartFridge Showcase X8","line":"SmartFridge","division":"HA","brand":"AMZN Tech","sku_code":"AMZN-HA-SmartFridge-015"}

@@ -1,0 +1,30 @@
+{"id":"AMZN-CUST-001","name":"Global Auto OEM A","segment":"AUTO_OEM","region":"US"}
+{"id":"AMZN-CUST-002","name":"Global Auto OEM B","segment":"AUTO_OEM","region":"US"}
+{"id":"AMZN-CUST-003","name":"EU Auto Group C","segment":"AUTO_OEM","region":"PL"}
+{"id":"AMZN-CUST-004","name":"Asia Auto Maker D","segment":"AUTO_OEM","region":"KR"}
+{"id":"AMZN-CUST-005","name":"Premium EV Maker E","segment":"AUTO_OEM","region":"US"}
+{"id":"AMZN-CUST-006","name":"AutoTier1-Alpha","segment":"TIER1","region":"MX"}
+{"id":"AMZN-CUST-007","name":"AutoTier1-Beta","segment":"TIER1","region":"US"}
+{"id":"AMZN-CUST-008","name":"AutoTier1-Gamma","segment":"TIER1","region":"PL"}
+{"id":"AMZN-CUST-009","name":"AutoTier1-Delta","segment":"TIER1","region":"PL"}
+{"id":"AMZN-CUST-010","name":"AutoTier1-Epsilon","segment":"TIER1","region":"KR"}
+{"id":"AMZN-CUST-011","name":"AutoTier1-Zeta","segment":"TIER1","region":"KR"}
+{"id":"AMZN-CUST-012","name":"AutoTier1-Eta","segment":"TIER1","region":"CN"}
+{"id":"AMZN-CUST-013","name":"AutoTier1-Theta","segment":"TIER1","region":"IN"}
+{"id":"AMZN-CUST-014","name":"ApplianceDist-1","segment":"APPLIANCE_DIST","region":"US"}
+{"id":"AMZN-CUST-015","name":"ApplianceDist-2","segment":"APPLIANCE_DIST","region":"PL"}
+{"id":"AMZN-CUST-016","name":"ApplianceDist-3","segment":"APPLIANCE_DIST","region":"KR"}
+{"id":"AMZN-CUST-017","name":"ApplianceDist-4","segment":"APPLIANCE_DIST","region":"VN"}
+{"id":"AMZN-CUST-018","name":"ApplianceDist-5","segment":"APPLIANCE_DIST","region":"IN"}
+{"id":"AMZN-CUST-019","name":"ApplianceDist-6","segment":"APPLIANCE_DIST","region":"MX"}
+{"id":"AMZN-CUST-020","name":"ApplianceDist-7","segment":"APPLIANCE_DIST","region":"CN"}
+{"id":"AMZN-CUST-021","name":"Telco-NA-1","segment":"TELECOM","region":"US"}
+{"id":"AMZN-CUST-022","name":"Telco-EU-1","segment":"TELECOM","region":"PL"}
+{"id":"AMZN-CUST-023","name":"Telco-AP-1","segment":"TELECOM","region":"KR"}
+{"id":"AMZN-CUST-024","name":"Telco-AP-2","segment":"TELECOM","region":"VN"}
+{"id":"AMZN-CUST-025","name":"Telco-IN-1","segment":"TELECOM","region":"IN"}
+{"id":"AMZN-CUST-026","name":"Industrial-A","segment":"OTHER","region":"KR"}
+{"id":"AMZN-CUST-027","name":"Industrial-B","segment":"OTHER","region":"MX"}
+{"id":"AMZN-CUST-028","name":"Defense-A","segment":"OTHER","region":"US"}
+{"id":"AMZN-CUST-029","name":"Defense-B","segment":"OTHER","region":"KR"}
+{"id":"AMZN-CUST-030","name":"Medical-A","segment":"OTHER","region":"PL"}

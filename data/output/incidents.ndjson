@@ -1,0 +1,300 @@
+{"id":"INC-2026-0412","title":"BGA solder ball crack on Innotek FC-BGA Gen5 (lot 2026-Q1-W04)","component_id":"AMZN-CMP-DIS-00001","plant_id":"AMZN-PLANT-001","severity":"CRITICAL","occurred_at":"2026-04-12"}
+{"id":"INC-2026-0002","title":"Solder ball crack","component_id":"AMZN-CMP-MAG-02620","plant_id":"AMZN-PLANT-008","severity":"MID","occurred_at":"2025-09-03"}
+{"id":"INC-2026-0003","title":"Cable shielding break","component_id":"AMZN-CMP-OPT-00915","plant_id":"AMZN-PLANT-009","severity":"LOW","occurred_at":"2026-02-04"}
+{"id":"INC-2026-0004","title":"Motor bearing wear","component_id":"AMZN-CMP-ANT-00357","plant_id":"AMZN-PLANT-038","severity":"LOW","occurred_at":"2025-06-17"}
+{"id":"INC-2026-0005","title":"Optical misalignment","component_id":"AMZN-CMP-IC-00896","plant_id":"AMZN-PLANT-015","severity":"MID","occurred_at":"2026-02-12"}
+{"id":"INC-2026-0006","title":"Motor bearing wear","component_id":"AMZN-CMP-MOT-00815","plant_id":"AMZN-PLANT-035","severity":"LOW","occurred_at":"2026-02-26"}
+{"id":"INC-2026-0007","title":"Connector intermittent","component_id":"AMZN-CMP-BAT-01140","plant_id":"AMZN-PLANT-001","severity":"MID","occurred_at":"2025-10-22"}
+{"id":"INC-2026-0008","title":"PCB delamination","component_id":"AMZN-CMP-SEN-01139","plant_id":"AMZN-PLANT-010","severity":"CRITICAL","occurred_at":"2025-10-20"}
+{"id":"INC-2026-0009","title":"Motor bearing wear","component_id":"AMZN-CMP-MEM-00419","plant_id":"AMZN-PLANT-006","severity":"LOW","occurred_at":"2025-10-24"}
+{"id":"INC-2026-0010","title":"Solder ball crack","component_id":"AMZN-CMP-MEM-02473","plant_id":"AMZN-PLANT-017","severity":"MID","occurred_at":"2026-01-30"}
+{"id":"INC-2026-0011","title":"Capacitor leakage","component_id":"AMZN-CMP-MOT-00512","plant_id":"AMZN-PLANT-025","severity":"MID","occurred_at":"2026-03-18"}
+{"id":"INC-2026-0012","title":"Memory bit flip","component_id":"AMZN-CMP-MEM-02534","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2025-06-05"}
+{"id":"INC-2026-0013","title":"Display dead pixel","component_id":"AMZN-CMP-CON-00188","plant_id":"AMZN-PLANT-015","severity":"CRITICAL","occurred_at":"2025-08-28"}
+{"id":"INC-2026-0014","title":"Display dead pixel","component_id":"AMZN-CMP-ANT-00414","plant_id":"AMZN-PLANT-025","severity":"MID","occurred_at":"2025-11-03"}
+{"id":"INC-2026-0015","title":"Battery thermal runaway","component_id":"AMZN-CMP-MEM-00667","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2025-09-14"}
+{"id":"INC-2026-0016","title":"Memory bit flip","component_id":"AMZN-CMP-MEC-02875","plant_id":"AMZN-PLANT-005","severity":"MID","occurred_at":"2026-01-29"}
+{"id":"INC-2026-0017","title":"Sensor calibration drift","component_id":"AMZN-CMP-ANT-01003","plant_id":"AMZN-PLANT-011","severity":"LOW","occurred_at":"2026-03-24"}
+{"id":"INC-2026-0018","title":"PCB delamination","component_id":"AMZN-CMP-SEN-02819","plant_id":"AMZN-PLANT-036","severity":"MID","occurred_at":"2025-05-29"}
+{"id":"INC-2026-0019","title":"Battery thermal runaway","component_id":"AMZN-CMP-MAG-00939","plant_id":"AMZN-PLANT-003","severity":"MID","occurred_at":"2025-06-03"}
+{"id":"INC-2026-0020","title":"Cable shielding break","component_id":"AMZN-CMP-IC-00865","plant_id":"AMZN-PLANT-037","severity":"LOW","occurred_at":"2026-04-01"}
+{"id":"INC-2026-0021","title":"Antenna gain drop","component_id":"AMZN-CMP-OPT-02045","plant_id":"AMZN-PLANT-026","severity":"MID","occurred_at":"2025-09-13"}
+{"id":"INC-2026-0022","title":"Cable shielding break","component_id":"AMZN-CMP-OPT-00572","plant_id":"AMZN-PLANT-016","severity":"MID","occurred_at":"2025-09-12"}
+{"id":"INC-2026-0023","title":"Memory bit flip","component_id":"AMZN-CMP-DIS-02395","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2025-08-21"}
+{"id":"INC-2026-0024","title":"Sensor calibration drift","component_id":"AMZN-CMP-ANT-00567","plant_id":"AMZN-PLANT-033","severity":"LOW","occurred_at":"2025-05-25"}
+{"id":"INC-2026-0025","title":"Antenna gain drop","component_id":"AMZN-CMP-MOT-00450","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2026-04-14"}
+{"id":"INC-2026-0026","title":"Capacitor leakage","component_id":"AMZN-CMP-OPT-01730","plant_id":"AMZN-PLANT-039","severity":"LOW","occurred_at":"2026-03-02"}
+{"id":"INC-2026-0027","title":"Display dead pixel","component_id":"AMZN-CMP-SEN-01918","plant_id":"AMZN-PLANT-034","severity":"CRITICAL","occurred_at":"2025-05-06"}
+{"id":"INC-2026-0028","title":"Antenna gain drop","component_id":"AMZN-CMP-OPT-02787","plant_id":"AMZN-PLANT-008","severity":"HIGH","occurred_at":"2025-09-14"}
+{"id":"INC-2026-0029","title":"Capacitor leakage","component_id":"AMZN-CMP-MOT-02626","plant_id":"AMZN-PLANT-022","severity":"LOW","occurred_at":"2025-07-20"}
+{"id":"INC-2026-0030","title":"Cable shielding break","component_id":"AMZN-CMP-MOT-01859","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2025-09-12"}
+{"id":"INC-2026-0031","title":"Optical misalignment","component_id":"AMZN-CMP-MEM-02051","plant_id":"AMZN-PLANT-012","severity":"HIGH","occurred_at":"2026-03-17"}
+{"id":"INC-2026-0032","title":"Memory bit flip","component_id":"AMZN-CMP-CAB-01223","plant_id":"AMZN-PLANT-033","severity":"LOW","occurred_at":"2025-11-08"}
+{"id":"INC-2026-0033","title":"Optical misalignment","component_id":"AMZN-CMP-ANT-00662","plant_id":"AMZN-PLANT-035","severity":"HIGH","occurred_at":"2026-03-03"}
+{"id":"INC-2026-0034","title":"Solder ball crack","component_id":"AMZN-CMP-MEC-01328","plant_id":"AMZN-PLANT-032","severity":"LOW","occurred_at":"2025-11-02"}
+{"id":"INC-2026-0035","title":"Solder ball crack","component_id":"AMZN-CMP-MEM-01260","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2026-02-15"}
+{"id":"INC-2026-0036","title":"Cable shielding break","component_id":"AMZN-CMP-BAT-00323","plant_id":"AMZN-PLANT-006","severity":"MID","occurred_at":"2025-06-05"}
+{"id":"INC-2026-0037","title":"Connector intermittent","component_id":"AMZN-CMP-DIS-02182","plant_id":"AMZN-PLANT-009","severity":"MID","occurred_at":"2026-02-06"}
+{"id":"INC-2026-0038","title":"Optical misalignment","component_id":"AMZN-CMP-MAG-00677","plant_id":"AMZN-PLANT-017","severity":"HIGH","occurred_at":"2025-12-03"}
+{"id":"INC-2026-0039","title":"Cable shielding break","component_id":"AMZN-CMP-DIS-00868","plant_id":"AMZN-PLANT-035","severity":"MID","occurred_at":"2026-05-01"}
+{"id":"INC-2026-0040","title":"Antenna gain drop","component_id":"AMZN-CMP-SEN-01277","plant_id":"AMZN-PLANT-026","severity":"MID","occurred_at":"2025-12-11"}
+{"id":"INC-2026-0041","title":"Capacitor leakage","component_id":"AMZN-CMP-POW-02120","plant_id":"AMZN-PLANT-029","severity":"LOW","occurred_at":"2025-06-02"}
+{"id":"INC-2026-0042","title":"Memory bit flip","component_id":"AMZN-CMP-OPT-01385","plant_id":"AMZN-PLANT-002","severity":"MID","occurred_at":"2026-02-26"}
+{"id":"INC-2026-0043","title":"Capacitor leakage","component_id":"AMZN-CMP-MEM-00903","plant_id":"AMZN-PLANT-001","severity":"MID","occurred_at":"2025-05-31"}
+{"id":"INC-2026-0044","title":"Solder ball crack","component_id":"AMZN-CMP-BAT-00938","plant_id":"AMZN-PLANT-005","severity":"HIGH","occurred_at":"2025-06-06"}
+{"id":"INC-2026-0045","title":"Display dead pixel","component_id":"AMZN-CMP-CAB-02106","plant_id":"AMZN-PLANT-016","severity":"MID","occurred_at":"2025-08-18"}
+{"id":"INC-2026-0046","title":"Cable shielding break","component_id":"AMZN-CMP-OPT-02209","plant_id":"AMZN-PLANT-009","severity":"HIGH","occurred_at":"2026-02-17"}
+{"id":"INC-2026-0047","title":"PCB delamination","component_id":"AMZN-CMP-SEN-02361","plant_id":"AMZN-PLANT-031","severity":"HIGH","occurred_at":"2025-11-25"}
+{"id":"INC-2026-0048","title":"Capacitor leakage","component_id":"AMZN-CMP-CAB-00780","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-10-29"}
+{"id":"INC-2026-0049","title":"Sensor calibration drift","component_id":"AMZN-CMP-MEC-01735","plant_id":"AMZN-PLANT-027","severity":"HIGH","occurred_at":"2025-05-28"}
+{"id":"INC-2026-0050","title":"Solder ball crack","component_id":"AMZN-CMP-PCB-02759","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-10-21"}
+{"id":"INC-2026-0051","title":"PCB delamination","component_id":"AMZN-CMP-ANT-00448","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2025-12-16"}
+{"id":"INC-2026-0052","title":"Connector intermittent","component_id":"AMZN-CMP-MEC-00575","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2025-09-05"}
+{"id":"INC-2026-0053","title":"Optical misalignment","component_id":"AMZN-CMP-CAB-00309","plant_id":"AMZN-PLANT-029","severity":"LOW","occurred_at":"2026-03-30"}
+{"id":"INC-2026-0054","title":"Capacitor leakage","component_id":"AMZN-CMP-POW-02215","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2025-08-30"}
+{"id":"INC-2026-0055","title":"Sensor calibration drift","component_id":"AMZN-CMP-MOT-00682","plant_id":"AMZN-PLANT-027","severity":"MID","occurred_at":"2025-11-22"}
+{"id":"INC-2026-0056","title":"Motor bearing wear","component_id":"AMZN-CMP-MAG-00241","plant_id":"AMZN-PLANT-011","severity":"LOW","occurred_at":"2025-11-16"}
+{"id":"INC-2026-0057","title":"Display dead pixel","component_id":"AMZN-CMP-POW-01087","plant_id":"AMZN-PLANT-030","severity":"MID","occurred_at":"2026-02-09"}
+{"id":"INC-2026-0058","title":"Connector intermittent","component_id":"AMZN-CMP-MAG-02712","plant_id":"AMZN-PLANT-032","severity":"LOW","occurred_at":"2025-08-20"}
+{"id":"INC-2026-0059","title":"Cable shielding break","component_id":"AMZN-CMP-MEC-00240","plant_id":"AMZN-PLANT-038","severity":"MID","occurred_at":"2025-10-08"}
+{"id":"INC-2026-0060","title":"Memory bit flip","component_id":"AMZN-CMP-MAG-00235","plant_id":"AMZN-PLANT-004","severity":"MID","occurred_at":"2026-01-27"}
+{"id":"INC-2026-0061","title":"Optical misalignment","component_id":"AMZN-CMP-POW-00645","plant_id":"AMZN-PLANT-004","severity":"LOW","occurred_at":"2025-08-04"}
+{"id":"INC-2026-0062","title":"Capacitor leakage","component_id":"AMZN-CMP-DIS-00281","plant_id":"AMZN-PLANT-039","severity":"MID","occurred_at":"2025-08-29"}
+{"id":"INC-2026-0063","title":"Memory bit flip","component_id":"AMZN-CMP-MEC-01654","plant_id":"AMZN-PLANT-008","severity":"LOW","occurred_at":"2026-03-01"}
+{"id":"INC-2026-0064","title":"Capacitor leakage","component_id":"AMZN-CMP-MEM-00163","plant_id":"AMZN-PLANT-040","severity":"MID","occurred_at":"2026-02-23"}
+{"id":"INC-2026-0065","title":"Battery thermal runaway","component_id":"AMZN-CMP-MOT-02316","plant_id":"AMZN-PLANT-034","severity":"HIGH","occurred_at":"2025-08-13"}
+{"id":"INC-2026-0066","title":"PCB delamination","component_id":"AMZN-CMP-CON-02744","plant_id":"AMZN-PLANT-021","severity":"LOW","occurred_at":"2025-07-07"}
+{"id":"INC-2026-0067","title":"Sensor calibration drift","component_id":"AMZN-CMP-PCB-02752","plant_id":"AMZN-PLANT-020","severity":"LOW","occurred_at":"2025-06-07"}
+{"id":"INC-2026-0068","title":"Memory bit flip","component_id":"AMZN-CMP-IC-00039","plant_id":"AMZN-PLANT-030","severity":"CRITICAL","occurred_at":"2025-06-21"}
+{"id":"INC-2026-0069","title":"PCB delamination","component_id":"AMZN-CMP-CON-00301","plant_id":"AMZN-PLANT-035","severity":"MID","occurred_at":"2025-07-07"}
+{"id":"INC-2026-0070","title":"PCB delamination","component_id":"AMZN-CMP-CAB-01430","plant_id":"AMZN-PLANT-005","severity":"LOW","occurred_at":"2025-07-20"}
+{"id":"INC-2026-0071","title":"Cable shielding break","component_id":"AMZN-CMP-MEM-01795","plant_id":"AMZN-PLANT-035","severity":"LOW","occurred_at":"2026-03-31"}
+{"id":"INC-2026-0072","title":"Antenna gain drop","component_id":"AMZN-CMP-PCB-02167","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2025-10-01"}
+{"id":"INC-2026-0073","title":"Connector intermittent","component_id":"AMZN-CMP-CAB-02718","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2025-06-24"}
+{"id":"INC-2026-0074","title":"Display dead pixel","component_id":"AMZN-CMP-DIS-02267","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2025-08-16"}
+{"id":"INC-2026-0075","title":"PCB delamination","component_id":"AMZN-CMP-BAT-02940","plant_id":"AMZN-PLANT-022","severity":"MID","occurred_at":"2025-09-13"}
+{"id":"INC-2026-0076","title":"Display dead pixel","component_id":"AMZN-CMP-IC-02071","plant_id":"AMZN-PLANT-032","severity":"HIGH","occurred_at":"2025-05-27"}
+{"id":"INC-2026-0077","title":"Display dead pixel","component_id":"AMZN-CMP-CAB-00379","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2025-10-18"}
+{"id":"INC-2026-0078","title":"Connector intermittent","component_id":"AMZN-CMP-MAG-00536","plant_id":"AMZN-PLANT-017","severity":"MID","occurred_at":"2026-02-07"}
+{"id":"INC-2026-0079","title":"Optical misalignment","component_id":"AMZN-CMP-IC-02891","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2025-06-08"}
+{"id":"INC-2026-0080","title":"Optical misalignment","component_id":"AMZN-CMP-DIS-02831","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2025-11-06"}
+{"id":"INC-2026-0081","title":"Connector intermittent","component_id":"AMZN-CMP-ANT-02386","plant_id":"AMZN-PLANT-036","severity":"MID","occurred_at":"2025-05-22"}
+{"id":"INC-2026-0082","title":"Solder ball crack","component_id":"AMZN-CMP-BAT-01263","plant_id":"AMZN-PLANT-024","severity":"HIGH","occurred_at":"2025-08-16"}
+{"id":"INC-2026-0083","title":"Antenna gain drop","component_id":"AMZN-CMP-CON-02794","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2026-02-11"}
+{"id":"INC-2026-0084","title":"Cable shielding break","component_id":"AMZN-CMP-IC-01665","plant_id":"AMZN-PLANT-040","severity":"LOW","occurred_at":"2025-08-30"}
+{"id":"INC-2026-0085","title":"Motor bearing wear","component_id":"AMZN-CMP-MAG-00666","plant_id":"AMZN-PLANT-012","severity":"LOW","occurred_at":"2025-10-18"}
+{"id":"INC-2026-0086","title":"Display dead pixel","component_id":"AMZN-CMP-MEM-01687","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2026-04-25"}
+{"id":"INC-2026-0087","title":"Solder ball crack","component_id":"AMZN-CMP-MEC-00443","plant_id":"AMZN-PLANT-025","severity":"HIGH","occurred_at":"2025-08-22"}
+{"id":"INC-2026-0088","title":"Battery thermal runaway","component_id":"AMZN-CMP-MEC-00818","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-08-25"}
+{"id":"INC-2026-0089","title":"Antenna gain drop","component_id":"AMZN-CMP-MEM-00914","plant_id":"AMZN-PLANT-002","severity":"LOW","occurred_at":"2025-10-16"}
+{"id":"INC-2026-0090","title":"Display dead pixel","component_id":"AMZN-CMP-DIS-01142","plant_id":"AMZN-PLANT-005","severity":"LOW","occurred_at":"2026-01-16"}
+{"id":"INC-2026-0091","title":"Battery thermal runaway","component_id":"AMZN-CMP-MOT-01638","plant_id":"AMZN-PLANT-035","severity":"HIGH","occurred_at":"2025-06-29"}
+{"id":"INC-2026-0092","title":"Memory bit flip","component_id":"AMZN-CMP-MEM-01070","plant_id":"AMZN-PLANT-012","severity":"CRITICAL","occurred_at":"2025-09-13"}
+{"id":"INC-2026-0093","title":"Memory bit flip","component_id":"AMZN-CMP-MOT-00157","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-10-08"}
+{"id":"INC-2026-0094","title":"Optical misalignment","component_id":"AMZN-CMP-PCB-01788","plant_id":"AMZN-PLANT-039","severity":"LOW","occurred_at":"2026-02-20"}
+{"id":"INC-2026-0095","title":"Solder ball crack","component_id":"AMZN-CMP-MOT-00779","plant_id":"AMZN-PLANT-017","severity":"MID","occurred_at":"2025-05-01"}
+{"id":"INC-2026-0096","title":"Antenna gain drop","component_id":"AMZN-CMP-OPT-02130","plant_id":"AMZN-PLANT-035","severity":"MID","occurred_at":"2026-04-09"}
+{"id":"INC-2026-0097","title":"Motor bearing wear","component_id":"AMZN-CMP-MOT-00808","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2026-04-06"}
+{"id":"INC-2026-0098","title":"Battery thermal runaway","component_id":"AMZN-CMP-BAT-01353","plant_id":"AMZN-PLANT-040","severity":"MID","occurred_at":"2025-07-03"}
+{"id":"INC-2026-0099","title":"Optical misalignment","component_id":"AMZN-CMP-ANT-02949","plant_id":"AMZN-PLANT-020","severity":"LOW","occurred_at":"2025-11-26"}
+{"id":"INC-2026-0100","title":"Cable shielding break","component_id":"AMZN-CMP-OPT-01337","plant_id":"AMZN-PLANT-026","severity":"LOW","occurred_at":"2025-07-05"}
+{"id":"INC-2026-0101","title":"Antenna gain drop","component_id":"AMZN-CMP-PCB-00786","plant_id":"AMZN-PLANT-027","severity":"HIGH","occurred_at":"2026-04-12"}
+{"id":"INC-2026-0102","title":"Memory bit flip","component_id":"AMZN-CMP-PCB-00713","plant_id":"AMZN-PLANT-040","severity":"LOW","occurred_at":"2026-02-05"}
+{"id":"INC-2026-0103","title":"Display dead pixel","component_id":"AMZN-CMP-DIS-00002","plant_id":"AMZN-PLANT-020","severity":"LOW","occurred_at":"2026-02-21"}
+{"id":"INC-2026-0104","title":"Sensor calibration drift","component_id":"AMZN-CMP-POW-02485","plant_id":"AMZN-PLANT-021","severity":"MID","occurred_at":"2026-04-11"}
+{"id":"INC-2026-0105","title":"Sensor calibration drift","component_id":"AMZN-CMP-SEN-00876","plant_id":"AMZN-PLANT-033","severity":"HIGH","occurred_at":"2025-07-26"}
+{"id":"INC-2026-0106","title":"Display dead pixel","component_id":"AMZN-CMP-BAT-02699","plant_id":"AMZN-PLANT-006","severity":"MID","occurred_at":"2026-03-21"}
+{"id":"INC-2026-0107","title":"Capacitor leakage","component_id":"AMZN-CMP-MEM-02537","plant_id":"AMZN-PLANT-022","severity":"HIGH","occurred_at":"2025-08-29"}
+{"id":"INC-2026-0108","title":"PCB delamination","component_id":"AMZN-CMP-BAT-02756","plant_id":"AMZN-PLANT-020","severity":"HIGH","occurred_at":"2025-07-15"}
+{"id":"INC-2026-0109","title":"PCB delamination","component_id":"AMZN-CMP-SEN-00101","plant_id":"AMZN-PLANT-003","severity":"CRITICAL","occurred_at":"2026-03-09"}
+{"id":"INC-2026-0110","title":"Motor bearing wear","component_id":"AMZN-CMP-SEN-00299","plant_id":"AMZN-PLANT-030","severity":"HIGH","occurred_at":"2026-02-19"}
+{"id":"INC-2026-0111","title":"Sensor calibration drift","component_id":"AMZN-CMP-DIS-00797","plant_id":"AMZN-PLANT-025","severity":"LOW","occurred_at":"2025-07-15"}
+{"id":"INC-2026-0112","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-02688","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2025-08-21"}
+{"id":"INC-2026-0113","title":"Sensor calibration drift","component_id":"AMZN-CMP-MOT-00721","plant_id":"AMZN-PLANT-034","severity":"LOW","occurred_at":"2025-09-05"}
+{"id":"INC-2026-0114","title":"Connector intermittent","component_id":"AMZN-CMP-POW-00498","plant_id":"AMZN-PLANT-030","severity":"HIGH","occurred_at":"2026-04-07"}
+{"id":"INC-2026-0115","title":"Memory bit flip","component_id":"AMZN-CMP-POW-02176","plant_id":"AMZN-PLANT-036","severity":"LOW","occurred_at":"2025-12-13"}
+{"id":"INC-2026-0116","title":"Motor bearing wear","component_id":"AMZN-CMP-MEC-02510","plant_id":"AMZN-PLANT-033","severity":"HIGH","occurred_at":"2026-02-05"}
+{"id":"INC-2026-0117","title":"Cable shielding break","component_id":"AMZN-CMP-BAT-01827","plant_id":"AMZN-PLANT-011","severity":"HIGH","occurred_at":"2025-12-17"}
+{"id":"INC-2026-0118","title":"Antenna gain drop","component_id":"AMZN-CMP-DIS-01062","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2026-01-22"}
+{"id":"INC-2026-0119","title":"Display dead pixel","component_id":"AMZN-CMP-MOT-01985","plant_id":"AMZN-PLANT-016","severity":"MID","occurred_at":"2026-05-01"}
+{"id":"INC-2026-0120","title":"Display dead pixel","component_id":"AMZN-CMP-BAT-01171","plant_id":"AMZN-PLANT-016","severity":"LOW","occurred_at":"2026-02-01"}
+{"id":"INC-2026-0121","title":"Connector intermittent","component_id":"AMZN-CMP-MAG-00331","plant_id":"AMZN-PLANT-009","severity":"LOW","occurred_at":"2026-04-21"}
+{"id":"INC-2026-0122","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-00626","plant_id":"AMZN-PLANT-014","severity":"MID","occurred_at":"2025-10-17"}
+{"id":"INC-2026-0123","title":"Motor bearing wear","component_id":"AMZN-CMP-OPT-02223","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-12-02"}
+{"id":"INC-2026-0124","title":"Cable shielding break","component_id":"AMZN-CMP-ANT-01596","plant_id":"AMZN-PLANT-038","severity":"LOW","occurred_at":"2026-02-19"}
+{"id":"INC-2026-0125","title":"Solder ball crack","component_id":"AMZN-CMP-CON-01559","plant_id":"AMZN-PLANT-031","severity":"HIGH","occurred_at":"2025-09-30"}
+{"id":"INC-2026-0126","title":"Optical misalignment","component_id":"AMZN-CMP-DIS-01598","plant_id":"AMZN-PLANT-027","severity":"MID","occurred_at":"2026-02-04"}
+{"id":"INC-2026-0127","title":"Sensor calibration drift","component_id":"AMZN-CMP-ANT-02471","plant_id":"AMZN-PLANT-015","severity":"LOW","occurred_at":"2025-12-10"}
+{"id":"INC-2026-0128","title":"Motor bearing wear","component_id":"AMZN-CMP-POW-01990","plant_id":"AMZN-PLANT-002","severity":"LOW","occurred_at":"2026-04-13"}
+{"id":"INC-2026-0129","title":"Sensor calibration drift","component_id":"AMZN-CMP-MEC-01657","plant_id":"AMZN-PLANT-011","severity":"HIGH","occurred_at":"2026-03-15"}
+{"id":"INC-2026-0130","title":"Motor bearing wear","component_id":"AMZN-CMP-MOT-02188","plant_id":"AMZN-PLANT-002","severity":"MID","occurred_at":"2026-04-05"}
+{"id":"INC-2026-0131","title":"Antenna gain drop","component_id":"AMZN-CMP-PCB-00112","plant_id":"AMZN-PLANT-006","severity":"MID","occurred_at":"2025-12-23"}
+{"id":"INC-2026-0132","title":"Display dead pixel","component_id":"AMZN-CMP-IC-00745","plant_id":"AMZN-PLANT-004","severity":"LOW","occurred_at":"2025-08-17"}
+{"id":"INC-2026-0133","title":"Battery thermal runaway","component_id":"AMZN-CMP-MOT-01863","plant_id":"AMZN-PLANT-021","severity":"HIGH","occurred_at":"2025-11-11"}
+{"id":"INC-2026-0134","title":"Display dead pixel","component_id":"AMZN-CMP-BAT-01140","plant_id":"AMZN-PLANT-027","severity":"HIGH","occurred_at":"2025-12-27"}
+{"id":"INC-2026-0135","title":"Solder ball crack","component_id":"AMZN-CMP-MEC-00080","plant_id":"AMZN-PLANT-035","severity":"CRITICAL","occurred_at":"2025-10-27"}
+{"id":"INC-2026-0136","title":"Antenna gain drop","component_id":"AMZN-CMP-OPT-00919","plant_id":"AMZN-PLANT-005","severity":"LOW","occurred_at":"2025-05-16"}
+{"id":"INC-2026-0137","title":"Solder ball crack","component_id":"AMZN-CMP-POW-01013","plant_id":"AMZN-PLANT-013","severity":"MID","occurred_at":"2025-08-31"}
+{"id":"INC-2026-0138","title":"Antenna gain drop","component_id":"AMZN-CMP-CON-00518","plant_id":"AMZN-PLANT-031","severity":"LOW","occurred_at":"2025-08-20"}
+{"id":"INC-2026-0139","title":"Battery thermal runaway","component_id":"AMZN-CMP-CON-01905","plant_id":"AMZN-PLANT-017","severity":"LOW","occurred_at":"2026-03-07"}
+{"id":"INC-2026-0140","title":"Connector intermittent","component_id":"AMZN-CMP-MOT-02943","plant_id":"AMZN-PLANT-008","severity":"CRITICAL","occurred_at":"2025-06-25"}
+{"id":"INC-2026-0141","title":"Display dead pixel","component_id":"AMZN-CMP-MOT-02371","plant_id":"AMZN-PLANT-002","severity":"MID","occurred_at":"2025-11-09"}
+{"id":"INC-2026-0142","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-01625","plant_id":"AMZN-PLANT-013","severity":"MID","occurred_at":"2026-03-18"}
+{"id":"INC-2026-0143","title":"Cable shielding break","component_id":"AMZN-CMP-PCB-00995","plant_id":"AMZN-PLANT-007","severity":"HIGH","occurred_at":"2026-04-16"}
+{"id":"INC-2026-0144","title":"Memory bit flip","component_id":"AMZN-CMP-SEN-02460","plant_id":"AMZN-PLANT-008","severity":"HIGH","occurred_at":"2025-10-25"}
+{"id":"INC-2026-0145","title":"Antenna gain drop","component_id":"AMZN-CMP-OPT-02183","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2026-01-15"}
+{"id":"INC-2026-0146","title":"Solder ball crack","component_id":"AMZN-CMP-POW-02653","plant_id":"AMZN-PLANT-022","severity":"HIGH","occurred_at":"2026-01-06"}
+{"id":"INC-2026-0147","title":"Battery thermal runaway","component_id":"AMZN-CMP-MEM-00433","plant_id":"AMZN-PLANT-028","severity":"MID","occurred_at":"2025-12-22"}
+{"id":"INC-2026-0148","title":"Motor bearing wear","component_id":"AMZN-CMP-OPT-02898","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2026-01-23"}
+{"id":"INC-2026-0149","title":"Memory bit flip","component_id":"AMZN-CMP-PCB-02665","plant_id":"AMZN-PLANT-018","severity":"HIGH","occurred_at":"2026-01-31"}
+{"id":"INC-2026-0150","title":"Motor bearing wear","component_id":"AMZN-CMP-IC-01981","plant_id":"AMZN-PLANT-030","severity":"HIGH","occurred_at":"2026-02-28"}
+{"id":"INC-2026-0151","title":"PCB delamination","component_id":"AMZN-CMP-SEN-01100","plant_id":"AMZN-PLANT-021","severity":"HIGH","occurred_at":"2025-06-14"}
+{"id":"INC-2026-0152","title":"PCB delamination","component_id":"AMZN-CMP-BAT-01143","plant_id":"AMZN-PLANT-029","severity":"HIGH","occurred_at":"2026-02-16"}
+{"id":"INC-2026-0153","title":"Battery thermal runaway","component_id":"AMZN-CMP-MEM-02500","plant_id":"AMZN-PLANT-025","severity":"LOW","occurred_at":"2025-10-14"}
+{"id":"INC-2026-0154","title":"PCB delamination","component_id":"AMZN-CMP-IC-00745","plant_id":"AMZN-PLANT-032","severity":"LOW","occurred_at":"2025-09-10"}
+{"id":"INC-2026-0155","title":"Memory bit flip","component_id":"AMZN-CMP-BAT-01395","plant_id":"AMZN-PLANT-018","severity":"MID","occurred_at":"2025-09-19"}
+{"id":"INC-2026-0156","title":"Optical misalignment","component_id":"AMZN-CMP-DIS-02277","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2025-06-13"}
+{"id":"INC-2026-0157","title":"Sensor calibration drift","component_id":"AMZN-CMP-PCB-00989","plant_id":"AMZN-PLANT-027","severity":"MID","occurred_at":"2025-09-01"}
+{"id":"INC-2026-0158","title":"Antenna gain drop","component_id":"AMZN-CMP-CAB-02829","plant_id":"AMZN-PLANT-031","severity":"MID","occurred_at":"2025-12-16"}
+{"id":"INC-2026-0159","title":"Display dead pixel","component_id":"AMZN-CMP-DIS-00071","plant_id":"AMZN-PLANT-006","severity":"LOW","occurred_at":"2026-04-20"}
+{"id":"INC-2026-0160","title":"Antenna gain drop","component_id":"AMZN-CMP-MOT-00997","plant_id":"AMZN-PLANT-020","severity":"MID","occurred_at":"2025-12-29"}
+{"id":"INC-2026-0161","title":"Battery thermal runaway","component_id":"AMZN-CMP-CON-02268","plant_id":"AMZN-PLANT-034","severity":"MID","occurred_at":"2026-02-06"}
+{"id":"INC-2026-0162","title":"Cable shielding break","component_id":"AMZN-CMP-POW-01355","plant_id":"AMZN-PLANT-023","severity":"MID","occurred_at":"2025-10-04"}
+{"id":"INC-2026-0163","title":"Capacitor leakage","component_id":"AMZN-CMP-IC-01030","plant_id":"AMZN-PLANT-015","severity":"MID","occurred_at":"2025-10-09"}
+{"id":"INC-2026-0164","title":"Cable shielding break","component_id":"AMZN-CMP-PCB-00490","plant_id":"AMZN-PLANT-035","severity":"LOW","occurred_at":"2025-08-19"}
+{"id":"INC-2026-0165","title":"Cable shielding break","component_id":"AMZN-CMP-BAT-01984","plant_id":"AMZN-PLANT-018","severity":"MID","occurred_at":"2026-01-24"}
+{"id":"INC-2026-0166","title":"Capacitor leakage","component_id":"AMZN-CMP-CAB-02445","plant_id":"AMZN-PLANT-019","severity":"HIGH","occurred_at":"2025-09-29"}
+{"id":"INC-2026-0167","title":"Connector intermittent","component_id":"AMZN-CMP-SEN-00932","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2026-04-28"}
+{"id":"INC-2026-0168","title":"Display dead pixel","component_id":"AMZN-CMP-MOT-02188","plant_id":"AMZN-PLANT-009","severity":"LOW","occurred_at":"2025-05-28"}
+{"id":"INC-2026-0169","title":"Cable shielding break","component_id":"AMZN-CMP-DIS-02267","plant_id":"AMZN-PLANT-019","severity":"HIGH","occurred_at":"2026-03-23"}
+{"id":"INC-2026-0170","title":"Solder ball crack","component_id":"AMZN-CMP-CON-02011","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-12-27"}
+{"id":"INC-2026-0171","title":"Battery thermal runaway","component_id":"AMZN-CMP-DIS-01961","plant_id":"AMZN-PLANT-029","severity":"LOW","occurred_at":"2025-05-27"}
+{"id":"INC-2026-0172","title":"Capacitor leakage","component_id":"AMZN-CMP-MAG-01035","plant_id":"AMZN-PLANT-031","severity":"HIGH","occurred_at":"2025-11-22"}
+{"id":"INC-2026-0173","title":"Memory bit flip","component_id":"AMZN-CMP-POW-02015","plant_id":"AMZN-PLANT-005","severity":"MID","occurred_at":"2025-05-28"}
+{"id":"INC-2026-0174","title":"Memory bit flip","component_id":"AMZN-CMP-PCB-00622","plant_id":"AMZN-PLANT-010","severity":"HIGH","occurred_at":"2025-06-13"}
+{"id":"INC-2026-0175","title":"Optical misalignment","component_id":"AMZN-CMP-ANT-01017","plant_id":"AMZN-PLANT-008","severity":"HIGH","occurred_at":"2026-03-07"}
+{"id":"INC-2026-0176","title":"PCB delamination","component_id":"AMZN-CMP-DIS-02442","plant_id":"AMZN-PLANT-040","severity":"HIGH","occurred_at":"2025-11-11"}
+{"id":"INC-2026-0177","title":"Display dead pixel","component_id":"AMZN-CMP-MOT-01846","plant_id":"AMZN-PLANT-029","severity":"HIGH","occurred_at":"2025-12-06"}
+{"id":"INC-2026-0178","title":"Memory bit flip","component_id":"AMZN-CMP-DIS-01251","plant_id":"AMZN-PLANT-037","severity":"LOW","occurred_at":"2025-06-20"}
+{"id":"INC-2026-0179","title":"Display dead pixel","component_id":"AMZN-CMP-MAG-00852","plant_id":"AMZN-PLANT-014","severity":"MID","occurred_at":"2025-07-20"}
+{"id":"INC-2026-0180","title":"Optical misalignment","component_id":"AMZN-CMP-OPT-00983","plant_id":"AMZN-PLANT-012","severity":"LOW","occurred_at":"2025-05-02"}
+{"id":"INC-2026-0181","title":"Cable shielding break","component_id":"AMZN-CMP-OPT-01674","plant_id":"AMZN-PLANT-029","severity":"MID","occurred_at":"2025-09-27"}
+{"id":"INC-2026-0182","title":"Display dead pixel","component_id":"AMZN-CMP-CAB-00134","plant_id":"AMZN-PLANT-015","severity":"MID","occurred_at":"2026-04-25"}
+{"id":"INC-2026-0183","title":"Antenna gain drop","component_id":"AMZN-CMP-DIS-01860","plant_id":"AMZN-PLANT-005","severity":"LOW","occurred_at":"2025-09-13"}
+{"id":"INC-2026-0184","title":"Antenna gain drop","component_id":"AMZN-CMP-MEC-02561","plant_id":"AMZN-PLANT-038","severity":"HIGH","occurred_at":"2025-08-10"}
+{"id":"INC-2026-0185","title":"Optical misalignment","component_id":"AMZN-CMP-CAB-01742","plant_id":"AMZN-PLANT-008","severity":"LOW","occurred_at":"2025-07-16"}
+{"id":"INC-2026-0186","title":"Capacitor leakage","component_id":"AMZN-CMP-MEC-01089","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2025-10-05"}
+{"id":"INC-2026-0187","title":"Display dead pixel","component_id":"AMZN-CMP-OPT-02438","plant_id":"AMZN-PLANT-037","severity":"MID","occurred_at":"2025-12-26"}
+{"id":"INC-2026-0188","title":"Cable shielding break","component_id":"AMZN-CMP-MAG-02821","plant_id":"AMZN-PLANT-020","severity":"MID","occurred_at":"2025-09-17"}
+{"id":"INC-2026-0189","title":"Sensor calibration drift","component_id":"AMZN-CMP-MEM-02050","plant_id":"AMZN-PLANT-035","severity":"MID","occurred_at":"2026-03-03"}
+{"id":"INC-2026-0190","title":"Cable shielding break","component_id":"AMZN-CMP-CAB-00164","plant_id":"AMZN-PLANT-028","severity":"LOW","occurred_at":"2025-09-06"}
+{"id":"INC-2026-0191","title":"PCB delamination","component_id":"AMZN-CMP-IC-00106","plant_id":"AMZN-PLANT-006","severity":"CRITICAL","occurred_at":"2026-02-19"}
+{"id":"INC-2026-0192","title":"Antenna gain drop","component_id":"AMZN-CMP-PCB-02405","plant_id":"AMZN-PLANT-002","severity":"HIGH","occurred_at":"2026-02-20"}
+{"id":"INC-2026-0193","title":"Sensor calibration drift","component_id":"AMZN-CMP-POW-00165","plant_id":"AMZN-PLANT-012","severity":"MID","occurred_at":"2025-12-13"}
+{"id":"INC-2026-0194","title":"Memory bit flip","component_id":"AMZN-CMP-BAT-01140","plant_id":"AMZN-PLANT-012","severity":"MID","occurred_at":"2026-01-07"}
+{"id":"INC-2026-0195","title":"Battery thermal runaway","component_id":"AMZN-CMP-OPT-00374","plant_id":"AMZN-PLANT-031","severity":"MID","occurred_at":"2025-10-12"}
+{"id":"INC-2026-0196","title":"Connector intermittent","component_id":"AMZN-CMP-SEN-02745","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2026-04-21"}
+{"id":"INC-2026-0197","title":"Antenna gain drop","component_id":"AMZN-CMP-MOT-02030","plant_id":"AMZN-PLANT-019","severity":"HIGH","occurred_at":"2026-02-06"}
+{"id":"INC-2026-0198","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-00151","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-10-13"}
+{"id":"INC-2026-0199","title":"Optical misalignment","component_id":"AMZN-CMP-BAT-00475","plant_id":"AMZN-PLANT-026","severity":"HIGH","occurred_at":"2025-05-01"}
+{"id":"INC-2026-0200","title":"Sensor calibration drift","component_id":"AMZN-CMP-MEC-02694","plant_id":"AMZN-PLANT-035","severity":"MID","occurred_at":"2025-08-05"}
+{"id":"INC-2026-0201","title":"Memory bit flip","component_id":"AMZN-CMP-MEM-02124","plant_id":"AMZN-PLANT-024","severity":"HIGH","occurred_at":"2026-03-17"}
+{"id":"INC-2026-0202","title":"PCB delamination","component_id":"AMZN-CMP-MOT-01811","plant_id":"AMZN-PLANT-004","severity":"LOW","occurred_at":"2025-07-07"}
+{"id":"INC-2026-0203","title":"Cable shielding break","component_id":"AMZN-CMP-BAT-01180","plant_id":"AMZN-PLANT-029","severity":"MID","occurred_at":"2025-05-15"}
+{"id":"INC-2026-0204","title":"PCB delamination","component_id":"AMZN-CMP-MOT-02581","plant_id":"AMZN-PLANT-039","severity":"MID","occurred_at":"2025-10-07"}
+{"id":"INC-2026-0205","title":"Optical misalignment","component_id":"AMZN-CMP-ANT-02257","plant_id":"AMZN-PLANT-001","severity":"MID","occurred_at":"2025-08-24"}
+{"id":"INC-2026-0206","title":"Capacitor leakage","component_id":"AMZN-CMP-POW-00465","plant_id":"AMZN-PLANT-030","severity":"MID","occurred_at":"2025-07-18"}
+{"id":"INC-2026-0207","title":"Optical misalignment","component_id":"AMZN-CMP-ANT-02042","plant_id":"AMZN-PLANT-019","severity":"MID","occurred_at":"2025-11-29"}
+{"id":"INC-2026-0208","title":"PCB delamination","component_id":"AMZN-CMP-SEN-01977","plant_id":"AMZN-PLANT-031","severity":"MID","occurred_at":"2025-07-14"}
+{"id":"INC-2026-0209","title":"Memory bit flip","component_id":"AMZN-CMP-DIS-01572","plant_id":"AMZN-PLANT-013","severity":"MID","occurred_at":"2025-07-09"}
+{"id":"INC-2026-0210","title":"Motor bearing wear","component_id":"AMZN-CMP-SEN-00286","plant_id":"AMZN-PLANT-018","severity":"LOW","occurred_at":"2026-01-15"}
+{"id":"INC-2026-0211","title":"Display dead pixel","component_id":"AMZN-CMP-IC-01095","plant_id":"AMZN-PLANT-001","severity":"MID","occurred_at":"2026-02-25"}
+{"id":"INC-2026-0212","title":"Connector intermittent","component_id":"AMZN-CMP-SEN-02376","plant_id":"AMZN-PLANT-032","severity":"MID","occurred_at":"2026-01-03"}
+{"id":"INC-2026-0213","title":"Optical misalignment","component_id":"AMZN-CMP-OPT-01414","plant_id":"AMZN-PLANT-022","severity":"HIGH","occurred_at":"2025-11-10"}
+{"id":"INC-2026-0214","title":"PCB delamination","component_id":"AMZN-CMP-OPT-01866","plant_id":"AMZN-PLANT-021","severity":"CRITICAL","occurred_at":"2025-08-31"}
+{"id":"INC-2026-0215","title":"PCB delamination","component_id":"AMZN-CMP-ANT-02343","plant_id":"AMZN-PLANT-025","severity":"HIGH","occurred_at":"2025-11-27"}
+{"id":"INC-2026-0216","title":"Cable shielding break","component_id":"AMZN-CMP-CAB-00179","plant_id":"AMZN-PLANT-021","severity":"MID","occurred_at":"2025-11-12"}
+{"id":"INC-2026-0217","title":"Sensor calibration drift","component_id":"AMZN-CMP-DIS-01582","plant_id":"AMZN-PLANT-010","severity":"CRITICAL","occurred_at":"2025-07-04"}
+{"id":"INC-2026-0218","title":"Battery thermal runaway","component_id":"AMZN-CMP-MOT-02058","plant_id":"AMZN-PLANT-038","severity":"HIGH","occurred_at":"2025-12-12"}
+{"id":"INC-2026-0219","title":"Sensor calibration drift","component_id":"AMZN-CMP-MAG-00409","plant_id":"AMZN-PLANT-034","severity":"LOW","occurred_at":"2025-07-13"}
+{"id":"INC-2026-0220","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-01680","plant_id":"AMZN-PLANT-010","severity":"MID","occurred_at":"2025-09-13"}
+{"id":"INC-2026-0221","title":"Cable shielding break","component_id":"AMZN-CMP-BAT-01387","plant_id":"AMZN-PLANT-040","severity":"LOW","occurred_at":"2025-06-11"}
+{"id":"INC-2026-0222","title":"Motor bearing wear","component_id":"AMZN-CMP-CAB-01346","plant_id":"AMZN-PLANT-035","severity":"CRITICAL","occurred_at":"2026-03-17"}
+{"id":"INC-2026-0223","title":"Optical misalignment","component_id":"AMZN-CMP-POW-02944","plant_id":"AMZN-PLANT-032","severity":"LOW","occurred_at":"2025-06-05"}
+{"id":"INC-2026-0224","title":"PCB delamination","component_id":"AMZN-CMP-IC-00962","plant_id":"AMZN-PLANT-019","severity":"MID","occurred_at":"2025-12-09"}
+{"id":"INC-2026-0225","title":"Sensor calibration drift","component_id":"AMZN-CMP-SEN-00404","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2025-10-01"}
+{"id":"INC-2026-0226","title":"Battery thermal runaway","component_id":"AMZN-CMP-MOT-00119","plant_id":"AMZN-PLANT-003","severity":"HIGH","occurred_at":"2025-09-28"}
+{"id":"INC-2026-0227","title":"Motor bearing wear","component_id":"AMZN-CMP-DIS-01469","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2026-01-27"}
+{"id":"INC-2026-0228","title":"Antenna gain drop","component_id":"AMZN-CMP-MOT-01688","plant_id":"AMZN-PLANT-037","severity":"HIGH","occurred_at":"2025-07-27"}
+{"id":"INC-2026-0229","title":"Memory bit flip","component_id":"AMZN-CMP-POW-00718","plant_id":"AMZN-PLANT-006","severity":"HIGH","occurred_at":"2026-03-14"}
+{"id":"INC-2026-0230","title":"Sensor calibration drift","component_id":"AMZN-CMP-DIS-02799","plant_id":"AMZN-PLANT-016","severity":"HIGH","occurred_at":"2025-07-13"}
+{"id":"INC-2026-0231","title":"Antenna gain drop","component_id":"AMZN-CMP-MEM-00952","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-09-08"}
+{"id":"INC-2026-0232","title":"Sensor calibration drift","component_id":"AMZN-CMP-OPT-02732","plant_id":"AMZN-PLANT-001","severity":"HIGH","occurred_at":"2026-04-12"}
+{"id":"INC-2026-0233","title":"Capacitor leakage","component_id":"AMZN-CMP-BAT-02239","plant_id":"AMZN-PLANT-011","severity":"MID","occurred_at":"2025-10-24"}
+{"id":"INC-2026-0234","title":"Antenna gain drop","component_id":"AMZN-CMP-CAB-02407","plant_id":"AMZN-PLANT-020","severity":"CRITICAL","occurred_at":"2026-04-19"}
+{"id":"INC-2026-0235","title":"Display dead pixel","component_id":"AMZN-CMP-OPT-01025","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-11-13"}
+{"id":"INC-2026-0236","title":"PCB delamination","component_id":"AMZN-CMP-SEN-01980","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2025-10-31"}
+{"id":"INC-2026-0237","title":"Cable shielding break","component_id":"AMZN-CMP-SEN-02355","plant_id":"AMZN-PLANT-019","severity":"LOW","occurred_at":"2026-04-03"}
+{"id":"INC-2026-0238","title":"Solder ball crack","component_id":"AMZN-CMP-SEN-01622","plant_id":"AMZN-PLANT-018","severity":"MID","occurred_at":"2026-04-17"}
+{"id":"INC-2026-0239","title":"Cable shielding break","component_id":"AMZN-CMP-POW-00201","plant_id":"AMZN-PLANT-039","severity":"MID","occurred_at":"2025-09-24"}
+{"id":"INC-2026-0240","title":"Battery thermal runaway","component_id":"AMZN-CMP-POW-00943","plant_id":"AMZN-PLANT-039","severity":"LOW","occurred_at":"2025-08-06"}
+{"id":"INC-2026-0241","title":"Antenna gain drop","component_id":"AMZN-CMP-CAB-02544","plant_id":"AMZN-PLANT-017","severity":"HIGH","occurred_at":"2026-04-03"}
+{"id":"INC-2026-0242","title":"Antenna gain drop","component_id":"AMZN-CMP-CON-02789","plant_id":"AMZN-PLANT-009","severity":"LOW","occurred_at":"2026-03-18"}
+{"id":"INC-2026-0243","title":"Display dead pixel","component_id":"AMZN-CMP-PCB-02648","plant_id":"AMZN-PLANT-003","severity":"HIGH","occurred_at":"2025-05-18"}
+{"id":"INC-2026-0244","title":"Cable shielding break","component_id":"AMZN-CMP-CON-02374","plant_id":"AMZN-PLANT-024","severity":"LOW","occurred_at":"2025-09-29"}
+{"id":"INC-2026-0245","title":"Connector intermittent","component_id":"AMZN-CMP-CON-01339","plant_id":"AMZN-PLANT-027","severity":"LOW","occurred_at":"2026-02-01"}
+{"id":"INC-2026-0246","title":"Optical misalignment","component_id":"AMZN-CMP-MEC-01499","plant_id":"AMZN-PLANT-034","severity":"HIGH","occurred_at":"2025-07-24"}
+{"id":"INC-2026-0247","title":"Display dead pixel","component_id":"AMZN-CMP-BAT-01053","plant_id":"AMZN-PLANT-031","severity":"MID","occurred_at":"2025-10-21"}
+{"id":"INC-2026-0248","title":"Capacitor leakage","component_id":"AMZN-CMP-MEC-00472","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-08-24"}
+{"id":"INC-2026-0249","title":"Optical misalignment","component_id":"AMZN-CMP-BAT-02771","plant_id":"AMZN-PLANT-026","severity":"LOW","occurred_at":"2025-11-19"}
+{"id":"INC-2026-0250","title":"Optical misalignment","component_id":"AMZN-CMP-CON-00058","plant_id":"AMZN-PLANT-017","severity":"LOW","occurred_at":"2025-11-05"}
+{"id":"INC-2026-0251","title":"Memory bit flip","component_id":"AMZN-CMP-BAT-02756","plant_id":"AMZN-PLANT-017","severity":"LOW","occurred_at":"2026-03-23"}
+{"id":"INC-2026-0252","title":"Antenna gain drop","component_id":"AMZN-CMP-IC-01522","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2025-05-13"}
+{"id":"INC-2026-0253","title":"Battery thermal runaway","component_id":"AMZN-CMP-MAG-02538","plant_id":"AMZN-PLANT-036","severity":"HIGH","occurred_at":"2025-08-22"}
+{"id":"INC-2026-0254","title":"Antenna gain drop","component_id":"AMZN-CMP-POW-02653","plant_id":"AMZN-PLANT-005","severity":"HIGH","occurred_at":"2026-04-24"}
+{"id":"INC-2026-0255","title":"Capacitor leakage","component_id":"AMZN-CMP-MEC-01238","plant_id":"AMZN-PLANT-027","severity":"LOW","occurred_at":"2025-05-20"}
+{"id":"INC-2026-0256","title":"Capacitor leakage","component_id":"AMZN-CMP-CAB-01247","plant_id":"AMZN-PLANT-032","severity":"LOW","occurred_at":"2026-01-31"}
+{"id":"INC-2026-0257","title":"Sensor calibration drift","component_id":"AMZN-CMP-MOT-00556","plant_id":"AMZN-PLANT-025","severity":"LOW","occurred_at":"2026-04-22"}
+{"id":"INC-2026-0258","title":"Memory bit flip","component_id":"AMZN-CMP-MAG-02213","plant_id":"AMZN-PLANT-027","severity":"MID","occurred_at":"2025-07-19"}
+{"id":"INC-2026-0259","title":"Sensor calibration drift","component_id":"AMZN-CMP-BAT-01700","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-09-21"}
+{"id":"INC-2026-0260","title":"PCB delamination","component_id":"AMZN-CMP-BAT-00135","plant_id":"AMZN-PLANT-024","severity":"MID","occurred_at":"2025-08-29"}
+{"id":"INC-2026-0261","title":"Antenna gain drop","component_id":"AMZN-CMP-MEM-01486","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2026-03-27"}
+{"id":"INC-2026-0262","title":"Motor bearing wear","component_id":"AMZN-CMP-MAG-01470","plant_id":"AMZN-PLANT-004","severity":"LOW","occurred_at":"2025-07-02"}
+{"id":"INC-2026-0263","title":"Antenna gain drop","component_id":"AMZN-CMP-MOT-01863","plant_id":"AMZN-PLANT-006","severity":"LOW","occurred_at":"2026-03-24"}
+{"id":"INC-2026-0264","title":"Solder ball crack","component_id":"AMZN-CMP-ANT-02446","plant_id":"AMZN-PLANT-002","severity":"HIGH","occurred_at":"2025-09-02"}
+{"id":"INC-2026-0265","title":"PCB delamination","component_id":"AMZN-CMP-IC-00516","plant_id":"AMZN-PLANT-037","severity":"LOW","occurred_at":"2026-02-08"}
+{"id":"INC-2026-0266","title":"PCB delamination","component_id":"AMZN-CMP-CON-00849","plant_id":"AMZN-PLANT-038","severity":"HIGH","occurred_at":"2025-08-28"}
+{"id":"INC-2026-0267","title":"Memory bit flip","component_id":"AMZN-CMP-CAB-01346","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2025-07-14"}
+{"id":"INC-2026-0268","title":"Display dead pixel","component_id":"AMZN-CMP-MAG-00533","plant_id":"AMZN-PLANT-035","severity":"HIGH","occurred_at":"2025-06-26"}
+{"id":"INC-2026-0269","title":"Connector intermittent","component_id":"AMZN-CMP-BAT-02708","plant_id":"AMZN-PLANT-002","severity":"LOW","occurred_at":"2025-08-30"}
+{"id":"INC-2026-0270","title":"Solder ball crack","component_id":"AMZN-CMP-MAG-02412","plant_id":"AMZN-PLANT-021","severity":"LOW","occurred_at":"2025-05-27"}
+{"id":"INC-2026-0271","title":"Optical misalignment","component_id":"AMZN-CMP-MAG-00520","plant_id":"AMZN-PLANT-027","severity":"LOW","occurred_at":"2025-06-02"}
+{"id":"INC-2026-0272","title":"Battery thermal runaway","component_id":"AMZN-CMP-POW-01951","plant_id":"AMZN-PLANT-029","severity":"MID","occurred_at":"2025-06-25"}
+{"id":"INC-2026-0273","title":"PCB delamination","component_id":"AMZN-CMP-MEC-01852","plant_id":"AMZN-PLANT-033","severity":"HIGH","occurred_at":"2025-05-23"}
+{"id":"INC-2026-0274","title":"Display dead pixel","component_id":"AMZN-CMP-BAT-02699","plant_id":"AMZN-PLANT-034","severity":"MID","occurred_at":"2025-05-16"}
+{"id":"INC-2026-0275","title":"Motor bearing wear","component_id":"AMZN-CMP-ANT-00250","plant_id":"AMZN-PLANT-031","severity":"MID","occurred_at":"2025-06-25"}
+{"id":"INC-2026-0276","title":"Capacitor leakage","component_id":"AMZN-CMP-IC-02009","plant_id":"AMZN-PLANT-029","severity":"HIGH","occurred_at":"2025-10-12"}
+{"id":"INC-2026-0277","title":"Capacitor leakage","component_id":"AMZN-CMP-DIS-02492","plant_id":"AMZN-PLANT-010","severity":"LOW","occurred_at":"2026-03-16"}
+{"id":"INC-2026-0278","title":"Optical misalignment","component_id":"AMZN-CMP-OPT-02594","plant_id":"AMZN-PLANT-038","severity":"MID","occurred_at":"2025-11-12"}
+{"id":"INC-2026-0279","title":"Display dead pixel","component_id":"AMZN-CMP-CON-02447","plant_id":"AMZN-PLANT-034","severity":"MID","occurred_at":"2026-03-06"}
+{"id":"INC-2026-0280","title":"Cable shielding break","component_id":"AMZN-CMP-MOT-01763","plant_id":"AMZN-PLANT-007","severity":"LOW","occurred_at":"2026-04-01"}
+{"id":"INC-2026-0281","title":"Cable shielding break","component_id":"AMZN-CMP-IC-02667","plant_id":"AMZN-PLANT-036","severity":"HIGH","occurred_at":"2025-12-07"}
+{"id":"INC-2026-0282","title":"Motor bearing wear","component_id":"AMZN-CMP-BAT-01850","plant_id":"AMZN-PLANT-015","severity":"LOW","occurred_at":"2025-12-19"}
+{"id":"INC-2026-0283","title":"Cable shielding break","component_id":"AMZN-CMP-PCB-01634","plant_id":"AMZN-PLANT-027","severity":"LOW","occurred_at":"2025-12-05"}
+{"id":"INC-2026-0284","title":"Battery thermal runaway","component_id":"AMZN-CMP-SEN-01281","plant_id":"AMZN-PLANT-017","severity":"CRITICAL","occurred_at":"2026-04-17"}
+{"id":"INC-2026-0285","title":"Capacitor leakage","component_id":"AMZN-CMP-BAT-01943","plant_id":"AMZN-PLANT-005","severity":"HIGH","occurred_at":"2025-06-17"}
+{"id":"INC-2026-0286","title":"Cable shielding break","component_id":"AMZN-CMP-POW-01769","plant_id":"AMZN-PLANT-007","severity":"MID","occurred_at":"2025-07-06"}
+{"id":"INC-2026-0287","title":"Memory bit flip","component_id":"AMZN-CMP-MEC-02279","plant_id":"AMZN-PLANT-004","severity":"CRITICAL","occurred_at":"2026-02-12"}
+{"id":"INC-2026-0288","title":"Motor bearing wear","component_id":"AMZN-CMP-MAG-01351","plant_id":"AMZN-PLANT-008","severity":"LOW","occurred_at":"2026-04-06"}
+{"id":"INC-2026-0289","title":"Display dead pixel","component_id":"AMZN-CMP-CON-01733","plant_id":"AMZN-PLANT-004","severity":"MID","occurred_at":"2025-10-28"}
+{"id":"INC-2026-0290","title":"Optical misalignment","component_id":"AMZN-CMP-CAB-00425","plant_id":"AMZN-PLANT-037","severity":"LOW","occurred_at":"2026-04-02"}
+{"id":"INC-2026-0291","title":"Capacitor leakage","component_id":"AMZN-CMP-MEM-01976","plant_id":"AMZN-PLANT-015","severity":"LOW","occurred_at":"2026-02-09"}
+{"id":"INC-2026-0292","title":"Display dead pixel","component_id":"AMZN-CMP-OPT-01506","plant_id":"AMZN-PLANT-008","severity":"MID","occurred_at":"2025-12-06"}
+{"id":"INC-2026-0293","title":"Memory bit flip","component_id":"AMZN-CMP-CAB-02298","plant_id":"AMZN-PLANT-040","severity":"MID","occurred_at":"2026-02-10"}
+{"id":"INC-2026-0294","title":"Antenna gain drop","component_id":"AMZN-CMP-CON-00108","plant_id":"AMZN-PLANT-039","severity":"HIGH","occurred_at":"2025-09-14"}
+{"id":"INC-2026-0295","title":"Display dead pixel","component_id":"AMZN-CMP-MOT-00119","plant_id":"AMZN-PLANT-012","severity":"MID","occurred_at":"2025-10-06"}
+{"id":"INC-2026-0296","title":"Solder ball crack","component_id":"AMZN-CMP-PCB-01392","plant_id":"AMZN-PLANT-023","severity":"LOW","occurred_at":"2025-07-13"}
+{"id":"INC-2026-0297","title":"Capacitor leakage","component_id":"AMZN-CMP-ANT-02320","plant_id":"AMZN-PLANT-026","severity":"LOW","occurred_at":"2026-03-21"}
+{"id":"INC-2026-0298","title":"Cable shielding break","component_id":"AMZN-CMP-IC-00126","plant_id":"AMZN-PLANT-006","severity":"MID","occurred_at":"2025-11-09"}
+{"id":"INC-2026-0299","title":"Battery thermal runaway","component_id":"AMZN-CMP-PCB-01720","plant_id":"AMZN-PLANT-030","severity":"LOW","occurred_at":"2025-10-07"}
+{"id":"INC-2026-0300","title":"Memory bit flip","component_id":"AMZN-CMP-PCB-02956","plant_id":"AMZN-PLANT-021","severity":"MID","occurred_at":"2025-05-27"}

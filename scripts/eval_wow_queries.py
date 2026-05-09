@@ -175,6 +175,31 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 I (compliance) ----
+WOW_QUERIES.extend([
+    {'scenario': 'I', 'persona': 'strategy',
+     'query': {'target_cust_ids': ['c001', 'c002', 'c003'],
+               'marketing_action': '고급휘발유 SMS 캠페인'},
+     'expects': lambda r: 'recommendation' in r, 'min_results': 1},
+    {'scenario': 'I', 'persona': 'crm',
+     'query': {'target_cust_ids': ['c004'],
+               'marketing_action': '위치기반 푸시 알림'},
+     'expects': lambda r: 'eligible_count' in r, 'min_results': 1},
+    {'scenario': 'I', 'persona': 'marketing',
+     'query': {'target_cust_ids': ['c001', 'c002'],
+               'marketing_action': '단순 SMS 안내'},
+     'expects': lambda r: r.get('eligible_count', 0) >= 0, 'min_results': 1},
+    {'scenario': 'I', 'persona': 'data-ai',
+     'query': {'target_cust_ids': ['c005', 'c006'],
+               'marketing_action': '개인화 추천 모델 적용'},
+     'expects': lambda r: 'guardrail_violations' in r, 'min_results': 1},
+    {'scenario': 'I', 'persona': 'retail-ops',
+     'query': {'target_cust_ids': ['c007'],
+               'marketing_action': '주유소 방문 행사 안내'},
+     'expects': lambda r: 'recommendation' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

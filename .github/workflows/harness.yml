@@ -1,0 +1,30 @@
+name: harness-eval-nightly
+
+on:
+  schedule:
+    # KST 03:00 (UTC 18:00 prev day)
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+# Plan 5 Task 5.7.1 — refresh the README harness-eval badge from
+# .harness-eval/latest.json (produced by the Claude harness-eval Skill).
+# This workflow only runs the badge-refresh script; the actual evaluation
+# is triggered manually via Claude harness-eval:full.
+
+jobs:
+  badge-refresh:
+    name: README badge refresh from latest.json
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Refresh README badge
+        run: bash scripts/run_harness_eval.sh
+      - uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore(harness): nightly badge refresh'
+          title: 'Harness eval refresh'
+          branch: chore/harness-refresh
+          delete-branch: true

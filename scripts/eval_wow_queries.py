@@ -278,6 +278,26 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 H (network_map) ----
+WOW_QUERIES.extend([
+    {'scenario': 'H', 'persona': 'retail-ops', 'query': {},
+     'expects': lambda r: len(r.get('stations_by_sido', [])) >= 5,
+     'min_results': 5},
+    {'scenario': 'H', 'persona': 'strategy', 'query': {'fuel_grade': 'premium'},
+     'expects': lambda r: 'stations_by_sido' in r, 'min_results': 1},
+    {'scenario': 'H', 'persona': 'marketing', 'query': {},
+     'expects': lambda r: any(s.get('avg_price', 0) > 0
+                              for s in r.get('stations_by_sido', [])),
+     'min_results': 1},
+    {'scenario': 'H', 'persona': 'data-ai', 'query': {},
+     'expects': lambda r: any(s.get('brand') in {'GSC', 'SK', 'HD', 'SOIL'}
+                              for s in r.get('stations_by_sido', [])),
+     'min_results': 1},
+    {'scenario': 'H', 'persona': 'crm', 'query': {},
+     'expects': lambda r: 'stations_by_sido' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

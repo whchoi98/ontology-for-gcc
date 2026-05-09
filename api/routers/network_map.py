@@ -1,27 +1,37 @@
-# api/routers/network_map.py — 시나리오 H: 주유소 네트워크 지도
+# api/routers/network_map.py — 시나리오 H: 주유소 네트워크 지도 (시도 choropleth)
 from __future__ import annotations
 from typing import Optional
 from fastapi import APIRouter
-from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from api.services.sse import sse_event, stream_phases
-from api.services.persona import get as get_persona
+from api.services.neptune import open_cypher
 
 router = APIRouter(prefix='/api/network-map', tags=['network_map'])
 
 
-class NetworkMapRequest(BaseModel):
-    persona_id: Optional[str] = 'marketing'
+class MapRequest(BaseModel):
+    persona_id: Optional[str] = 'retail-ops'
+    fuel_grade: Optional[str] = None
 
 
-@router.post('')
-def network_map_sync(req: NetworkMapRequest):
-    return {'persona': get_persona(req.persona_id)['name_kr'], 'placeholder': 'task 4.x에서 구현'}
+@router.post('/map')
+def network_map(req: MapRequest) -> dict:
+    """시도 × 브랜드 stations 집계.
+
+    property-join fallback — Plan 5 polish: switch to graph traversal once
+    PRICED_AT edges are loaded. We aggregate on GasStation nodes directly.
+    """
+    q = """MATCH (s:GasStation)
+           RETURN s.sido_nm AS sido, s.brand_cd AS brand,
+                  count(DISTINCT s) AS stations,
+                  avg(s.last_price) AS avg_price"""
+    res = open_cypher(query=q)
+    return {'stations_by_sido': res.get('results', [])}
 
 
-@router.post('/stream')
-async def network_map_streaming(req: NetworkMapRequest):
-    async def gen():
-        yield ('phase', {'name': 'network_map_start'})
-        yield ('result', {'placeholder': True})
-    return StreamingResponse(stream_phases(gen()), media_type='text/event-stream')
+@router.post('/stations')
+def stations_around(req: MapRequest) -> dict:
+    q = """MATCH (s:GasStation) RETURN s LIMIT 1000"""
+    res = open_cypher(query=q)
+    return {
+        'stations': [r.get('s', {}) for r in res.get('results', [])],
+    }

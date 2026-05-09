@@ -18,6 +18,7 @@ S3_BUCKET = os.environ.get('SYNTHETIC_DATA_BUCKET', 'ontology-gcc-dev-synthetic-
 REGION = os.environ.get('AWS_REGION', 'ap-northeast-2')
 
 # Map S3 prefix → (Label, primary-key field)
+# pk_field MUST match the actual field in NDJSON / Pydantic schema. Mismatch → 0 rows merged.
 NODE_MAP = [
     ('nodes/customer/',                'Customer',            'cust_id'),
     ('nodes/transaction/',             'FuelTransaction',     'tx_id'),
@@ -25,19 +26,19 @@ NODE_MAP = [
     ('nodes/coupon/',                  'Coupon',              'coupon_id'),
     ('nodes/coupon_use/',              'CouponUse',           'use_id'),
     ('nodes/offer/',                   'Offer',               'offer_id'),
-    ('nodes/term/',                    'Term',                'term_id'),
+    ('nodes/term/',                    'Term',                'term_cd'),    # schema field is term_cd, not term_id
     ('nodes/term_agreement/',          'TermAgreement',       'agreement_id'),
-    ('nodes/fuel_price/',              'FuelPrice',           'price_id'),
+    ('nodes/fuel_price/',              'FuelPrice',           'price_id'),   # synthesized composite pk (see _ensure_pk)
     ('nodes/gas_station/',             'GasStation',          'opinet_no'),
     ('nodes/region/',                  'Region',              'region_cd'),
     ('nodes/consumption_index/',       'ConsumptionIndex',    'idx_id'),
     ('nodes/app_event/',               'AppEvent',            'event_id'),
-    ('nodes/survey/',                  'Survey',              'survey_id'),
+    ('nodes/survey/',                  'Survey',              'response_id'),  # SurveyResponse pk is response_id
     ('nodes/persona/',                 'Persona',             'persona_id'),
     ('nodes/cluster/',                 'Cluster',             'cluster_id'),
     ('nodes/segment/',                 'Segment',             'segment_id'),
     ('nodes/member/',                  'Member',              'member_id'),
-    ('nodes/timeslot/',                'TimeSlot',            'timeslot_id'),
+    ('nodes/timeslot/',                'TimeSlot',            'slot_id'),    # schema field is slot_id, not timeslot_id
     ('nodes/campaign_sms/',            'CampaignSMS',         'sms_id'),
     ('nodes/campaign_aggregation/',    'CampaignAggregation', 'agg_id'),
 ]
@@ -79,12 +80,22 @@ def _post_cypher(query: str, params: dict, retries: int = 3) -> dict:
 def _scan_pk_values(obj: dict, fallback_id_keys: tuple = ('id',)) -> str | None:
     """Find the unique id from the object using common pk names."""
     for k in (*fallback_id_keys, 'cust_id', 'tx_id', 'campaign_cd', 'coupon_id',
-              'use_id', 'offer_id', 'term_id', 'agreement_id', 'price_id', 'opinet_no',
-              'region_cd', 'idx_id', 'event_id', 'survey_id', 'persona_id', 'cluster_id',
-              'segment_id', 'member_id', 'timeslot_id', 'sms_id', 'agg_id'):
+              'use_id', 'offer_id', 'term_cd', 'term_id', 'agreement_id', 'price_id', 'opinet_no',
+              'region_cd', 'idx_id', 'event_id', 'response_id', 'survey_id', 'persona_id', 'cluster_id',
+              'segment_id', 'member_id', 'slot_id', 'timeslot_id', 'sms_id', 'agg_id'):
         v = obj.get(k)
         if v is not None and v != '':
             return str(v)
+    return None
+
+
+def _synthesize_fuel_price_pk(obj: dict) -> str | None:
+    """FuelPrice has no natural id field — composite key (opinet, dt, grade)."""
+    opinet = obj.get('station_opinet_no')
+    dt = obj.get('dt')
+    grade = obj.get('fuel_grade')
+    if opinet and dt and grade:
+        return f'{opinet}-{dt}-{grade}'
     return None
 
 
@@ -120,11 +131,16 @@ def load_label(s3, prefix: str, label: str, pk_field: str, batch_size: int = 500
             if not line.strip():
                 continue
             obj = json.loads(line)
+            # FuelPrice has no natural id — synthesize from composite (opinet, dt, grade)
+            if label == 'FuelPrice' and not obj.get(pk_field):
+                synth = _synthesize_fuel_price_pk(obj)
+                if synth is not None:
+                    obj[pk_field] = synth
             pk_val = obj.get(pk_field) or _scan_pk_values(obj)
             if pk_val is None:
                 continue
             props = _flatten_props(obj)
-            props.setdefault(pk_field, pk_val)
+            props[pk_field] = pk_val   # ensure pk_field is present (Cypher MERGE pattern depends on it)
             props['__pk'] = pk_val   # alias used by MERGE
             batch.append(props)
 

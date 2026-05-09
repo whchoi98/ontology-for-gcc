@@ -1,0 +1,25 @@
+class: CouponUse
+group: behavior
+description: CouponUse 도메인 클래스
+fields:
+- name: use_id
+  type: str
+  required: true
+- name: cust_id
+  type: str
+  required: true
+- name: coupon_no
+  type: str
+  required: true
+- name: tx_id
+  type: Optional[str]
+  required: false
+- name: use_amt
+  type: int
+  required: true
+- name: deal_dt
+  type: str
+  required: true
+relations_out:
+- edge: OF
+  target: Coupon

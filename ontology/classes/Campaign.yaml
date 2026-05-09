@@ -1,0 +1,43 @@
+class: Campaign
+group: marketing
+description: Campaign 도메인 클래스
+fields:
+- name: campaign_cd
+  type: str
+  required: true
+- name: name_kr
+  type: str
+  required: true
+- name: purpose_nm
+  type: Optional[str]
+  required: false
+- name: lcls_nm
+  type: Optional[str]
+  required: false
+- name: scls_nm
+  type: Optional[str]
+  required: false
+- name: start_dt
+  type: str
+  required: true
+- name: end_dt
+  type: str
+  required: true
+- name: target_persona_id
+  type: Optional[str]
+  required: false
+relations_out:
+- edge: HAS_OFFER
+  target: Offer
+- edge: TARGETS_PERSONA
+  target: Persona
+- edge: TARGETS_CLUSTER
+  target: Cluster
+- edge: TARGETS_SEGMENT
+  target: Segment
+- edge: SENT_VIA
+  target: Channel
+- edge: SENT_SMS
+  target: CampaignSms
+- edge: AGGREGATED_AS
+  target: CampaignAggregation

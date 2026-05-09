@@ -1,0 +1,47 @@
+class: GasStation
+group: operations
+description: GasStation 도메인 클래스
+fields:
+- name: opinet_no
+  type: str
+  required: true
+- name: site_cd
+  type: Optional[str]
+  required: false
+- name: name
+  type: str
+  required: true
+- name: addr
+  type: str
+  required: true
+- name: sido_nm
+  type: str
+  required: true
+- name: sgg_nm
+  type: str
+  required: true
+- name: self_yn
+  type: str
+  required: false
+- name: cvs_yn
+  type: str
+  required: false
+- name: crwa_yn
+  type: str
+  required: false
+- name: lat
+  type: float
+  required: true
+- name: lon
+  type: float
+  required: true
+- name: brand_cd
+  type: str
+  required: true
+relations_out:
+- edge: IN
+  target: Region
+- edge: PRICED_AT
+  target: FuelPrice
+- edge: SELLS
+  target: FuelProduct

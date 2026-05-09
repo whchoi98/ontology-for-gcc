@@ -1,0 +1,16 @@
+class: Offer
+group: marketing
+description: Offer 도메인 클래스
+fields:
+- name: offer_cd
+  type: str
+  required: true
+- name: campaign_cd
+  type: str
+  required: true
+- name: offer_nm
+  type: str
+  required: true
+relations_out:
+- edge: ISSUES
+  target: Coupon

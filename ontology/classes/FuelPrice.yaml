@@ -1,0 +1,20 @@
+class: FuelPrice
+group: operations
+description: FuelPrice 도메인 클래스
+fields:
+- name: station_opinet_no
+  type: str
+  required: true
+- name: fuel_grade
+  type: str
+  required: true
+- name: dt
+  type: str
+  required: true
+- name: amount
+  type: int
+  required: true
+- name: source
+  type: Literal[real, synthetic]
+  required: true
+relations_out: []

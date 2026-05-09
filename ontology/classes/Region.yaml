@@ -1,0 +1,19 @@
+class: Region
+group: operations
+description: Region 도메인 클래스
+fields:
+- name: region_cd
+  type: str
+  required: true
+- name: sido_nm
+  type: str
+  required: true
+- name: sgg_nm
+  type: Optional[str]
+  required: false
+- name: level
+  type: str
+  required: false
+relations_out:
+- edge: OBSERVED_WEATHER
+  target: WeatherObservation

@@ -1,0 +1,17 @@
+class: Term
+group: compliance_external
+description: Term 도메인 클래스
+fields:
+- name: term_cd
+  type: str
+  required: true
+- name: name_kr
+  type: str
+  required: true
+- name: required_yn
+  type: str
+  required: false
+- name: marketing_eligible_yn
+  type: str
+  required: false
+relations_out: []

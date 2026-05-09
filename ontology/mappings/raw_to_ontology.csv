@@ -1,0 +1,63 @@
+xlsx_table,xlsx_col,gcc_class,gcc_field,note
+TB_SM_CMPG_OFER_F,비식별고객번호,CouponUse,cust_id,join key (real)
+TB_SM_CMPG_OFER_F,campaign_cd,Coupon,campaign_cd,
+TB_SM_CMPG_OFER_F,offer_cd,Coupon,offer_cd,
+TB_SM_CMPG_OFER_F,coupon_no,Coupon,coupon_no,unique
+TB_SM_CMPG_OFER_F,denomination_amt,Coupon,denomination_amt,
+TB_SM_CMPG_OFER_F,valid_start_dt,Coupon,valid_start_dt,
+TB_SM_CMPG_OFER_F,valid_end_dt,Coupon,valid_end_dt,
+TB_SM_CMPG_OFER_F,coupon_use_amt,CouponUse,use_amt,
+TB_SM_CMPG_OFER_F,deal_dt,CouponUse,deal_dt,
+TB_SM_CMPG_OFER_F,offer_nm,Offer,offer_nm,
+cust_deal_cntx_intg,비식별고객번호,FuelTransaction,cust_id,
+cust_deal_cntx_intg,sales_dt,FuelTransaction,ts,combine with sales_time
+cust_deal_cntx_intg,store_cd,FuelTransaction,store_cd,
+cust_deal_cntx_intg,product_cd,FuelTransaction,fuel_grade,via opinet_codes lookup
+cust_deal_cntx_intg,sales_qty,FuelTransaction,qty_l,
+cust_deal_cntx_intg,unit_price_amt,FuelTransaction,unit_price,
+cust_deal_cntx_intg,sales_amt,FuelTransaction,amount,
+cust_deal_cntx_intg,payment_type_cd,FuelTransaction,payment_type,
+cust_deal_cntx_intg,smart_card_use_yn,FuelTransaction,_payment_alt,if Y override payment_type
+cust_deal_cntx_intg,plcc_card_yn,FuelTransaction,_payment_alt,if Y override
+DW_CU_AGRM_AGR,비식별고객번호,TermAgreement,cust_id,
+DW_CU_AGRM_AGR,agreement_channel_cd,TermAgreement,approval_channel_cd,
+DW_CU_AGRM_AGR,term_cd,TermAgreement,term_cd,
+DW_CU_AGRM_AGR,term_approval_cd,TermAgreement,approved_yn,Y/N derive
+DW_CU_AGRM_AGR,approval_dt,TermAgreement,approval_dt,'00000000' = NULL
+TB_T_OPINET_PRICE,opinet_no,FuelPrice,station_opinet_no,
+TB_T_OPINET_PRICE,std_dt,FuelPrice,dt,
+TB_T_OPINET_PRICE,pmgs_amt,FuelPrice,amount,split per fuel grade
+TB_T_OPINET_PRICE,mogs_amt,FuelPrice,amount,grade=regular
+TB_T_OPINET_PRICE,dsel_amt,FuelPrice,amount,grade=diesel
+TB_T_OPINET_PRICE,indr_kero_amt,FuelPrice,amount,grade=kerosene
+TB_T_OPINET_PRICE,c4h10_amt,FuelPrice,amount,grade=lpg
+TCO016,opinet_no,GasStation,opinet_no,
+TCO016,site_cd,GasStation,site_cd,GSC internal
+TCO016,gass_nm,GasStation,name,
+TCO016,road_nm_addr,GasStation,addr,
+TCO016,sido_opinet_area_cd,GasStation,sido_nm,via opinet_codes
+TCO016,sgg_opinet_area_cd,GasStation,sgg_nm,via opinet_codes
+TCO016,self_gass_yn,GasStation,self_yn,
+TCO016,cvs_xn,GasStation,cvs_yn,
+TCO016,crwa_xn,GasStation,crwa_yn,
+TCO016,wgs_xcrd,GasStation,lon,WGS84
+TCO016,wgs_ycrd,GasStation,lat,WGS84
+TCO016,erm_gass_trdm_dvs_cd,GasStation,brand_cd,via opinet_codes
+DW_CU_CUST_MAST,통합고객번호,Customer,cust_id,blueprint only (raw_data 없음)
+DW_CU_CUST_MAST,M01_GNDR_CD,Customer,gender_cd,blueprint
+DW_CU_CUST_MAST,AGE_VAL,Customer,age_val,blueprint
+DW_CU_CUST_MAST,M01_AGE_SCTN_CD,Customer,age_section_cd,blueprint
+DW_CU_CUST_MAST,SIDO_NM,Customer,sido_nm,blueprint
+DW_CU_CUST_MAST,SGG_NM,Customer,sgg_nm,blueprint
+DW_CU_CUST_MAST,WRPL_SGG_ZPCD,Customer,work_sgg,blueprint (zipcode → sgg derive)
+DW_CU_CUST_MAST,M01_OCPT_CD,Customer,occupation_cd,blueprint
+DW_CU_CUST_MAST,VIP_CUST_YN,Customer,vip_yn,blueprint
+DW_CU_CUST_MAST,PRMR_DEAL_SITE_CD,Customer,primary_site_cd,blueprint
+DW_CU_CUST_MAST,KIXX_JOIN_DT,Customer,kixx_join_dt,blueprint
+DW_CU_CUST_MAST,BNS_CARD_JOIN_DT,Customer,bns_card_join_dt,blueprint
+DW_CU_CUST_MAST,MAIL_RECV_AGRM_YN,Customer,mail_recv_yn,blueprint
+DW_CP_SM_CAMP_MSG,비식별고객번호,CampaignSms,cust_id,blueprint (raw 없음)
+DW_CP_SM_CAMP_MSG,cmpg_cd,CampaignSms,campaign_cd,blueprint
+TB_SM_CMPG_OFER_S,cmpg_cd,CampaignAggregation,campaign_cd,blueprint
+TB_SM_CMPG_OFER_S,target_count,CampaignAggregation,target_count,blueprint
+TB_SM_CMPG_OFER_S,roi_pct,CampaignAggregation,roi_pct,blueprint

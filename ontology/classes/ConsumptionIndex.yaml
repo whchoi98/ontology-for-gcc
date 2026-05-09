@@ -1,0 +1,26 @@
+class: ConsumptionIndex
+group: compliance_external
+description: ConsumptionIndex 도메인 클래스
+fields:
+- name: cust_id
+  type: str
+  required: true
+- name: bonus_card_months
+  type: Optional[int]
+  required: false
+- name: energy_plus_app_months
+  type: Optional[int]
+  required: false
+- name: car_need_idx
+  type: Optional[float]
+  required: false
+- name: gas_station_pref_idx
+  type: Optional[float]
+  required: false
+- name: car_finance_pref_idx
+  type: Optional[float]
+  required: false
+- name: extras
+  type: dict
+  required: false
+relations_out: []

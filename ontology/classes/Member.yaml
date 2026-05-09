@@ -1,0 +1,14 @@
+class: Member
+group: customer
+description: Member 도메인 클래스
+fields:
+- name: cust_id
+  type: str
+  required: true
+- name: grade
+  type: str
+  required: true
+- name: points
+  type: int
+  required: false
+relations_out: []

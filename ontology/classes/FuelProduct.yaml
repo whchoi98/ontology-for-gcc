@@ -1,0 +1,17 @@
+class: FuelProduct
+group: operations
+description: FuelProduct 도메인 클래스
+fields:
+- name: product_id
+  type: str
+  required: true
+- name: grade
+  type: str
+  required: true
+- name: octane_ron
+  type: Optional[int]
+  required: false
+- name: label_kr
+  type: str
+  required: true
+relations_out: []

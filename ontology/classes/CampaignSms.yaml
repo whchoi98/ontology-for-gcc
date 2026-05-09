@@ -1,0 +1,28 @@
+class: CampaignSms
+group: marketing
+description: CampaignSms 도메인 클래스
+fields:
+- name: sms_id
+  type: str
+  required: true
+- name: campaign_cd
+  type: str
+  required: true
+- name: cust_id
+  type: str
+  required: true
+- name: sent_dt
+  type: str
+  required: true
+- name: delivered_yn
+  type: str
+  required: false
+- name: open_yn
+  type: str
+  required: false
+- name: clicked_yn
+  type: str
+  required: false
+relations_out:
+- edge: TO
+  target: Customer

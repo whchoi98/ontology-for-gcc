@@ -1,0 +1,28 @@
+class: WeatherObservation
+group: compliance_external
+description: WeatherObservation 도메인 클래스
+fields:
+- name: sido_nm
+  type: str
+  required: true
+- name: dt
+  type: str
+  required: true
+- name: hour
+  type: int
+  required: true
+- name: temp_c
+  type: Optional[float]
+  required: false
+- name: rain_mm
+  type: Optional[float]
+  required: false
+- name: wind_mps
+  type: Optional[float]
+  required: false
+- name: pm10_ugm3
+  type: Optional[int]
+  required: false
+relations_out:
+- edge: AT_TIME
+  target: TimeSlot

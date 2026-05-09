@@ -1,0 +1,25 @@
+class: TermAgreement
+group: compliance_external
+description: TermAgreement 도메인 클래스
+fields:
+- name: agreement_id
+  type: str
+  required: true
+- name: cust_id
+  type: str
+  required: true
+- name: term_cd
+  type: str
+  required: true
+- name: approval_dt
+  type: str
+  required: true
+- name: approval_channel_cd
+  type: Optional[str]
+  required: false
+- name: approved_yn
+  type: str
+  required: false
+relations_out:
+- edge: FOR
+  target: Term

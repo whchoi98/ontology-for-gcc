@@ -1,0 +1,71 @@
+class: Customer
+group: customer
+description: Customer 도메인 클래스
+fields:
+- name: cust_id
+  type: str
+  required: true
+- name: age_val
+  type: Optional[int]
+  required: false
+- name: age_section_cd
+  type: Optional[str]
+  required: false
+- name: gender_cd
+  type: Optional[str]
+  required: false
+- name: sido_nm
+  type: Optional[str]
+  required: false
+- name: sgg_nm
+  type: Optional[str]
+  required: false
+- name: work_sgg
+  type: Optional[str]
+  required: false
+- name: occupation_cd
+  type: Optional[str]
+  required: false
+- name: vip_yn
+  type: str
+  required: false
+- name: primary_site_cd
+  type: Optional[str]
+  required: false
+- name: member_grade
+  type: Optional[str]
+  required: false
+- name: kixx_join_dt
+  type: Optional[str]
+  required: false
+- name: bns_card_join_dt
+  type: Optional[str]
+  required: false
+- name: mail_recv_yn
+  type: str
+  required: false
+- name: plcc_yn
+  type: str
+  required: false
+- name: data_depth
+  type: Literal[deep-history, coupon-only, sales-only, lookalike-syn]
+  required: true
+relations_out:
+- edge: HAS_PERSONA
+  target: Persona
+- edge: BELONGS_TO
+  target: Cluster
+- edge: IN_SEGMENT
+  target: Segment
+- edge: IS_MEMBER
+  target: Member
+- edge: AGREED_TO
+  target: TermAgreement
+- edge: HAS_INDEX
+  target: ConsumptionIndex
+- edge: USED_APP
+  target: AppEvent
+- edge: ANSWERED
+  target: SurveyResponse
+- edge: REFUELED
+  target: FuelTransaction

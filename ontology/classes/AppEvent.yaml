@@ -1,0 +1,23 @@
+class: AppEvent
+group: behavior
+description: AppEvent 도메인 클래스
+fields:
+- name: event_id
+  type: str
+  required: true
+- name: cust_id
+  type: Optional[str]
+  required: false
+- name: ts
+  type: str
+  required: true
+- name: event_action
+  type: str
+  required: true
+- name: event_label
+  type: Optional[str]
+  required: false
+- name: platform
+  type: str
+  required: false
+relations_out: []

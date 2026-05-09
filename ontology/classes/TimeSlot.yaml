@@ -1,0 +1,20 @@
+class: TimeSlot
+group: time
+description: TimeSlot 도메인 클래스
+fields:
+- name: slot_id
+  type: str
+  required: true
+- name: label_kr
+  type: str
+  required: true
+- name: hour_start
+  type: int
+  required: true
+- name: hour_end
+  type: int
+  required: true
+- name: weekend_yn
+  type: str
+  required: true
+relations_out: []

@@ -1,0 +1,45 @@
+class: FuelTransaction
+group: behavior
+description: FuelTransaction 도메인 클래스
+fields:
+- name: tx_id
+  type: str
+  required: true
+- name: cust_id
+  type: str
+  required: true
+- name: ts
+  type: str
+  required: true
+- name: store_cd
+  type: str
+  required: true
+- name: fuel_grade
+  type: str
+  required: true
+- name: qty_l
+  type: float
+  required: true
+- name: unit_price
+  type: int
+  required: true
+- name: amount
+  type: int
+  required: true
+- name: payment_type
+  type: str
+  required: true
+- name: earned_general_point
+  type: int
+  required: false
+relations_out:
+- edge: AT
+  target: GasStation
+- edge: OF
+  target: FuelProduct
+- edge: VIA
+  target: PaymentMethod
+- edge: AT_TIME
+  target: TimeSlot
+- edge: USED
+  target: CouponUse

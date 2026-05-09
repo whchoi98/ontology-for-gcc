@@ -1,0 +1,17 @@
+class: Segment
+group: customer
+description: Segment 도메인 클래스
+fields:
+- name: segment_id
+  type: str
+  required: true
+- name: label
+  type: str
+  required: true
+- name: seed_cust_ids
+  type: list[str]
+  required: true
+- name: similarity_threshold
+  type: float
+  required: false
+relations_out: []

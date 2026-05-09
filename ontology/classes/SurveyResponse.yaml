@@ -1,0 +1,20 @@
+class: SurveyResponse
+group: behavior
+description: SurveyResponse 도메인 클래스
+fields:
+- name: response_id
+  type: str
+  required: true
+- name: cust_id
+  type: Optional[str]
+  required: false
+- name: ts
+  type: str
+  required: true
+- name: inconvenience_factors
+  type: list[str]
+  required: true
+- name: free_text
+  type: Optional[str]
+  required: false
+relations_out: []

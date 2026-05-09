@@ -1,0 +1,14 @@
+class: Cluster
+group: customer
+description: Cluster 도메인 클래스
+fields:
+- name: cluster_id
+  type: str
+  required: true
+- name: label
+  type: str
+  required: true
+- name: centroid
+  type: dict
+  required: true
+relations_out: []

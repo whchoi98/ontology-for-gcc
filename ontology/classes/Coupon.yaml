@@ -1,0 +1,25 @@
+class: Coupon
+group: marketing
+description: Coupon 도메인 클래스
+fields:
+- name: coupon_no
+  type: str
+  required: true
+- name: campaign_cd
+  type: str
+  required: true
+- name: offer_cd
+  type: str
+  required: true
+- name: denomination_amt
+  type: int
+  required: true
+- name: valid_start_dt
+  type: str
+  required: true
+- name: valid_end_dt
+  type: str
+  required: true
+relations_out:
+- edge: REDEEMED_AS
+  target: CouponUse

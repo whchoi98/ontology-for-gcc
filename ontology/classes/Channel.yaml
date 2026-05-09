@@ -1,0 +1,11 @@
+class: Channel
+group: marketing
+description: Channel 도메인 클래스
+fields:
+- name: channel_id
+  type: str
+  required: true
+- name: label_kr
+  type: str
+  required: true
+relations_out: []

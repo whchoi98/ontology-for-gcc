@@ -1,0 +1,14 @@
+class: Persona
+group: customer
+description: Persona 도메인 클래스
+fields:
+- name: persona_id
+  type: str
+  required: true
+- name: name_kr
+  type: str
+  required: true
+- name: kpi_focus
+  type: list[str]
+  required: true
+relations_out: []

@@ -1,25 +1,44 @@
-"""Scenario A — Semantic Search."""
-from __future__ import annotations
-from fastapi import APIRouter, Body
-from pydantic import BaseModel
-from api.services.search import get_search
-from api.services.reranker import rerank
-from api.services.neptune import get_neptune
+"""Plan 3 Task 3.2.2 — POST /api/search + /api/search/stream (SSE phases).
 
-router = APIRouter(tags=["search"])
+Replaces the legacy mfg-template router. Sync endpoint returns the final
+search dict; streaming endpoint emits ``phase`` → ``result`` → ``final`` SSE
+events for the live web UI.
+"""
+from __future__ import annotations
+from typing import Optional
+
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+
+from api.services.search_pipeline import search
+from api.services.sse import stream_phases
+from api.services.persona import get as get_persona
+
+router = APIRouter(prefix='/api', tags=['search'])
 
 
 class SearchRequest(BaseModel):
-    q: str
-    persona: str = "buyer"
-    top_n: int = 10
+    query: str
+    persona_id: Optional[str] = 'marketing'
+    size: int = 10
 
 
-@router.post("/search")
-def search(req: SearchRequest = Body(...)) -> dict:
-    hits = get_search().hybrid_search(req.q, top_n=req.top_n * 2)
-    docs = [{"id": h["_id"], "text": h["_source"].get("text", ""), **h["_source"]} for h in hits]
-    reranked = rerank(req.q, docs, top_n=req.top_n)
-    component_ids = [d["id"] for d in reranked if d.get("label") == "Component"]
-    subgraph = get_neptune().subgraph_for(component_ids[:5], hops=1) if component_ids else {"nodes": [], "edges": []}
-    return {"hits": reranked, "subgraph": subgraph}
+@router.post('/search')
+def search_sync(req: SearchRequest) -> dict:
+    return search(req.query, req.persona_id, req.size)
+
+
+@router.post('/search/stream')
+async def search_streaming(req: SearchRequest):
+    async def gen():
+        yield ('phase', {
+            'name': 'embedding',
+            'persona': get_persona(req.persona_id)['name_kr'],
+        })
+        out = search(req.query, req.persona_id, req.size)
+        yield ('phase', {'name': 'reranked', 'count': len(out['results'])})
+        yield ('phase', {'name': 'subgraph', 'nodes': len(out['subgraph']['nodes'])})
+        yield ('result', out)
+
+    return StreamingResponse(stream_phases(gen()), media_type='text/event-stream')

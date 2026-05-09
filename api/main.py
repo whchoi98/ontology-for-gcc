@@ -55,3 +55,10 @@ try:
     app.include_router(personas.router)
 except Exception as e:
     log.warning("personas router not registered: %s", e)
+
+# Plan 3 Task 3.2.2 — /api/search + /api/search/stream (SSE phases)
+try:
+    from api.routers import search as search_router
+    app.include_router(search_router.router)
+except Exception as e:
+    log.warning("search router not registered: %s", e)

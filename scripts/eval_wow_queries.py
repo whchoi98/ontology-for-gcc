@@ -240,6 +240,23 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 E (cluster) ----
+WOW_QUERIES.extend([
+    {'scenario': 'E', 'persona': 'data-ai', 'query': {'write_back': False},
+     'expects': lambda r: len(r.get('assignments', [])) > 0
+                          and len(r.get('labels', [])) == 6,
+     'min_results': 1},
+    {'scenario': 'E', 'persona': 'marketing', 'query': {'write_back': False},
+     'expects': lambda r: bool(r.get('chart_png_b64')), 'min_results': 1},
+    {'scenario': 'E', 'persona': 'strategy', 'query': {'write_back': False},
+     'expects': lambda r: len(r.get('centroids', [])) == 6, 'min_results': 1},
+    {'scenario': 'E', 'persona': 'crm', 'query': {'write_back': False},
+     'expects': lambda r: len(r.get('labels', [])) > 0, 'min_results': 1},
+    {'scenario': 'E', 'persona': 'retail-ops', 'query': {'write_back': False},
+     'expects': lambda r: 'assignments' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

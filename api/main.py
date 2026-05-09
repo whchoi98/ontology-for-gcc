@@ -81,3 +81,10 @@ for module_name in [
         app.include_router(mod.router)
     except Exception as e:
         log.warning("plan4 router %s not registered: %s", module_name, e)
+
+# Plan 5 Task 5.2.1 — /api/ontology/{schema,standards,validation}
+try:
+    from api.routers import ontology as ontology_router
+    app.include_router(ontology_router.router)
+except Exception as e:
+    log.warning("ontology router not registered: %s", e)

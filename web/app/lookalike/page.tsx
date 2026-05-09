@@ -1,14 +1,14 @@
-// web/app/compliance/page.tsx — 시나리오 I: 약관·규제 가드레일
+// web/app/lookalike/page.tsx — 시나리오 F: 룩어라이크 익스팬션
 'use client';
 import { useState } from 'react';
 import DataSourceBadge from '../../components/DataSourceBadge';
 import PersonaSwitchGcc from '../../components/PersonaSwitchGcc';
 
-export default function CompliancePage() {
+export default function LookalikePage() {
   const [persona, setPersona] = useState('marketing');
   return (
     <div className='p-8 max-w-6xl mx-auto'>
-      <h1 className='text-2xl font-bold mb-2'>I. 약관·규제 가드레일</h1>
+      <h1 className='text-2xl font-bold mb-2'>F. 룩어라이크 익스팬션</h1>
       <div className='flex items-center gap-3 mb-4'>
         <PersonaSwitchGcc value={persona} onChange={setPersona}/>
         <DataSourceBadge source='real'/><DataSourceBadge source='synthetic'/>

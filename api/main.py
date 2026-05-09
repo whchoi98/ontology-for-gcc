@@ -69,3 +69,15 @@ try:
     app.include_router(chat_router.router)
 except Exception as e:
     log.warning("chat router not registered: %s", e)
+
+# Plan 4 — 12 시나리오 라우터 (C~N) — 각 라우터가 own prefix 보유.
+for module_name in [
+    "insights", "persona_match", "cluster", "lookalike", "campaign_roi",
+    "network_map", "compliance", "external_signal", "outlier", "payment",
+    "journey", "weather",
+]:
+    try:
+        mod = __import__(f"api.routers.{module_name}", fromlist=["router"])
+        app.include_router(mod.router)
+    except Exception as e:
+        log.warning("plan4 router %s not registered: %s", module_name, e)

@@ -1,14 +1,14 @@
-// web/app/compliance/page.tsx — 시나리오 I: 약관·규제 가드레일
+// web/app/external-signal/page.tsx — 시나리오 J: 외부 시그널 통합
 'use client';
 import { useState } from 'react';
 import DataSourceBadge from '../../components/DataSourceBadge';
 import PersonaSwitchGcc from '../../components/PersonaSwitchGcc';
 
-export default function CompliancePage() {
+export default function ExternalSignalPage() {
   const [persona, setPersona] = useState('marketing');
   return (
     <div className='p-8 max-w-6xl mx-auto'>
-      <h1 className='text-2xl font-bold mb-2'>I. 약관·규제 가드레일</h1>
+      <h1 className='text-2xl font-bold mb-2'>J. 외부 시그널 통합</h1>
       <div className='flex items-center gap-3 mb-4'>
         <PersonaSwitchGcc value={persona} onChange={setPersona}/>
         <DataSourceBadge source='real'/><DataSourceBadge source='synthetic'/>

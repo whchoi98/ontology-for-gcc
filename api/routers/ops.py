@@ -109,3 +109,33 @@ def ops(area: str = Path(..., description="One of: ingest, guardrail, memory, ev
     if area not in _AREAS:
         return {"error": f"unknown area '{area}'", "valid": sorted(_AREAS)}
     return {"area": area, **_HANDLERS[area]()}
+
+
+# ── Plan 5 Task 5.3.1 — Live metrics endpoints (Neptune + buffer-backed) ──
+# These coexist with the legacy /ops/{area} demo endpoints above.
+from api.services import ops_metrics as _opsm  # noqa: E402
+
+
+@router.get("/ops/live/ingest")
+def ops_ingest_live() -> dict:
+    return _opsm.ingest_counts()
+
+
+@router.get("/ops/live/memory")
+def ops_memory_live() -> dict:
+    return _opsm.memory_snapshot()
+
+
+@router.get("/ops/live/eval")
+def ops_eval_live() -> dict:
+    return _opsm.eval_scoreboard()
+
+
+@router.get("/ops/live/trace")
+def ops_trace_live() -> dict:
+    return _opsm.trace_timeline()
+
+
+@router.get("/ops/live/guardrail")
+def ops_guardrail_live() -> dict:
+    return _opsm.guardrail_log()

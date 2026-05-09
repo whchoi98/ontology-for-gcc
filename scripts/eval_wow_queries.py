@@ -155,6 +155,26 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 F (lookalike) ----
+WOW_QUERIES.extend([
+    {'scenario': 'F', 'persona': 'data-ai',
+     'query': {'seed_cust_ids': ['c001'], 'top_pct': 0.10},
+     'expects': lambda r: r.get('count', 0) >= 100, 'min_results': 100},
+    {'scenario': 'F', 'persona': 'marketing',
+     'query': {'seed_cust_ids': ['c001', 'c002'], 'top_pct': 0.20},
+     'expects': lambda r: r.get('count', 0) >= 200, 'min_results': 200},
+    {'scenario': 'F', 'persona': 'strategy',
+     'query': {'seed_cust_ids': ['c003']},
+     'expects': lambda r: 'expanded' in r, 'min_results': 1},
+    {'scenario': 'F', 'persona': 'crm',
+     'query': {'seed_cust_ids': ['c004', 'c005', 'c006']},
+     'expects': lambda r: r.get('count', 0) > 0, 'min_results': 1},
+    {'scenario': 'F', 'persona': 'retail-ops',
+     'query': {'seed_cust_ids': ['c007']},
+     'expects': lambda r: 'expanded' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

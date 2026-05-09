@@ -200,6 +200,24 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 L (payment) ----
+WOW_QUERIES.extend([
+    {'scenario': 'L', 'persona': 'retail-ops', 'query': {'fuel_grade': 'premium'},
+     'expects': lambda r: len(r.get('matrix', [])) >= 1, 'min_results': 1},
+    {'scenario': 'L', 'persona': 'data-ai',
+     'query': {'fuel_grade': None, 'sido_nm': '서울'},
+     'expects': lambda r: any('서울' in str(m) for m in r.get('matrix', [])),
+     'min_results': 1},
+    {'scenario': 'L', 'persona': 'marketing', 'query': {},
+     'expects': lambda r: 'matrix' in r, 'min_results': 1},
+    {'scenario': 'L', 'persona': 'crm', 'query': {'fuel_grade': 'regular'},
+     'expects': lambda r: 'matrix' in r, 'min_results': 1},
+    {'scenario': 'L', 'persona': 'strategy', 'query': {},
+     'expects': lambda r: any(m.get('revenue', 0) > 0 for m in r.get('matrix', [])),
+     'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

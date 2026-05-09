@@ -267,28 +267,29 @@ EDGE_MAP: list[EdgeSpec] = [
              note='SKIP: Customer has no segment_id field; Plan 5 ML clustering required'),
 
     # Customer ↔ membership/agreement/index/event/survey/transaction
-    # Member node label; pk in Neptune is `member_id` (scan-fallback to cust_id), so
-    # MATCH on Member.cust_id (regular property — Member NDJSON has cust_id).
+    # Match keys are the *Neptune merge keys* (the pk_field from NODE_MAP) when
+    # possible, because Neptune indexes those. Customer→cust_id, Member→member_id
+    # (= cust_id value via scan fallback), ConsumptionIndex→idx_id (= cust_id), etc.
     EdgeSpec(edge_type='IS_MEMBER', source_label='Customer', source_match_field='cust_id',
-             target_label='Member', target_match_field='cust_id',
+             target_label='Member', target_match_field='member_id',
              ndjson_prefix='nodes/member/', ndjson_source_field='cust_id', ndjson_target_field='cust_id',
-             note='Member.cust_id == Customer.cust_id'),
+             note='Member.member_id == cust_id (scan fallback); Customer.cust_id is the pk'),
     EdgeSpec(edge_type='AGREED_TO', source_label='Customer', source_match_field='cust_id',
              target_label='TermAgreement', target_match_field='agreement_id',
              ndjson_prefix='nodes/term_agreement/', ndjson_source_field='cust_id', ndjson_target_field='agreement_id',
-             note='TermAgreement.cust_id'),
+             note='TermAgreement.cust_id; both ends are indexed pk fields'),
     EdgeSpec(edge_type='FOR', source_label='TermAgreement', source_match_field='agreement_id',
              target_label='Term', target_match_field='term_cd',
              ndjson_prefix='nodes/term_agreement/', ndjson_source_field='agreement_id', ndjson_target_field='term_cd',
-             note='TermAgreement.term_cd'),
+             note='TermAgreement.term_cd; both ends are indexed pk fields'),
     EdgeSpec(edge_type='HAS_INDEX', source_label='Customer', source_match_field='cust_id',
-             target_label='ConsumptionIndex', target_match_field='cust_id',
+             target_label='ConsumptionIndex', target_match_field='idx_id',
              ndjson_prefix='nodes/consumption_index/', ndjson_source_field='cust_id', ndjson_target_field='cust_id',
-             note='ConsumptionIndex node has cust_id property; idx_id pk == cust_id (scan fallback)'),
+             note='ConsumptionIndex.idx_id == cust_id (scan fallback)'),
     EdgeSpec(edge_type='USED_APP', source_label='Customer', source_match_field='cust_id',
              target_label='AppEvent', target_match_field='event_id',
              ndjson_prefix='nodes/app_event/', ndjson_source_field='cust_id', ndjson_target_field='event_id',
-             note='AppEvent.cust_id (drop nulls)'),
+             note='AppEvent.cust_id (drop nulls); both ends indexed pk fields'),
     EdgeSpec(edge_type='ANSWERED', source_label='Customer', source_match_field='cust_id',
              target_label='Survey', target_match_field='response_id',
              ndjson_prefix='nodes/survey/', ndjson_source_field='cust_id', ndjson_target_field='response_id',
@@ -296,7 +297,7 @@ EDGE_MAP: list[EdgeSpec] = [
     EdgeSpec(edge_type='REFUELED', source_label='Customer', source_match_field='cust_id',
              target_label='FuelTransaction', target_match_field='tx_id',
              ndjson_prefix='nodes/transaction/', ndjson_source_field='cust_id', ndjson_target_field='tx_id',
-             note='FuelTransaction.cust_id — high-volume edge (~500K)'),
+             note='FuelTransaction.cust_id — high-volume edge (~500K); both ends indexed'),
 
     # FuelTransaction outgoing edges
     # AT: tx.store_cd MATCHES gas_station.site_cd (real txs only — synthetic S0xxx
@@ -395,11 +396,10 @@ EDGE_MAP: list[EdgeSpec] = [
              ndjson_prefix='nodes/campaign_sms/', ndjson_source_field='sms_id', ndjson_target_field='cust_id',
              note='CampaignSms.cust_id'),
     EdgeSpec(edge_type='AGGREGATED_AS', source_label='Campaign', source_match_field='campaign_cd',
-             target_label='CampaignAggregation', target_match_field='campaign_cd',
+             target_label='CampaignAggregation', target_match_field='agg_id',
              ndjson_prefix='nodes/campaign_aggregation/', ndjson_source_field='campaign_cd',
              ndjson_target_field='campaign_cd',
-             note='CampaignAggregation.campaign_cd; node has campaign_cd property '
-                  '(pk merged on agg_id=campaign_cd by scan fallback)'),
+             note='CampaignAggregation.agg_id == campaign_cd (scan fallback); both ends indexed'),
 
     # D13 — weather
     EdgeSpec(edge_type='OBSERVED_WEATHER', source_label='Region', source_match_field='sido_nm',
@@ -444,12 +444,14 @@ def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
     pairs is a list of {'s': source_match_value, 't': target_match_value}.
     We MATCH both endpoints and MERGE the relationship — no SET on the rel
     (edges are pure structural, no attributes in this graph).
+
+    Performance: source_match_field / target_match_field should be the *Neptune
+    merge keys* (pk_field from NODE_MAP) for indexed lookups, not arbitrary
+    properties. Non-indexed lookups make MATCH O(N_label).
     """
     if not pairs:
         return 0
     rel_type = _edge_cypher_type(spec.edge_type)
-    # Cast to string in MATCH to be safe for ints/strs alike (e.g. region_cd is str but
-    # might be loaded as int by Neptune's coercion). Cast both sides.
     query = (
         f"UNWIND $pairs AS p "
         f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
@@ -464,11 +466,18 @@ def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
     return 0
 
 
-def load_edge(spec: EdgeSpec, *, batch_size: int = 1000, limit: Optional[int] = None) -> int:
-    """Stream NDJSON for the given edge spec, MERGE relationships in batches."""
+def load_edge(spec: EdgeSpec, *, batch_size: int = 200, limit: Optional[int] = None,
+              progress_every: int = 2000) -> int:
+    """Stream NDJSON for the given edge spec, MERGE relationships in batches.
+
+    batch_size=200 keeps each Neptune Cypher request under a few seconds even
+    for the high-volume REFUELED edge (~500K total pairs ≈ 2500 batches).
+    progress_every controls log cadence — defaults to every 2000 pairs.
+    """
     if spec.ndjson_prefix is None:
-        print(f'  [{spec.edge_type}] SKIP — {spec.note}')
+        print(f'  [{spec.edge_type}] SKIP — {spec.note}', flush=True)
         return 0
+    print(f'  [{spec.edge_type}] starting (batch_size={batch_size}) prefix={spec.ndjson_prefix}', flush=True)
     s3 = boto3.client('s3')
     paginator = s3.get_paginator('list_objects_v2')
     keys = []
@@ -477,11 +486,14 @@ def load_edge(spec: EdgeSpec, *, batch_size: int = 1000, limit: Optional[int] = 
             if o['Key'].endswith('.ndjson'):
                 keys.append(o['Key'])
     if not keys:
-        print(f'  [{spec.edge_type}] no NDJSON under s3://{S3_BUCKET}/{spec.ndjson_prefix}')
+        print(f'  [{spec.edge_type}] no NDJSON under s3://{S3_BUCKET}/{spec.ndjson_prefix}', flush=True)
         return 0
 
+    t_start = time.time()
     total = 0
+    last_logged = 0
     batch: list[dict] = []
+    errors = 0
     for key in keys:
         body = s3.get_object(Bucket=S3_BUCKET, Key=key)['Body'].read().decode('utf-8')
         for line in body.splitlines():
@@ -508,21 +520,28 @@ def load_edge(spec: EdgeSpec, *, batch_size: int = 1000, limit: Optional[int] = 
                 try:
                     _flush_edge_batch(spec, batch)
                 except Exception as e:
-                    print(f'  [{spec.edge_type}] batch flush error: {e}; continuing')
+                    errors += 1
+                    if errors <= 3:
+                        print(f'  [{spec.edge_type}] batch flush error #{errors}: {e}; continuing', flush=True)
                 total += len(batch)
-                if total % 10000 == 0:
-                    print(f'  [{spec.edge_type}] processed {total}')
+                if total - last_logged >= progress_every:
+                    elapsed = time.time() - t_start
+                    rate = total / elapsed if elapsed > 0 else 0
+                    print(f'  [{spec.edge_type}] processed {total} ({rate:.0f}/s, errors={errors})', flush=True)
+                    last_logged = total
                 if limit and total >= limit:
-                    print(f'  [{spec.edge_type}] limit {limit} reached')
+                    print(f'  [{spec.edge_type}] limit {limit} reached', flush=True)
                     return total
                 batch = []
     if batch:
         try:
             _flush_edge_batch(spec, batch)
         except Exception as e:
-            print(f'  [{spec.edge_type}] final batch flush error: {e}')
+            errors += 1
+            print(f'  [{spec.edge_type}] final batch flush error: {e}', flush=True)
         total += len(batch)
-    print(f'  [{spec.edge_type}] processed total={total} pairs')
+    elapsed = time.time() - t_start
+    print(f'  [{spec.edge_type}] processed total={total} pairs in {elapsed:.1f}s (errors={errors})', flush=True)
     return total
 
 
@@ -537,7 +556,7 @@ def _count_edges_by_type() -> dict:
         return {}
 
 
-def load_all_edges(batch_size: int = 1000, edge_filter: Optional[set] = None) -> dict:
+def load_all_edges(batch_size: int = 200, edge_filter: Optional[set] = None) -> dict:
     """Iterate EDGE_MAP, load each edge type, return per-edge processed-pair counts.
 
     edge_filter: if set, only load edges whose edge_type is in the filter.
@@ -545,27 +564,28 @@ def load_all_edges(batch_size: int = 1000, edge_filter: Optional[set] = None) ->
     counts, call _count_edges_by_type() afterwards.
     """
     if not NEPTUNE_ENDPOINT:
-        print('ERROR: NEPTUNE_ENDPOINT not set'); sys.exit(2)
+        print('ERROR: NEPTUNE_ENDPOINT not set', flush=True); sys.exit(2)
     counts: dict[str, int] = {}
+    t_overall = time.time()
     for spec in EDGE_MAP:
         if edge_filter and spec.edge_type not in edge_filter:
             continue
         try:
             n = load_edge(spec, batch_size=batch_size)
         except Exception as e:
-            print(f'  [{spec.edge_type}] FATAL: {e}')
+            print(f'  [{spec.edge_type}] FATAL: {e}', flush=True)
             n = -1
         counts[spec.edge_type] = n
-    print('\n=== EDGE LOAD SUMMARY (pairs processed) ===')
+    print(f'\n=== EDGE LOAD SUMMARY (pairs processed) — total wall {time.time()-t_overall:.1f}s ===', flush=True)
     for et, n in counts.items():
-        print(f'  {et}: {n}')
+        print(f'  {et}: {n}', flush=True)
     actual = _count_edges_by_type()
     if actual:
-        print('\n=== ACTUAL Neptune relationship counts (by Cypher type) ===')
+        print('\n=== ACTUAL Neptune relationship counts (by Cypher type) ===', flush=True)
         for t, n in sorted(actual.items()):
-            print(f'  {t}: {n}')
+            print(f'  {t}: {n}', flush=True)
         total = sum(actual.values())
-        print(f'  TOTAL EDGES: {total}')
+        print(f'  TOTAL EDGES: {total}', flush=True)
     return counts
 
 

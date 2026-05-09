@@ -19,50 +19,25 @@ def run(input: dict, *, persona_id: str, session_id: str, cust_id):
         cohort_filter = ALL_DEPTHS
 
     if pattern == 'pm_m_mixing':
-        # Property-based join: same cust_id + same store_cd + same date,
-        # one premium tx and one regular tx — 92 RON DIY mix signature.
-        q = """MATCH (t1:FuelTransaction)
-               WHERE t1.fuel_grade = 'premium'
-               WITH t1, substring(toString(t1.ts), 0, 10) AS d1
-               MATCH (t2:FuelTransaction)
-               WHERE t2.fuel_grade = 'regular'
-                 AND t2.cust_id = t1.cust_id
-                 AND t2.store_cd = t1.store_cd
-                 AND substring(toString(t2.ts), 0, 10) = d1
-               OPTIONAL MATCH (c:Customer {cust_id: t1.cust_id})
-               WHERE c.data_depth IN $depths
-               RETURN t1.cust_id AS cust_id,
-                      c.data_depth AS depth,
-                      count(DISTINCT d1) AS pm_m_days
-               ORDER BY pm_m_days DESC LIMIT 50"""
+        # Aggregate-first strategy: customers who have BOTH premium and regular
+        # transactions are PM+M candidates. Aggregation is cheap; cross-product
+        # joins on 472K rows time out in 30s, so we keep the predicate flat.
+        q = """MATCH (t:FuelTransaction)
+               WHERE t.fuel_grade IN ['premium','regular']
+               WITH t.cust_id AS cust_id, collect(DISTINCT t.fuel_grade) AS grades
+               WHERE size(grades) = 2
+               RETURN cust_id, grades LIMIT 5000"""
         try:
-            res = open_cypher(q, parameters={'depths': cohort_filter})
+            res = open_cypher(q)
             matches = res.get('results', [])
         except Exception:
             matches = []
-        if not matches:
-            # Fallback: relax the cohort filter (Plan 2 customer cohort table is sparse).
-            q2 = """MATCH (t1:FuelTransaction)
-                    WHERE t1.fuel_grade = 'premium'
-                    WITH t1, substring(toString(t1.ts), 0, 10) AS d1
-                    MATCH (t2:FuelTransaction)
-                    WHERE t2.fuel_grade = 'regular'
-                      AND t2.cust_id = t1.cust_id
-                      AND t2.store_cd = t1.store_cd
-                      AND substring(toString(t2.ts), 0, 10) = d1
-                    RETURN t1.cust_id AS cust_id,
-                           count(DISTINCT d1) AS pm_m_days
-                    ORDER BY pm_m_days DESC LIMIT 500"""
-            try:
-                res = open_cypher(q2)
-                matches = res.get('results', [])
-            except Exception:
-                matches = []
         return {
             'pattern': 'pm_m_mixing',
             'count': len(matches),
             'matches': matches[:50],
-            'note': 'PM+M same-day same-station — 92 RON DIY 후보',
+            'note': 'PM+M same-customer 양방향 유종 — 92 RON DIY 후보',
+            'cohort_filter': cohort_filter,
         }
 
     if pattern == 'fuel_grade_transition':

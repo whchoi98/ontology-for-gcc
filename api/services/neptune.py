@@ -29,7 +29,7 @@ REGION = os.environ.get('AWS_REGION', 'ap-northeast-2')
 def open_cypher(
     query: str,
     parameters: Optional[dict] = None,
-    timeout: int = 30,
+    timeout: int = 120,
 ) -> dict:
     """Execute openCypher query against Neptune.
 

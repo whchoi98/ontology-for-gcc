@@ -228,3 +228,43 @@ export function CytoscapeView({ graph, anchorIds = [], onNodeTap, height = 480 }
     </div>
   );
 }
+
+// Plan 2 Task 2.6.2 — simple ER view (default export). Used by /meta page.
+// Domain group → fill color (5 ontology groups + time).
+const GROUP_COLORS: Record<string, string> = {
+  customer:            '#34d399', // emerald
+  behavior:            '#60a5fa', // blue
+  marketing:           '#f472b6', // pink
+  operations:          '#fbbf24', // amber
+  compliance_external: '#c084fc', // purple
+  time:                '#9ca3af', // gray
+};
+
+export default function CytoscapeViewSimple({ elements }: { elements: any[] }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!ref.current) return;
+    let cy: any;
+    (async () => {
+      const cytoscape = (await import('cytoscape')).default;
+      cy = cytoscape({
+        container: ref.current,
+        elements,
+        style: [
+          { selector: 'node', style: {
+              'background-color': (n: any) => GROUP_COLORS[n.data('group')] ?? '#999',
+              label: 'data(label)', 'font-size': 11,
+          } as any },
+          { selector: 'edge', style: {
+              width: 1, 'line-color': '#bbb', 'curve-style': 'bezier',
+              'target-arrow-shape': 'triangle', 'target-arrow-color': '#bbb',
+              label: 'data(edge)', 'font-size': 9, color: '#666',
+          } as any },
+        ],
+        layout: { name: 'cose', animate: false },
+      });
+    })();
+    return () => { cy?.destroy(); };
+  }, [elements]);
+  return <div ref={ref} className='w-full h-[600px] border rounded' />;
+}

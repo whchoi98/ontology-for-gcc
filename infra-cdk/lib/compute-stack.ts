@@ -124,7 +124,7 @@ export class ComputeStack extends cdk.Stack {
       cluster,
       serviceName: 'ontology-gcc-dev-api',
       taskDefinition: apiTask,
-      desiredCount: 0, // Plan 1 Task 1.10 — restore to 2 after Task 1.11 image push
+      desiredCount: 2,
       securityGroups: [props.appSg],
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       assignPublicIp: false,
@@ -133,7 +133,7 @@ export class ComputeStack extends cdk.Stack {
       cluster,
       serviceName: 'ontology-gcc-dev-web',
       taskDefinition: webTask,
-      desiredCount: 0, // Plan 1 Task 1.10 — restore to 2 after Task 1.11 image push
+      desiredCount: 2,
       securityGroups: [props.appSg],
       vpcSubnets: { subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS },
       assignPublicIp: false,

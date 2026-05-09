@@ -26,16 +26,13 @@ def healthz():
     return {"status": "ok"}
 
 
-# Routers registered in Tasks 16-25 — placeholder import here, fail-soft if not yet present.
-# `objects` is excluded from this loop because Plan 2 Task 2.6.1 router carries its own
-# `/api/objects` prefix (registered explicitly below).
+# Plan 3 — only auth + ops routers retained from the legacy loop.
+# The 12 mfg-template scenario routers (search/chat/insights/spec_match/compliance/
+# substitute/price/scm_lane/supplier_rfm/eight_d/esg_cbam/pdm) are decommissioned;
+# Plan 3.2/3.4 will introduce GCC-flavored search.py and chat.py with their own
+# explicit registration below. Everything else (objects, personas) carries its own prefix.
 def _try_register():
-    for module_name in [
-        "auth",
-        "search", "chat", "insights", "spec_match", "compliance",
-        "substitute", "price", "scm_lane", "supplier_rfm", "eight_d",
-        "esg_cbam", "pdm", "ops",
-    ]:
+    for module_name in ["auth", "ops"]:
         try:
             mod = __import__(f"api.routers.{module_name}", fromlist=["router"])
             app.include_router(mod.router, prefix="/api")
@@ -51,3 +48,10 @@ try:
     app.include_router(objects.router)
 except Exception as e:
     log.warning("objects router not registered: %s", e)
+
+# Plan 3 Task 3.1.3 — 5 부서 personas SSOT endpoint (own /api/personas prefix)
+try:
+    from api.routers import personas
+    app.include_router(personas.router)
+except Exception as e:
+    log.warning("personas router not registered: %s", e)

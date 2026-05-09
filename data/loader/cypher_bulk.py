@@ -465,25 +465,29 @@ def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
     """UNWIND-batched MERGE of relationships.
 
     pairs is a list of {'s': source_match_value, 't': target_match_value}.
-    We MATCH both endpoints and MERGE the relationship — no SET on the rel
-    (edges are pure structural, no attributes in this graph).
+    We MERGE both endpoints (using their pk_fields — guaranteed indexed via the
+    initial load's MERGE) and MERGE the relationship.
 
-    Performance: source_match_field / target_match_field should be the *Neptune
-    merge keys* (pk_field from NODE_MAP) for indexed lookups, not arbitrary
-    properties. Non-indexed lookups make MATCH O(N_label).
+    Why MERGE-MERGE instead of MATCH-MATCH:
+    - Neptune t4g.medium OOMs on MATCH-MATCH UNWIND patterns even at batch=50
+      because the planner materializes label-scan intermediates.
+    - MERGE on a label+pk_field is index-resolved (the same pattern used in
+      the initial _flush_batch node load), so memory is bounded.
+    - All edge endpoints come from already-loaded NDJSON, so MERGE finds the
+      existing node 99% of the time. The 1% (FK pointing to a non-loaded
+      node) creates an orphan with just the pk property, which is acceptable
+      for an analytics graph (still resolvable via property).
 
-    Memory: Neptune t4g.medium OOMs at batch_size>=200 because the MERGE
-    accumulates the (a,b,r) result set before returning. Use batch_size=50
-    or smaller. We also drop the RETURN clause to minimize materialization.
+    Drops RETURN to minimize response size.
     """
     if not pairs:
         return 0
     rel_type = _edge_cypher_type(spec.edge_type)
     query = (
         f"UNWIND $pairs AS p "
-        f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
-        f"MATCH (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
-        f"MERGE (a)-[r:{rel_type}]->(b)"
+        f"MERGE (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
+        f"MERGE (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
+        f"MERGE (a)-[:{rel_type}]->(b)"
     )
     _post_cypher(query, {'pairs': pairs})
     return len(pairs)

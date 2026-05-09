@@ -4,9 +4,9 @@
 [![English](https://img.shields.io/badge/lang-English-blue.svg)](#english)
 [![한국어](https://img.shields.io/badge/lang-한국어-red.svg)](#한국어)
 
-A 30–60 minute proof-of-concept demo for a Korean fuel-retail (GS Caltex) customer-analytics knowledge graph on AWS Bedrock + AgentCore + Neptune (12 wow scenarios).
+A 30–60 minute proof-of-concept demo for a Korean fuel-retail (GS Caltex) customer-analytics knowledge graph on AWS Bedrock + AgentCore + Neptune — 14 wow scenarios (A–N) · 25 ontology classes · 5 부서 페르소나 · real + synthetic + external data.
 
-AWS Bedrock + AgentCore + Neptune 위에서 한국 주유 리테일(GS칼텍스) 고객 분석 지식그래프 12개 wow 시나리오를 보여주는 30–60분 PoC 데모.
+AWS Bedrock + AgentCore + Neptune 위에서 한국 주유 리테일(GS칼텍스) 고객 분석 지식그래프 14개 wow 시나리오(A–N) · 25 클래스 · 5 부서 페르소나를 보여주는 30–60분 PoC 데모. 실 데이터 cohort + 합성 lookalike + 외부 시그널(기상청·opinet) 3-tier 출처 분리.
 
 ---
 
@@ -14,9 +14,11 @@ AWS Bedrock + AgentCore + Neptune 위에서 한국 주유 리테일(GS칼텍스)
 
 ## Overview
 
-`ontology-gcc` is a hands-on demonstration of how a domain ontology (customers, fuel transactions, gas stations, fuel products, campaigns, coupons, terms, app behavior, external signals) can power twelve distinct customer-analytics scenarios for GS Caltex on AWS managed AI services. The demo deploys a multi-tier application — FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure — that integrates Bedrock Sonnet 4.6, AgentCore Memory and Code Interpreter, Neptune openCypher, OpenSearch Serverless hybrid search, and CloudFront-fronted ECS Fargate.
+`ontology-gcc` is a hands-on demonstration of how a 25-class domain ontology (customers, fuel transactions, gas stations, fuel products, weather observations, campaigns, coupons, app events, surveys, etc.) can power **14 distinct** customer-analytics scenarios for GS Caltex on AWS managed AI services. The demo deploys a multi-tier application — FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure (6 stacks) — that integrates Bedrock Sonnet 4.6, AgentCore Memory and Code Interpreter, Neptune openCypher, OpenSearch Serverless hybrid search, and CloudFront-fronted ECS Fargate (Graviton ARM64).
 
-The scenarios span semantic search, conversational marketer agent with multi-turn memory, MD-grade insights with streaming token summaries, persona matching, customer clustering, lookalike expansion, campaign ROI simulation, station network map, compliance/term-consent guardrails, external-signal fusion, behavior-change outlier detection, and payment/price/channel analysis.
+Scenarios span semantic search, conversational marketer agent with multi-turn memory, MD-grade insights with streaming token summaries, persona matching, customer clustering, lookalike expansion, campaign ROI simulation, station network map, compliance/term-consent guardrails, external-signal fusion, behavior-change outlier detection (PM+M 92 RON DIY · 디젤→premium 전환), payment/price/channel matrix, full customer journey timeline, and weather × fuel correlation.
+
+**Data cohorts (D14)**: real (deep-history 16 + sales-only 17 + coupon-only 500 + 약관 500), synthetic (lookalike-syn ~50,000 + PM+M 250 + 디젤→premium 250), external (기상청 단기예보 + opinet 가격 시계열). Each node is tagged with `data_depth` for cohort filtering and `source ∈ {real, synthetic, external}` for provenance badges.
 
 ## Features
 
@@ -30,8 +32,12 @@ The scenarios span semantic search, conversational marketer agent with multi-tur
 - **Station Network Map (H)** — Korean sido choropleth + 30~50 GSC stations with opinet_no real coords + haversine k-NN nearest stations.
 - **Compliance Lens (I)** — Bedrock Guardrails plus Term/TermAgreement graph walk for marketing-eligibility filtering.
 - **External Signal Fusion (J)** — 현대카드 consumption index + Airbridge app behavior + driving-inconvenience survey cross-source narrative.
-- **Behavior-Change Outlier (K)** — pandas window detection (디젤→고급휘발유 transition, PM+M 92 RON DIY mixing) with LLM pattern labeling.
+- **Behavior-Change Outlier (K)** — pandas window detection (디젤→고급휘발유 transition, PM+M 92 RON DIY mixing) with LLM pattern labeling. PDF 3-page signature.
 - **Payment/Price/Channel Analysis (L)** — PaymentMethod × FuelPrice × Channel matrix aggregation with Cytoscape flow visualization.
+- **Customer Journey Timeline (M)** — App + Tx + Term + Coupon unified timeline with fuel-grade transition highlighting. PDF 3-page signature.
+- **Weather × Fuel Correlation (N)** — 기상청 단기예보 17-시도 daily ETL × FuelTransaction join with scatter plot.
+
+Plus: **25-class object explorer** (search · pagination · 1-hop subgraph), **meta page** (ER · Standards · Validation tabs), **operational console** (5 panels — ingest · guardrail · memory · eval · trace), and **GuidedTour** (5 페르소나 × 14 시나리오 추천 카드).
 
 ## Prerequisites
 
@@ -206,9 +212,13 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 
 ## 개요
 
-`ontology-gcc`은 도메인 온톨로지(고객, 주유 거래, 주유소, 연료 상품, 캠페인, 쿠폰, 약관, 앱 행동, 외부 신호)가 AWS 매니지드 AI 서비스 위에서 GS칼텍스를 위한 12가지 고객 분석 시나리오를 어떻게 구동하는지 보여주는 실습형 데모입니다. FastAPI 백엔드, Next.js 14 프론트엔드, AWS CDK 인프라로 구성된 다층 애플리케이션이 Bedrock Sonnet 4.6, AgentCore Memory와 Code Interpreter, Neptune openCypher, OpenSearch Serverless 하이브리드 검색, CloudFront 앞단에 ECS Fargate를 통합합니다.
+`ontology-gcc`은 25-class 도메인 온톨로지(고객, 주유 거래, 주유소, 연료 상품, 기상 관측, 캠페인, 쿠폰, 앱 행동, 설문, 약관 등)가 AWS 매니지드 AI 서비스 위에서 GS칼텍스를 위한 **14가지** 고객 분석 시나리오를 어떻게 구동하는지 보여주는 실습형 데모입니다. FastAPI 백엔드, Next.js 14 프론트엔드, AWS CDK 인프라(6 stacks)로 구성된 다층 애플리케이션이 Bedrock Sonnet 4.6, AgentCore Memory와 Code Interpreter, Neptune openCypher, OpenSearch Serverless 하이브리드 검색, CloudFront 앞단에 ECS Fargate(Graviton ARM64)를 통합합니다.
 
-시나리오는 의미 검색, 다회차 메모리 기반 대화형 마케터 에이전트, 토큰 스트리밍 요약을 갖춘 MD급 인사이트, 페르소나 매칭, 고객 클러스터링, 룩어라이크 확장, 캠페인 ROI 시뮬레이션, 주유소 네트워크 지도, 컴플라이언스/약관 동의 가드레일, 외부 신호 융합, 행동 변화 이상치 탐지, 결제·가격·채널 분석에 걸쳐 있습니다.
+시나리오는 의미 검색, 다회차 메모리 기반 대화형 마케터 에이전트, 토큰 스트리밍 요약을 갖춘 MD급 인사이트, 페르소나 매칭, 고객 클러스터링, 룩어라이크 확장, 캠페인 ROI 시뮬레이션, 주유소 네트워크 지도, 컴플라이언스/약관 동의 가드레일, 외부 신호 융합, 행동 변화 이상치 탐지(PM+M 92 RON DIY · 디젤→premium 전환), 결제·가격·채널 매트릭스, 고객 통합 여정 timeline, 날씨 × 주유 상관 등 14개에 걸쳐 있습니다.
+
+**데이터 cohort (D14)**: real (deep-history 16 + sales-only 17 + coupon-only 500 + 약관 500), synthetic (lookalike-syn ~50,000 + PM+M 250 + 디젤→premium 250), external (기상청 단기예보 + opinet 가격 시계열). 각 노드에 `data_depth`와 `source ∈ {real, synthetic, external}`를 태깅하여 cohort 필터링과 출처 배지 노출 가능.
+
+**데모 사용자**: `admin@whchoi.net` / `demo@whchoi.net` (비밀번호 `!234Qwer`).
 
 ## 주요 기능
 
@@ -222,8 +232,12 @@ This project is licensed under the MIT License — see the [LICENSE](LICENSE) fi
 - **주유소 네트워크 지도 (H)** — 한국 시도 choropleth + opinet_no 실제 좌표 기반 30~50 GSC 주유소 + haversine k-NN 가까운 주유소 검색.
 - **컴플라이언스 렌즈 (I)** — Bedrock Guardrails + Term/TermAgreement 그래프 워크로 마케팅 적격성 필터링.
 - **외부 신호 융합 (J)** — 현대카드 소비 지수 + Airbridge 앱 행동 + 운전 불편 설문 교차 소스 내러티브.
-- **행동 변화 이상치 (K)** — pandas 윈도 탐지(디젤→고급휘발유 전환, PM+M 92 RON DIY 혼합) + LLM 패턴 라벨링.
+- **행동 변화 이상치 (K)** — pandas 윈도 탐지(디젤→고급휘발유 전환, PM+M 92 RON DIY 혼합) + LLM 패턴 라벨링. PDF 3-page 시그니처.
 - **결제·가격·채널 분석 (L)** — PaymentMethod × FuelPrice × Channel 매트릭스 집계 + Cytoscape 흐름 시각화.
+- **고객 통합 여정 timeline (M)** — App + Tx + Term + Coupon 통합 시간축 + 유종 전환 강조. PDF 3-page 시그니처.
+- **날씨 × 주유 상관 (N)** — 기상청 단기예보 17-시도 일별 ETL × FuelTransaction 산점도.
+
+추가: **25-class 객체 탐색기** (검색 · 페이지네이션 · 1-hop subgraph), **메타 페이지** (ER · 표준 · 검증 리포트 3-탭), **운영 콘솔** (5 패널 — 적재 · 가드레일 · 메모리 · 평가 · 트레이스), **GuidedTour** (5 페르소나 × 14 시나리오 추천 카드).
 
 ## 사전 요구 사항
 

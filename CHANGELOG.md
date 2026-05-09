@@ -5,6 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] — 2026-05-09
+
+### Added — first PoC release
+
+**Infrastructure**
+- 6-stack CDK (network imports retail VPC; data/ai/compute/edge/observability are GCC-only) deployed in account 061525506239.
+- ECR images (api + web ARM64) on ECS Fargate Graviton, 2/2 each.
+- Lambda@Edge Cognito JWT verification (RS256 + 10-min JWKS TTL cache, Plan 5 Task 5.5.1).
+- Custom domain runbook `docs/runbooks/02-add-custom-domain.md` with safe Cognito callback merge + rollback procedure.
+
+**Data** (~1.4M nodes / partial edge load, see Plan 4 hybrid traversal note)
+- Real cohort: coupon-only 500 + sales-only 17 + deep-history 16 + 약관 500 + 소비지수 287 + 앱 352 + 설문 25,961.
+- Synthetic: lookalike-syn ~50,000 + PM+M 92 RON 250 seeds + 디젤→premium 250 seeds.
+- External: 기상청 단기예보 17-시도 daily ETL (ADR 0005 — 6h TTL cache) + opinet 1년치 ETL stub (Plan 5 Task 5.6.1).
+- 25 classes + 31 relations + `ontology/standards/opinet_codes.yaml`.
+- Customer 15 핵심 속성 (DW_CU_CUST_MAST 청사진).
+- ADR 0004 — `Customer.data_depth` 4단계 cohort tagging.
+
+**Scenarios** (14 — A–N)
+- A 의미 검색 (BM25 Nori + Cohere KNN, RRF, rerank-v3, 1-hop Cytoscape subgraph)
+- B 마케터 챗 (Bedrock Converse 다회차 + AgentCore Memory + 10 도구, Tool dispatcher = `api/services/agent.py`)
+- C MD 인사이트 (Code Interpreter matplotlib NanumGothic + Sonnet 한국어 요약)
+- D 페르소나 매칭 (PERSONA_REGISTRY × KPI weights — ADR 0007)
+- E 클러스터링 KMeans 6 + LLM 라벨링
+- F 룩어라이크 (lookalike_expand)
+- G 캠페인 ROI 시뮬 + Bayesian 분포 차트
+- H 주유소 지도 (시도 choropleth)
+- I 약관·가드레일 (TermAgreement + Bedrock Guardrails)
+- J 외부 시그널 융합 (현대카드·앱·설문·날씨)
+- K Outlier (PM+M 92 RON DIY · 디젤→premium 전환) — PDF 3페이지 시그니처
+- L 결제·가격·채널 매트릭스
+- M 고객 통합 여정 timeline (App+Tx+Term+Coupon + 유종 전환) — PDF 3페이지 시그니처
+- N 날씨 × 주유 (기상청 join + 산점도)
+- 70+ wow 평가 케이스 (시나리오 × 페르소나 매트릭스).
+
+**Operations / Meta / UI** (Plan 5)
+- 25 클래스 객체 탐색기 (검색·페이지네이션·디테일·1-hop subgraph) — `web/app/objects/[type]/`, `web/app/objects/[type]/[id]/`.
+- 메타 페이지 3 탭 (ER · Standards · Validation 검증 리포트) — `/api/ontology/{schema,standards,validation}`.
+- 운영 콘솔 5 패널 (적재·가드레일·메모리·평가·트레이스) — `/api/ops/live/*` + 5 panel components.
+- GuidedTourGcc (5 페르소나 × 14 시나리오 추천 카드 — ADR 0008).
+- DataSourceBadge (real/synthetic/external 출처 명시).
+- harness-eval nightly README badge automation (`scripts/run_harness_eval.sh` + `.github/workflows/harness.yml`).
+
+**ADRs** 0001 (retail VPC import) · 0002 (domain deferred) · 0003 (bulk loader IAM) · 0004 (cohort data_depth) · 0005 (KMA API cache) · 0006 (tool specs design) · 0007 (persona registry SSOT) · 0008 (guided tour design).
+
+**Tests** CI 4-job 그린 (~50+ tests) + harness baseline 7.5/B (target ≥7.5/B reached).
+**Docs** README 한·영 + CLAUDE.md + SECURITY.md (Plan 1–5 통합) + 8 ADR + 2 runbook.
+
 ## [Unreleased]
 
 ### Added

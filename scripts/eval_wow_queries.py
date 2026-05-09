@@ -12,6 +12,10 @@ Each entry in `WOW_QUERIES` carries:
   - "expects": callable(result_dict) -> bool
   - "min_results": int (informational)
 
+Plan 3 cases:
+  - 시나리오 A (3.2.5): 5 personas × 1 search query each (10 total)
+  - 시나리오 B (3.4.5): 5 PDF Scenario 1 dialog 재현 chat queries
+
 Usage:
     python scripts/eval_wow_queries.py --dry-run
     python scripts/eval_wow_queries.py --scenarios A

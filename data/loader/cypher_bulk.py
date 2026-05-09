@@ -471,6 +471,10 @@ def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
     Performance: source_match_field / target_match_field should be the *Neptune
     merge keys* (pk_field from NODE_MAP) for indexed lookups, not arbitrary
     properties. Non-indexed lookups make MATCH O(N_label).
+
+    Memory: Neptune t4g.medium OOMs at batch_size>=200 because the MERGE
+    accumulates the (a,b,r) result set before returning. Use batch_size=50
+    or smaller. We also drop the RETURN clause to minimize materialization.
     """
     if not pairs:
         return 0
@@ -479,14 +483,10 @@ def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
         f"UNWIND $pairs AS p "
         f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
         f"MATCH (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
-        f"MERGE (a)-[r:{rel_type}]->(b) "
-        f"RETURN count(r) AS n"
+        f"MERGE (a)-[r:{rel_type}]->(b)"
     )
-    res = _post_cypher(query, {'pairs': pairs})
-    rows = res.get('results') or []
-    if rows:
-        return int(rows[0].get('n', 0))
-    return 0
+    _post_cypher(query, {'pairs': pairs})
+    return len(pairs)
 
 
 def load_edge(spec: EdgeSpec, *, batch_size: int = 200, limit: Optional[int] = None,

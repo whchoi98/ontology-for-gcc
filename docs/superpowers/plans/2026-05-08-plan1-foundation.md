@@ -10,6 +10,16 @@
 
 **Spec reference:** `docs/superpowers/specs/2026-05-08-ontology-gcc-design.md` (Phase 0 + Phase 1).
 
+**Backport notes (2026-05-09 — first-deploy lessons):**
+- Neptune `engineVersion: '1.3.2.0'` is **not** available in `ap-northeast-2`. Use **`1.4.7.0`** (latest stable 1.4.x). For fresh installs no upgrade flag needed; for in-place upgrades from 1.3.x add `--allow-major-version-upgrade` + neptune1.4 parameter group.
+- OpenSearch Serverless network policy with `AllowFromPublic: false` requires non-empty `SourceVPCEs`. PoC keeps `AllowFromPublic: true` until Plan 5 polish adds VPC endpoint.
+- CFN rejects non-ASCII characters in `description` fields (em-dash `—`). All SG descriptions use plain hyphen `-`.
+- ALB `addTargets` for non-standard ports (3000, 8000) requires explicit `protocol: ApplicationProtocol.HTTP`.
+- Cross-region stack references (compute ap-northeast-2 ↔ edge us-east-1) require `crossRegionReferences: true` on both stack props.
+- `Vpc.fromVpcAttributes()` does not expose `routeTableIds` → `GatewayVpcEndpoint` for S3 cannot be created from gcc-data-stack. Defer to retail-side or add explicitly via `RETAIL_*_RT_IDS` env vars (Plan 5 polish option).
+- AI stack KB ID temporarily hardcoded as `'PLACEHOLDER-KB-ID'` (Plan 5 polish provisions real KB + exports `GccBedrockKbId`).
+- ECS `desiredCount: 0` during initial deploy (no images yet), restored to `2` in Task 1.13 after Task 1.11 image push.
+
 ---
 
 ## File Structure
@@ -829,6 +839,7 @@ const ai = new AiStack(app, `${projectPrefix}-ai`, {
 
 const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   env, tags,
+  crossRegionReferences: true,   // [backport 2026-05-09] required for edge stack (us-east-1) to reference compute.alb
   vpc: network.vpc,
   appSg: network.appSg,
   albSg: network.albSg,
@@ -845,6 +856,7 @@ const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
 const edge = new EdgeStack(app, `${projectPrefix}-edge`, {
   env: { ...env, region: 'us-east-1' }, // ACM + Lambda@Edge are us-east-1
   tags,
+  crossRegionReferences: true,   // [backport 2026-05-09] required to reference compute.alb (ap-northeast-2)
   alb: compute.alb,
   domainName: app.node.tryGetContext('domain') as string | undefined,
 });
@@ -901,7 +913,7 @@ export class NetworkStack extends cdk.Stack {
     this.albSg = new ec2.SecurityGroup(this, 'AlbSg', {
       vpc: this.vpc,
       securityGroupName: 'gcc-alb-sg',
-      description: 'GCC ALB — ingress from CloudFront prefix list only',
+      description: 'GCC ALB - ingress from CloudFront prefix list only',   // [backport 2026-05-09] em-dash rejected by CFN; ASCII only
       allowAllOutbound: true,
     });
 
@@ -926,7 +938,7 @@ export class NetworkStack extends cdk.Stack {
     this.neptuneSg = new ec2.SecurityGroup(this, 'NeptuneSg', {
       vpc: this.vpc,
       securityGroupName: 'gcc-neptune-sg',
-      description: 'GCC Neptune — ingress from gcc-app-sg only',
+      description: 'GCC Neptune - ingress from gcc-app-sg only',   // ASCII only
       allowAllOutbound: false,
     });
     this.neptuneSg.addIngressRule(this.appSg, ec2.Port.tcp(8182), 'GCC api → Neptune');
@@ -1061,12 +1073,12 @@ export class DataStack extends cdk.Stack {
     this.syntheticDataBucket.grantRead(bulkLoaderRole);
     this.bulkLoaderRoleArn = bulkLoaderRole.roleArn;
 
-    // ── VPC endpoint for S3 (Neptune Loader needs S3 reach) ────────
-    new ec2.GatewayVpcEndpoint(this, 'S3VpcEndpoint', {
-      vpc: props.vpc,
-      service: ec2.GatewayVpcEndpointAwsService.S3,
-      subnets: [{ subnetType: ec2.SubnetType.PRIVATE_ISOLATED }],
-    });
+    // ── S3 Gateway VPC Endpoint: deferred to retail-side ─────────────
+    // [backport 2026-05-09] Vpc.fromVpcAttributes does not populate routeTableIds
+    // so a GatewayVpcEndpoint cannot be installed from this stack. Per ADR 0003,
+    // the S3 gateway endpoint will be added on retail's network stack (or via
+    // direct AWS CLI / console) before Plan 2 Bulk Loader runs. Until then,
+    // Neptune reaches S3 via NAT egress in private subnets.
 
     // ── Neptune ────────────────────────────────────────────────────
     const subnetGroup = new neptune.CfnDBSubnetGroup(this, 'NeptuneSubnetGroup', {
@@ -1077,7 +1089,7 @@ export class DataStack extends cdk.Stack {
 
     const cluster = new neptune.CfnDBCluster(this, 'NeptuneCluster', {
       dbClusterIdentifier: 'ontology-gcc-dev-neptune',
-      engineVersion: '1.3.2.0',
+      engineVersion: '1.4.7.0',   // [backport 2026-05-09] '1.3.2.0' not available in ap-northeast-2; 1.4.x latest stable
       dbSubnetGroupName: subnetGroup.dbSubnetGroupName,
       vpcSecurityGroupIds: [props.neptuneSg.securityGroupId],
       iamAuthEnabled: true,
@@ -1113,8 +1125,7 @@ export class DataStack extends cdk.Stack {
             { ResourceType: 'collection', Resource: ['collection/ontology-gcc-dev'] },
             { ResourceType: 'dashboard', Resource: ['collection/ontology-gcc-dev'] },
           ],
-          AllowFromPublic: false,
-          SourceVPCEs: [],  // VPC endpoint added below
+          AllowFromPublic: true,   // [backport 2026-05-09] AllowFromPublic=false requires non-empty SourceVPCEs; PoC keeps public until Plan 5 polish adds VPC endpoint
         },
       ]),
     });
@@ -1316,6 +1327,7 @@ export class ComputeStack extends cdk.Stack {
 
     listener.addTargets('ApiTargets', {
       port: 8000,
+      protocol: elbv2.ApplicationProtocol.HTTP,   // [backport 2026-05-09] non-standard port needs explicit protocol
       targets: [apiService],
       healthCheck: { path: '/healthz', healthyHttpCodes: '200' },
       conditions: [elbv2.ListenerCondition.pathPatterns(['/api/*', '/healthz'])],
@@ -1323,6 +1335,7 @@ export class ComputeStack extends cdk.Stack {
     });
     listener.addTargets('WebTargets', {
       port: 3000,
+      protocol: elbv2.ApplicationProtocol.HTTP,   // [backport 2026-05-09] non-standard port needs explicit protocol
       targets: [webService],
       healthCheck: { path: '/', healthyHttpCodes: '200,307' },
     });
@@ -1418,7 +1431,8 @@ export class AiStack extends cdk.Stack {
 
     // KB itself is created via custom resource or manually if Bedrock CFN gaps;
     // for now expose a placeholder ID (overwritten when KB is provisioned).
-    this.kbId = cdk.Fn.importValue('GccBedrockKbId').toString();
+    // [backport 2026-05-09] Fn.importValue would fail at deploy if export missing — Plan 5 polish provisions real KB + exports.
+    this.kbId = 'PLACEHOLDER-KB-ID';
 
     // ── AgentCore Memory (custom resource — same pattern as retail ADR 0001) ──
     // Plan 1에서는 placeholder string으로 두고, 실제 생성은 retail의 패턴 그대로

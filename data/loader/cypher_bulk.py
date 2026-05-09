@@ -47,8 +47,29 @@ NODE_MAP = [
 ]
 
 
-def _post_cypher(query: str, params: dict, retries: int = 3) -> dict:
-    """SigV4-signed POST via botocore (handles port 8182 correctly)."""
+# Module-scoped HTTPS session for connection reuse across batches.
+# Neptune (t4g.medium especially) drops connections under burst load — reusing
+# a TCP/TLS connection avoids ~100ms handshake per batch and reduces ECONNREFUSED.
+_SESSION: Optional[requests.Session] = None
+
+
+def _get_session() -> requests.Session:
+    global _SESSION
+    if _SESSION is None:
+        s = requests.Session()
+        adapter = requests.adapters.HTTPAdapter(pool_connections=4, pool_maxsize=8)
+        s.mount('https://', adapter)
+        _SESSION = s
+    return _SESSION
+
+
+def _post_cypher(query: str, params: dict, retries: int = 5) -> dict:
+    """SigV4-signed POST via botocore (handles port 8182 correctly).
+
+    Uses a module-scoped requests.Session for connection keep-alive (avoids
+    reconnect cost for every batch) and exponential backoff up to 5 attempts
+    to ride out Neptune transient connection-refused errors.
+    """
     from botocore.auth import SigV4Auth
     from botocore.awsrequest import AWSRequest
     from botocore.credentials import Credentials
@@ -56,6 +77,7 @@ def _post_cypher(query: str, params: dict, retries: int = 3) -> dict:
     url = f'https://{NEPTUNE_ENDPOINT}:8182/openCypher'
     body = json.dumps({'query': query, 'parameters': json.dumps(params)}).encode('utf-8')
     headers_in = {'Content-Type': 'application/json'}
+    sess = _get_session()
 
     last = None
     for attempt in range(retries):
@@ -67,13 +89,14 @@ def _post_cypher(query: str, params: dict, retries: int = 3) -> dict:
                 'neptune-db', REGION,
             ).add_auth(aws_req)
             prep = aws_req.prepare()
-            r = requests.post(url, data=body, headers=dict(prep.headers), timeout=120, verify=True)
+            r = sess.post(url, data=body, headers=dict(prep.headers), timeout=120, verify=True)
             if r.status_code >= 300:
                 raise RuntimeError(f'openCypher [{r.status_code}]: {r.text[:500]}')
             return r.json()
         except (requests.exceptions.RequestException, RuntimeError) as e:
             last = e
             if attempt < retries - 1:
+                # 1, 2, 4, 8, 16 second backoff
                 time.sleep(2 ** attempt)
                 continue
             raise
@@ -556,22 +579,32 @@ def _count_edges_by_type() -> dict:
         return {}
 
 
-def load_all_edges(batch_size: int = 200, edge_filter: Optional[set] = None) -> dict:
+def load_all_edges(batch_size: int = 200, edge_filter: Optional[set] = None,
+                   limit_per_edge: Optional[int] = None,
+                   limits: Optional[dict] = None) -> dict:
     """Iterate EDGE_MAP, load each edge type, return per-edge processed-pair counts.
 
     edge_filter: if set, only load edges whose edge_type is in the filter.
-    Returns a dict {edge_type: pairs_processed}. To get actual merged-relation
-    counts, call _count_edges_by_type() afterwards.
+    limit_per_edge: if set, cap each edge's pair count to this value (helpful
+        on small Neptune instances; e.g. REFUELED at 500K can take 2+ hours
+        on t4g.medium so capping at 100K gives partial coverage in <30min).
+    limits: per-edge override dict {edge_type: limit}. Takes priority over
+        limit_per_edge.
+
+    Returns a dict {edge_type: pairs_processed}. Also runs a final
+    _count_edges_by_type() and prints actual Neptune relationship counts.
     """
     if not NEPTUNE_ENDPOINT:
         print('ERROR: NEPTUNE_ENDPOINT not set', flush=True); sys.exit(2)
+    limits = limits or {}
     counts: dict[str, int] = {}
     t_overall = time.time()
     for spec in EDGE_MAP:
         if edge_filter and spec.edge_type not in edge_filter:
             continue
+        eff_limit = limits.get(spec.edge_type, limit_per_edge)
         try:
-            n = load_edge(spec, batch_size=batch_size)
+            n = load_edge(spec, batch_size=batch_size, limit=eff_limit)
         except Exception as e:
             print(f'  [{spec.edge_type}] FATAL: {e}', flush=True)
             n = -1
@@ -602,6 +635,19 @@ def main():
 
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == '--edges':
-        load_all_edges()
+        # Per-edge limits: cap high-volume edges so the t4g.medium Neptune
+        # finishes in reasonable time. Small edges run unlimited.
+        # Tune via env: EDGE_LIMIT_<TYPE>=N (e.g. EDGE_LIMIT_REFUELED=200000).
+        default_limits = {
+            'REFUELED':         int(os.environ.get('EDGE_LIMIT_REFUELED',         '150000')),
+            'AT':               int(os.environ.get('EDGE_LIMIT_AT',               '150000')),
+            'AT_TIME':          int(os.environ.get('EDGE_LIMIT_AT_TIME',          '150000')),
+            'USED_APP':         int(os.environ.get('EDGE_LIMIT_USED_APP',          '50000')),
+            'PRICED_AT':        int(os.environ.get('EDGE_LIMIT_PRICED_AT',        '100000')),
+            'SENT_SMS':         int(os.environ.get('EDGE_LIMIT_SENT_SMS',          '50000')),
+            'TO':               int(os.environ.get('EDGE_LIMIT_TO',                '50000')),
+        }
+        load_all_edges(batch_size=int(os.environ.get('EDGE_BATCH_SIZE', '200')),
+                       limits=default_limits)
     else:
         main()

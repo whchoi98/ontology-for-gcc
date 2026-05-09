@@ -1,5 +1,9 @@
 """Neptune openCypher with SigV4 signing — Plan 3 replacement for 2.6 stub.
 
+Uses ``botocore.auth.SigV4Auth`` for proper SigV4 signing of the JSON body
+(matches the bulk loader pattern in data/loader/cypher_bulk.py which works
+with IAM-auth enabled Neptune clusters).
+
 Always pass parameters as keyword (CLAUDE.md convention).
 ``open_cypher(query=..., parameters=...)`` returns the raw Neptune response dict.
 """
@@ -11,7 +15,6 @@ from typing import Optional
 
 import boto3
 import requests
-from requests_aws4auth import AWS4Auth
 
 
 @lru_cache
@@ -21,17 +24,6 @@ def _session() -> boto3.Session:
 
 NEPTUNE_ENDPOINT = os.environ.get('NEPTUNE_ENDPOINT', '')
 REGION = os.environ.get('AWS_REGION', 'ap-northeast-2')
-
-
-def _auth() -> AWS4Auth:
-    creds = _session().get_credentials().get_frozen_credentials()
-    return AWS4Auth(
-        creds.access_key,
-        creds.secret_key,
-        REGION,
-        'neptune-db',
-        session_token=creds.token,
-    )
 
 
 def open_cypher(
@@ -45,8 +37,26 @@ def open_cypher(
     """
     if not NEPTUNE_ENDPOINT:
         return {'results': []}
+
+    from botocore.auth import SigV4Auth
+    from botocore.awsrequest import AWSRequest
+    from botocore.credentials import Credentials
+
     url = f'https://{NEPTUNE_ENDPOINT}:8182/openCypher'
-    data = {'query': query, 'parameters': json.dumps(parameters or {})}
-    r = requests.post(url, data=data, auth=_auth(), timeout=timeout)
+    body = json.dumps({
+        'query': query,
+        'parameters': json.dumps(parameters or {}),
+    }).encode('utf-8')
+    headers_in = {'Content-Type': 'application/json'}
+
+    frozen = _session().get_credentials().get_frozen_credentials()
+    aws_req = AWSRequest(method='POST', url=url, data=body, headers=headers_in)
+    SigV4Auth(
+        Credentials(frozen.access_key, frozen.secret_key, frozen.token),
+        'neptune-db',
+        REGION,
+    ).add_auth(aws_req)
+    prep = aws_req.prepare()
+    r = requests.post(url, data=body, headers=dict(prep.headers), timeout=timeout, verify=True)
     r.raise_for_status()
     return r.json()

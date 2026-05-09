@@ -8,6 +8,43 @@ function handleUnauthorized(): never {
   throw new Error("authentication required");
 }
 
+/** Plan 3 Task 3.2.3 — Generic SSE async iterator. Consumed by /search and /chat
+ *  pages. Yields each `{type, data}` object as parsed from `data: ...\n\n` lines. */
+export async function* streamSSE<T = unknown>(
+  url: string,
+  body: unknown,
+): AsyncGenerator<{ type: string; data: T }> {
+  const fullUrl = url.startsWith("http") || url.startsWith("/api")
+    ? url
+    : `${BASE}${url}`;
+  const r = await fetch(fullUrl, {
+    method: "POST",
+    body: JSON.stringify(body),
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+  });
+  if (r.status === 401) handleUnauthorized();
+  const reader = r.body!.getReader();
+  const dec = new TextDecoder();
+  let buf = "";
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buf += dec.decode(value, { stream: true });
+    const lines = buf.split("\n\n");
+    buf = lines.pop() || "";
+    for (const ln of lines) {
+      const trimmed = ln.trim();
+      if (!trimmed.startsWith("data: ")) continue;
+      try {
+        yield JSON.parse(trimmed.slice(6)) as { type: string; data: T };
+      } catch {
+        /* skip malformed */
+      }
+    }
+  }
+}
+
 async function postJson<T>(path: string, body: unknown): Promise<T> {
   const r = await fetch(`${BASE}${path}`, {
     method: "POST",

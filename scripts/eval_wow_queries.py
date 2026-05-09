@@ -133,6 +133,28 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 D (persona_match) ----
+WOW_QUERIES.extend([
+    {'scenario': 'D', 'persona': 'marketing',
+     'query': {'cust_ids': ['c001', 'c002', 'c003']},
+     'expects': lambda r: len(r.get('matches', [])) >= 1, 'min_results': 1},
+    {'scenario': 'D', 'persona': 'strategy',
+     'query': {'cust_ids': ['c004', 'c005']},
+     'expects': lambda r: any('best_persona' in m for m in r.get('matches', [])),
+     'min_results': 1},
+    {'scenario': 'D', 'persona': 'data-ai',
+     'query': {'cust_ids': ['c001']},
+     'expects': lambda r: 'all_scores' in (r.get('matches', [{}])[0] or {}),
+     'min_results': 1},
+    {'scenario': 'D', 'persona': 'crm',
+     'query': {'cust_ids': ['c001', 'c002']},
+     'expects': lambda r: 'crm' in str(r), 'min_results': 1},
+    {'scenario': 'D', 'persona': 'retail-ops',
+     'query': {'cust_ids': ['c003']},
+     'expects': lambda r: 'retail-ops' in str(r), 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

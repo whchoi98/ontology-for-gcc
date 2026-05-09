@@ -26,13 +26,15 @@ def healthz():
     return {"status": "ok"}
 
 
-# Routers registered in Tasks 16-25 — placeholder import here, fail-soft if not yet present
+# Routers registered in Tasks 16-25 — placeholder import here, fail-soft if not yet present.
+# `objects` is excluded from this loop because Plan 2 Task 2.6.1 router carries its own
+# `/api/objects` prefix (registered explicitly below).
 def _try_register():
     for module_name in [
         "auth",
         "search", "chat", "insights", "spec_match", "compliance",
         "substitute", "price", "scm_lane", "supplier_rfm", "eight_d",
-        "esg_cbam", "pdm", "objects", "ops",
+        "esg_cbam", "pdm", "ops",
     ]:
         try:
             mod = __import__(f"api.routers.{module_name}", fromlist=["router"])
@@ -42,3 +44,10 @@ def _try_register():
 
 
 _try_register()
+
+# Plan 2 Task 2.6.1 — 25-class GCC objects router (carries own `/api/objects` prefix)
+try:
+    from api.routers import objects
+    app.include_router(objects.router)
+except Exception as e:
+    log.warning("objects router not registered: %s", e)

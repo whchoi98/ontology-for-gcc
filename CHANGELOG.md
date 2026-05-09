@@ -20,3 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Notes
 - raw_data/ (PII inputs) is gitignored. Stored separately in KMS-encrypted S3.
 - Phase 1 (Infrastructure) — 6-stack CDK with retail VPC import — complete.
+
+### Phase 2 Data Pipeline ✅ (2026-05-09)
+- raw_data 11 files uploaded to s3://ontology-gcc-dev-raw-docs-061525506239/raw_data/.
+- api Docker image rebuilt + pushed (Plan 2 code: data/external, data/loader, data/load, api/services/cohort, /api/objects 25-class).
+- Bulk Loader fallback (data/loader/cypher_bulk.py) — openCypher UNWIND MERGE batches via SigV4 — used when CSV format doesn't fit.
+- ECS one-shot task ran loader: **869,648 nodes merged** to Neptune.
+- Cohort verified: Customer 50,517 (500 real + 17 sales-only + 50K lookalike-syn), FuelTransaction 556,712, GasStation 31,109, Campaign 137, Coupon 997, CouponUse 5,278, Term 0/12, TermAgreement 17,615, AppEvent 121,700, ConsumptionIndex 287, Persona 5, Cluster 6, Segment 20, Member 50,517, CampaignSMS 34,250, CampaignAggregation 137.
+- Some classes show 0 — to be addressed in Plan 5 polish: Term (no separate generator output), FuelPrice (real 6일/synthetic 1년 generator output mismatch), TimeSlot (5 fixed not in pipeline), Survey anonymous 25,946 (load filter).
+- KMA ETL deferred — no API key registered yet.
+- PM+M 92 RON detection + cohort breakdown verification deferred to Plan 3 (requires functional api/services/neptune.py).

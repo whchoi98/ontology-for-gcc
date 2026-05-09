@@ -13,9 +13,39 @@ from data.synthetic import (customer, lookalike, transaction_synth,
 S3_BUCKET = os.environ.get('SYNTHETIC_DATA_BUCKET', 'ontology-gcc-dev-synthetic-data-x')
 
 def upload_ndjson(s3, key: str, items: list, model_dump=True):
-    body = '\n'.join(o.model_dump_json() if model_dump else json.dumps(o, ensure_ascii=False) for o in items)
-    s3.put_object(Bucket=S3_BUCKET, Key=key, Body=body.encode('utf-8'))
-    print(f'  → s3://{S3_BUCKET}/{key} ({len(items)} items)')
+    """Stream-encode to bytes via incremental write to bound peak memory."""
+    n = len(items)
+    # For large item lists, split into multiple S3 objects (helps both memory and Bulk Loader parallelism).
+    chunk_size = int(os.environ.get('NDJSON_CHUNK_SIZE', '500000'))
+    if n <= chunk_size:
+        # Build incrementally (avoid one giant join string)
+        from io import BytesIO
+        buf = BytesIO()
+        for i, o in enumerate(items):
+            line = (o.model_dump_json() if model_dump else json.dumps(o, ensure_ascii=False))
+            if i:
+                buf.write(b'\n')
+            buf.write(line.encode('utf-8'))
+        body = buf.getvalue()
+        s3.put_object(Bucket=S3_BUCKET, Key=key, Body=body)
+        print(f'  -> s3://{S3_BUCKET}/{key} ({n} items, {len(body)//1024}KB)')
+    else:
+        # Multi-part: split into <chunk_size> per file
+        base = key.rsplit('.', 1)[0]
+        ext = key.rsplit('.', 1)[1] if '.' in key else 'ndjson'
+        for ci, start in enumerate(range(0, n, chunk_size)):
+            sub = items[start:start+chunk_size]
+            from io import BytesIO
+            buf = BytesIO()
+            for i, o in enumerate(sub):
+                line = (o.model_dump_json() if model_dump else json.dumps(o, ensure_ascii=False))
+                if i:
+                    buf.write(b'\n')
+                buf.write(line.encode('utf-8'))
+            sub_key = f'{base}.part{ci:04d}.{ext}'
+            s3.put_object(Bucket=S3_BUCKET, Key=sub_key, Body=buf.getvalue())
+            print(f'  -> s3://{S3_BUCKET}/{sub_key} ({len(sub)} items)')
+        print(f'  total {n} items in {(n + chunk_size - 1)//chunk_size} parts under {base}/')
 
 def main():
     p = argparse.ArgumentParser()
@@ -79,8 +109,9 @@ def main():
     sms = campaign_sms.generate_sms_for_campaigns(campaign_codes, target_cust)
     aggr = campaign_aggr.aggregate_from_facts(cf['coupons'], cf['coupon_uses'], sms)
 
-    # synthetic price 1년
-    syn_prices = price_synth.generate_yearly_for_stations(stations, days=365)
+    # synthetic price (days reduced to keep memory bounded under Fargate task)
+    syn_price_days = int(os.environ.get('SYN_PRICE_DAYS', '30'))
+    syn_prices = price_synth.generate_yearly_for_stations(stations, days=syn_price_days)
     all_prices = fp + syn_prices
 
     # supporting
@@ -91,19 +122,25 @@ def main():
     ts_init = timeslot.get_timeslots()
 
     print('=== Phase 3: upload to S3 (NDJSON) ===')
-    upload_ndjson(s3, 'nodes/customer/all.ndjson', all_customers)
+    import gc
     upload_ndjson(s3, 'nodes/transaction/all.ndjson', all_txs)
+    del all_txs, syn_txs, look_txs, pm_m_txs, d2p_txs, txs; gc.collect()
+    upload_ndjson(s3, 'nodes/fuel_price/all.ndjson', all_prices)
+    del all_prices, syn_prices, fp; gc.collect()
+    # Capture a small sample for OpenSearch before freeing the big customer list
+    customers_sample_for_os = all_customers[:1000]
+    upload_ndjson(s3, 'nodes/customer/all.ndjson', all_customers)
+    del all_customers, look_customers, real_customers; gc.collect()
+    upload_ndjson(s3, 'nodes/app_event/all.ndjson', aev); del aev; gc.collect()
     upload_ndjson(s3, 'nodes/campaign/all.ndjson', enriched_campaigns)
     upload_ndjson(s3, 'nodes/coupon/all.ndjson', cf['coupons'])
     upload_ndjson(s3, 'nodes/coupon_use/all.ndjson', cf['coupon_uses'])
     upload_ndjson(s3, 'nodes/offer/all.ndjson', cf['offers'])
     upload_ndjson(s3, 'nodes/term/all.ndjson', ta['terms'])
     upload_ndjson(s3, 'nodes/term_agreement/all.ndjson', ta['agreements'])
-    upload_ndjson(s3, 'nodes/fuel_price/all.ndjson', all_prices)
     upload_ndjson(s3, 'nodes/gas_station/all.ndjson', stations)
     upload_ndjson(s3, 'nodes/region/all.ndjson', regions)
     upload_ndjson(s3, 'nodes/consumption_index/all.ndjson', ci)
-    upload_ndjson(s3, 'nodes/app_event/all.ndjson', aev)
     upload_ndjson(s3, 'nodes/survey/all.ndjson', surv)
     upload_ndjson(s3, 'nodes/persona/all.ndjson', pers)
     upload_ndjson(s3, 'nodes/cluster/all.ndjson', cl_init)
@@ -112,6 +149,7 @@ def main():
     upload_ndjson(s3, 'nodes/timeslot/all.ndjson', ts_init)
     upload_ndjson(s3, 'nodes/campaign_sms/all.ndjson', sms)
     upload_ndjson(s3, 'nodes/campaign_aggregation/all.ndjson', aggr)
+    del cf, ta, stations, regions, ci, surv, sms, aggr; gc.collect()
 
     if args.weather:
         from data.external.run_etl import run as run_kma
@@ -128,10 +166,10 @@ def main():
     if args.opensearch:
         from data.loader.opensearch_index import ensure_index, bulk_index
         ensure_index()
-        # 텍스트 인덱싱 (간단판) — 실제 임베딩은 Plan 5에서
+        sample = customers_sample_for_os
         docs = [{'doc_id': c.cust_id, 'class_name': 'Customer',
                  'text': f'{c.gender_cd} {c.age_section_cd} {c.sido_nm}', 'metadata': c.model_dump()}
-                for c in all_customers[:1000]]
+                for c in sample]
         bulk_index(docs)
         print(f'  OS indexed {len(docs)} customer samples')
 

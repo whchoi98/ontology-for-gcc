@@ -31,9 +31,12 @@ def expand_to_lookalike(
         new_customers.append(c)
 
         # 거래 합성: seed의 평균 ± 30%, 분포는 KOSIS
+        # 캡: env LOOKALIKE_TX_CAP (default 20) — 50K 고객 × 20 ≈ 1M FuelTransaction 메모리 안전선
+        import os as _os
+        tx_cap = int(_os.environ.get('LOOKALIKE_TX_CAP', '20'))
         rng = seeded_rng(f'lookalike-tx:{new_cust_id}')
         n_tx = max(1, int(rng.gauss(avg_tx_per_cust, avg_tx_per_cust * 0.3)))
-        for j in range(min(n_tx, 200)):  # 캡 200
+        for j in range(min(n_tx, tx_cap)):
             grade = weighted_choice(rng, FUEL_DIST)
             qty = round(rng.uniform(20, 60), 1)
             unit = {'regular': 1700, 'premium': 2000, 'diesel': 1600,

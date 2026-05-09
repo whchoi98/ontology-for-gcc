@@ -48,6 +48,9 @@ export class EdgeStack extends cdk.Stack {
           },
         }),
         viewerProtocolPolicy: cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        // POST/PUT/DELETE/OPTIONS/PATCH 허용 — 14 시나리오 API가 POST 사용.
+        // 브라우저가 호출하는 fetch가 CloudFront 403을 받지 않도록 명시.
+        allowedMethods: cf.AllowedMethods.ALLOW_ALL,
         cachePolicy: cf.CachePolicy.CACHING_DISABLED,
         originRequestPolicy: cf.OriginRequestPolicy.ALL_VIEWER,
         edgeLambdas: [

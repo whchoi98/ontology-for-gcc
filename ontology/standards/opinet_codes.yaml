@@ -1,0 +1,66 @@
+# D18 — opinet 표준 코드 카탈로그
+# raw_data 5(가격), 7(주유소 마스터)에서 사용되는 GSC 내부 코드 표준
+version: '1.0'
+updated: '2026-05-08'
+
+# 주유소 상표 구분 (erm_gass_trdm_dvs_cd)
+gass_trdm:
+  '01': { brand: GSC,     label_kr: 'GS칼텍스',      kr_alias: ['GS', 'GSC', '지에스'] }
+  '02': { brand: SK,      label_kr: 'SK에너지',      kr_alias: ['SK'] }
+  '03': { brand: HD,      label_kr: 'HD현대오일뱅크', kr_alias: ['HD현대', '현대오일뱅크'] }
+  '04': { brand: SOIL,    label_kr: 'S-OIL',         kr_alias: ['에쓰오일', 'S-OIL'] }
+  '05': { brand: NHJN,    label_kr: '농협주유소',     kr_alias: ['NH'] }
+  '06': { brand: ALK,     label_kr: '알뜰주유소',    kr_alias: ['알뜰'] }
+  '99': { brand: OTHER,   label_kr: '기타',           kr_alias: [] }
+
+# 충전소 상표 구분 (erm_chgs_trdm_dvs_cd) — LPG
+chgs_trdm:
+  '01': { brand: GSC,     label_kr: 'GS LPG' }
+  '02': { brand: SK,      label_kr: 'SK가스' }
+  '03': { brand: ECARGO,  label_kr: 'E1' }
+  '99': { brand: OTHER,   label_kr: '기타' }
+
+# 영업 상태 (opinet_sale_sts_cd)
+sale_sts:
+  '01': operating
+  '02': temporary_closed
+  '03': permanently_closed
+  '04': new
+
+# 시도 (sido_opinet_area_cd) — 17 시도
+sido:
+  '01': { sido_nm: '서울', sido_kostat: '11' }
+  '02': { sido_nm: '부산', sido_kostat: '26' }
+  '03': { sido_nm: '대구', sido_kostat: '27' }
+  '04': { sido_nm: '인천', sido_kostat: '28' }
+  '05': { sido_nm: '광주', sido_kostat: '29' }
+  '06': { sido_nm: '대전', sido_kostat: '30' }
+  '07': { sido_nm: '울산', sido_kostat: '31' }
+  '08': { sido_nm: '세종', sido_kostat: '36' }
+  '09': { sido_nm: '경기', sido_kostat: '41' }
+  '10': { sido_nm: '강원', sido_kostat: '51' }
+  '11': { sido_nm: '충북', sido_kostat: '43' }
+  '12': { sido_nm: '충남', sido_kostat: '44' }
+  '13': { sido_nm: '전북', sido_kostat: '45' }  # '52' 신코드도 있음
+  '14': { sido_nm: '전남', sido_kostat: '46' }
+  '15': { sido_nm: '경북', sido_kostat: '47' }
+  '16': { sido_nm: '경남', sido_kostat: '48' }
+  '17': { sido_nm: '제주', sido_kostat: '50' }
+
+# 연료 grade 구분 (FuelProduct)
+fuel_grade:
+  pmgs_amt:      { grade: premium,   label_kr: '고급휘발유',  octane_ron: 95 }
+  mogs_amt:      { grade: regular,   label_kr: '보통휘발유',  octane_ron: 91 }
+  dsel_amt:      { grade: diesel,    label_kr: '경유',         octane_ron: null }
+  indr_kero_amt: { grade: kerosene,  label_kr: '실내등유',     octane_ron: null }
+  c4h10_amt:     { grade: lpg,       label_kr: 'LPG',          octane_ron: null }
+
+# Self 여부 (self_gass_yn)
+self:
+  Y: true
+  N: false
+
+# Y/N 시설 플래그 (cvs_xn 편의점 / crwa_xn 세차장 / lmnt_fclt_xn 경정비)
+yn_facility:
+  Y: present
+  N: absent

@@ -41,6 +41,7 @@ NODE_MAP = [
     ('nodes/timeslot/',                'TimeSlot',            'slot_id'),    # schema field is slot_id, not timeslot_id
     ('nodes/campaign_sms/',            'CampaignSMS',         'sms_id'),
     ('nodes/campaign_aggregation/',    'CampaignAggregation', 'agg_id'),
+    ('nodes/weather/',                 'WeatherObservation',  'weather_id'), # synthesized composite pk (sido-dt-hour)
 ]
 
 
@@ -99,6 +100,16 @@ def _synthesize_fuel_price_pk(obj: dict) -> str | None:
     return None
 
 
+def _synthesize_weather_pk(obj: dict) -> str | None:
+    """WeatherObservation has no natural id field — composite key (sido, dt, hour)."""
+    sido = obj.get('sido_nm')
+    dt = obj.get('dt')
+    hour = obj.get('hour')
+    if sido and dt and hour is not None:
+        return f'{sido}-{dt}-{hour}'
+    return None
+
+
 def _flatten_props(obj: dict) -> dict:
     """Drop null + list values (Neptune doesn't accept them as scalar props)."""
     out = {}
@@ -134,6 +145,11 @@ def load_label(s3, prefix: str, label: str, pk_field: str, batch_size: int = 500
             # FuelPrice has no natural id — synthesize from composite (opinet, dt, grade)
             if label == 'FuelPrice' and not obj.get(pk_field):
                 synth = _synthesize_fuel_price_pk(obj)
+                if synth is not None:
+                    obj[pk_field] = synth
+            # WeatherObservation has no natural id — synthesize from composite (sido, dt, hour)
+            if label == 'WeatherObservation' and not obj.get(pk_field):
+                synth = _synthesize_weather_pk(obj)
                 if synth is not None:
                     obj[pk_field] = synth
             pk_val = obj.get(pk_field) or _scan_pk_values(obj)

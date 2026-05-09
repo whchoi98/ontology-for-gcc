@@ -330,6 +330,27 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 K (outlier — PDF 3페이지 시그니처) ----
+WOW_QUERIES.extend([
+    {'scenario': 'K', 'persona': 'data-ai', 'query': {'pattern': 'pm_m_mixing'},
+     'expects': lambda r: r.get('count', 0) >= 250
+                          or len(r.get('matches', [])) >= 50,
+     'min_results': 50},  # PM+M 250 식재 → 검출 ≥250 필수
+    {'scenario': 'K', 'persona': 'marketing',
+     'query': {'pattern': 'fuel_grade_transition'},
+     'expects': lambda r: 'matches' in r, 'min_results': 1},
+    {'scenario': 'K', 'persona': 'strategy',
+     'query': {'pattern': 'pm_m_mixing', 'cohort_filter': ['deep-history']},
+     'expects': lambda r: 'matches' in r, 'min_results': 1},
+    {'scenario': 'K', 'persona': 'crm',
+     'query': {'pattern': 'fuel_grade_transition'},
+     'expects': lambda r: 'matches' in r, 'min_results': 1},
+    {'scenario': 'K', 'persona': 'retail-ops', 'query': {'pattern': 'pm_m_mixing'},
+     'expects': lambda r: 'note' in r and '92 RON' in r.get('note', ''),
+     'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

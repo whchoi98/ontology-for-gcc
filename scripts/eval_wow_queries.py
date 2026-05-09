@@ -314,6 +314,22 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 J (external_signal) ----
+WOW_QUERIES.extend([
+    {'scenario': 'J', 'persona': 'strategy', 'query': {'cust_id': 'c001'},
+     'expects': lambda r: 'narrative' in r and len(r.get('narrative', '')) > 30,
+     'min_results': 1},
+    {'scenario': 'J', 'persona': 'data-ai', 'query': {},
+     'expects': lambda r: 'fused_rows' in r, 'min_results': 1},
+    {'scenario': 'J', 'persona': 'marketing', 'query': {'cust_id': 'c002'},
+     'expects': lambda r: bool(r.get('narrative')), 'min_results': 1},
+    {'scenario': 'J', 'persona': 'crm', 'query': {'cust_id': 'c003'},
+     'expects': lambda r: 'narrative' in r, 'min_results': 1},
+    {'scenario': 'J', 'persona': 'retail-ops', 'query': {},
+     'expects': lambda r: 'fused_rows' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

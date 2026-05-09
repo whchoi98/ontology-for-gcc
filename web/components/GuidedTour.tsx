@@ -275,3 +275,63 @@ export function GuidedTour() {
     </>
   );
 }
+
+// ── Plan 5 Task 5.4.1 — persona-aware 시나리오 추천 카드 (default export) ──
+// ADR 0008 — 5 페르소나 × 14 시나리오 (A~N) 권장 시작점 3개를 카드로 노출.
+// 페르소나 변경 시 즉시 갱신. 홈페이지 `<GuidedTour persona={persona} />` 사용.
+import { useEffect as _useEffect, useState as _useState } from 'react';
+
+const SCENARIO_META: Record<string, { code: string; label: string; desc: string; href: string }> = {
+  A: { code: 'A', label: '의미 검색',       desc: '자연어로 고객·주유 패턴을 1-hop 그래프로 탐색.',     href: '/search' },
+  B: { code: 'B', label: '대화 에이전트',    desc: 'PDF Scenario 1 마케터 dialog. 메모리 + 10 도구.',  href: '/chat' },
+  C: { code: 'C', label: '인사이트 차트',    desc: 'matplotlib NanumGothic + Sonnet 한국어 요약.',     href: '/insights' },
+  D: { code: 'D', label: '페르소나 매칭',    desc: '고객 cohort에 맞는 부서 페르소나 추천.',           href: '/persona-match' },
+  E: { code: 'E', label: '클러스터링',       desc: 'KMeans 6 + LLM 라벨링 + Cluster write-back.',     href: '/cluster' },
+  F: { code: 'F', label: '룩어라이크',       desc: '시드 고객 임베딩 유사도 상위 X% 확장.',           href: '/lookalike' },
+  G: { code: 'G', label: '캠페인 ROI',       desc: '쿠폰액 → 전환률·매출 시뮬 + Bayesian 분포.',      href: '/campaign-roi' },
+  H: { code: 'H', label: '주유소 지도',      desc: '한국 시도 choropleth + GSC vs 경쟁사 가격.',      href: '/network-map' },
+  I: { code: 'I', label: '약관 가드레일',    desc: '마케팅 자격 + Bedrock Guardrails.',               href: '/compliance' },
+  J: { code: 'J', label: '외부 시그널',      desc: '현대카드·앱·설문·날씨 융합 narrative.',           href: '/external-signal' },
+  K: { code: 'K', label: 'Outlier 탐지',     desc: 'PM+M 92 RON DIY · 디젤→premium 전환 검출.',       href: '/outlier' },
+  L: { code: 'L', label: '결제 분석',        desc: 'PaymentMethod × FuelPrice × Channel 매트릭스.',   href: '/payment' },
+  M: { code: 'M', label: '고객 통합 여정',   desc: 'PDF 3페이지 — App+Tx+Term+Coupon timeline.',      href: '/journey' },
+  N: { code: 'N', label: '날씨 × 주유',      desc: '기상청 단기예보 × 시도 거래 상관.',               href: '/weather' },
+};
+
+export default function GuidedTourGcc({ persona }: { persona: string }) {
+  const [priority, setPriority] = _useState<string[]>([]);
+  _useEffect(() => {
+    const base = process.env.NEXT_PUBLIC_API_BASE ?? '/api';
+    fetch(`${base}/personas`)
+      .then((r) => r.json())
+      .then((arr) => {
+        const p = (Array.isArray(arr) ? arr : []).find((x: any) => x.persona_id === persona);
+        setPriority((p?.scenario_priority || ['A', 'B', 'C']).slice(0, 3));
+      })
+      .catch(() => setPriority(['A', 'B', 'C']));
+  }, [persona]);
+  return (
+    <div className='border rounded p-4 bg-amber-50 mb-6'>
+      <h3 className='font-semibold mb-3 text-sm text-amber-900'>
+        이 페르소나에 추천하는 시나리오 (Plan 5 GuidedTour)
+      </h3>
+      <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+        {priority.map((code) => {
+          const m = SCENARIO_META[code];
+          if (!m) return null;
+          return (
+            <Link
+              key={code}
+              href={m.href}
+              className='block border rounded p-3 bg-white hover:shadow transition'
+            >
+              <div className='font-mono text-xs text-amber-700'>시나리오 {m.code}</div>
+              <div className='font-semibold mt-1 text-sm'>{m.label}</div>
+              <div className='text-xs text-slate-600 mt-1'>{m.desc}</div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}

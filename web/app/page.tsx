@@ -1,4 +1,7 @@
+'use client';
 import Link from 'next/link';
+import { useState } from 'react';
+import GuidedTourGcc from '../components/GuidedTour';
 import {
   Search, MessageSquare, BarChart3, FileSearch, ShieldCheck, ArrowLeftRight,
   Wallet, Truck, TrendingUp, ClipboardList, Leaf, Activity,
@@ -107,11 +110,23 @@ const OBJECT_GROUPS: { title: string; types: ObjectType[] }[] = [
 ];
 
 export default function HomePage() {
+  const [persona, setPersona] = useState('marketing');
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-14 border-b border-ink-700 bg-ink-900 flex items-center px-6">
         <div className="text-xs text-ink-400">홈 / 대시보드</div>
         <div className="ml-auto flex items-center gap-3 text-xs">
+          <select
+            className="bg-ink-800 border border-ink-700 rounded px-2 py-1 text-xs text-ink-100"
+            value={persona}
+            onChange={(e) => setPersona(e.target.value)}
+          >
+            <option value='marketing'>마케팅</option>
+            <option value='strategy'>고객전략</option>
+            <option value='data-ai'>데이터·AI</option>
+            <option value='crm'>CRM·회원사업</option>
+            <option value='retail-ops'>리테일영업</option>
+          </select>
           <span className="flex items-center gap-1.5 text-ink-300">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
             All systems operational
@@ -120,9 +135,10 @@ export default function HomePage() {
       </header>
 
       <div className="flex-1 px-8 py-10 max-w-7xl mx-auto w-full">
+        <GuidedTourGcc persona={persona} />
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-400 mb-2 font-semibold">
-            AMZN Tech 온톨로지 데모 · Hi-Tech GCC · 12 시나리오 × 5 페르소나
+            ontology-gcc · 14 시나리오 (A~N) · 25 클래스 · 5 부서 페르소나
           </p>
           <h1 className="text-4xl font-bold text-ink-50 leading-tight mb-3">
             부품·공급망·표준·품질 데이터를<br />

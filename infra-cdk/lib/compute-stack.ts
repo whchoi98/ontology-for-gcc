@@ -95,7 +95,9 @@ export class ComputeStack extends cdk.Stack {
         UPLOADS_BUCKET: props.uploadsBucket.bucketName,
         SYNTHETIC_DATA_BUCKET: props.syntheticDataBucket.bucketName,
         ONTOLOGY_ENV: 'dev',
-        DEMO_PUBLIC_MODE: 'false',
+        // Demo mode — bypass JWT in middleware so menu pages render without
+        // a Cognito session. CloudFront/Lambda@Edge still serves as the entry gate.
+        DEMO_PUBLIC_MODE: 'true',
       },
       secrets: { ORIGIN_AUTH_TOKEN: ecs.Secret.fromSecretsManager(originAuthSecret) },
     });

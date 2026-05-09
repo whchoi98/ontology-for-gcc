@@ -22,6 +22,10 @@ class Settings(BaseModel):
     cognito_user_pool_id: str = os.environ.get("COGNITO_USER_POOL_ID", "us-east-1_zQZZJRYer")
     cognito_region: str = "us-east-1"  # Edge stack region
     log_level: str = os.environ.get("LOG_LEVEL", "INFO")
+    # Demo mode — when true, JWT middleware skips verification and treats requests
+    # as anonymous. CloudFront/Lambda@Edge still enforces the cookie at the edge,
+    # so this only relaxes the API layer for public-mode demos.
+    demo_public_mode: bool = os.environ.get("DEMO_PUBLIC_MODE", "false").lower() == "true"
 
     # ---- Plan 3 uppercase aliases (used by new services bedrock/opensearch/etc.) ----
     @property

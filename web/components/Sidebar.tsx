@@ -3,15 +3,16 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Home, Search, MessageSquare, BarChart3, FileSearch, ShieldCheck,
-  ArrowLeftRight, Wallet, Truck, TrendingUp, ClipboardList, Leaf,
-  Activity, GitBranch, BookOpen, Package, Boxes, Cpu, Layers,
-  Factory, Building2, Building, Briefcase, MapPin, Award, Scale,
-  FlaskConical, AlertTriangle, Wrench, Cloud, Database, Brain,
-  ListTree, Network, Sparkles, ChevronRight, ClipboardCheck, Code2,
+  Home, Search, MessageSquare, BarChart3, Users, Layers, GitMerge,
+  Megaphone, Map, ShieldCheck, Radio, AlertTriangle, CreditCard,
+  Compass, Cloud, GitBranch, Database, Brain, ListTree, Network,
+  Sparkles, ChevronRight, Activity, Fuel, Tag, Gift, BadgeCheck,
+  PhoneCall, Smartphone, ClipboardList, Building2, Calendar, Clock,
+  TrendingUp, ScrollText, Lightbulb,
 } from 'lucide-react';
 
 import { SidebarAuth } from './SidebarAuth';
+import { CompanyLogo } from './CompanyLogo';
 
 type Item = {
   href: string;
@@ -25,80 +26,76 @@ type Section = { title: string; items: Item[] };
 
 const SECTIONS: Section[] = [
   {
-    title: '시나리오 (Scenarios)',
+    title: '시나리오 (Scenarios A~N)',
     items: [
-      { href: '/',             icon: Home,            label: '홈' },
-      { href: '/search',       icon: Search,          label: '의미 검색',       badge: 'A' },
-      { href: '/chat',         icon: MessageSquare,   label: '대화형 에이전트',  badge: 'B' },
-      { href: '/insights',     icon: BarChart3,       label: '인사이트',         badge: 'C' },
-      { href: '/spec',         icon: FileSearch,      label: '스펙 매치',        badge: 'D' },
-      { href: '/compliance',   icon: ShieldCheck,     label: '규제 검증',        badge: 'E' },
-      { href: '/substitute',   icon: ArrowLeftRight,  label: '대체 부품',        badge: 'F' },
-      { href: '/price',        icon: Wallet,          label: '단가/재고 비교',   badge: 'G' },
-      { href: '/lane',         icon: Truck,           label: '글로벌 SCM lane', badge: 'H' },
-      { href: '/rfm',          icon: TrendingUp,      label: '협력사 RFM',      badge: 'I' },
-      { href: '/eight-d',      icon: ClipboardList,   label: '8D / RCA',        badge: 'J' },
-      { href: '/esg',          icon: Leaf,            label: 'ESG / CBAM',      badge: 'K' },
-      { href: '/pdm',          icon: Activity,        label: 'PdM / IoT',       badge: 'L' },
-      { href: '/journey',      icon: MapPin,          label: '고객 통합 여정',  badge: 'M' },
-      { href: '/weather',      icon: Cloud,           label: '날씨 × 주유',     badge: 'N' },
+      { href: '/',                icon: Home,           label: '홈' },
+      { href: '/search',          icon: Search,         label: '하이브리드 검색',     badge: 'A' },
+      { href: '/chat',            icon: MessageSquare,  label: '페르소나 챗봇',       badge: 'B' },
+      { href: '/insights',        icon: BarChart3,      label: '인사이트 카드',       badge: 'C' },
+      { href: '/persona-match',   icon: Users,          label: '페르소나 매칭',       badge: 'D' },
+      { href: '/cluster',         icon: Layers,         label: '고객 클러스터링',     badge: 'E' },
+      { href: '/lookalike',       icon: GitMerge,       label: '룩어라이크 확장',     badge: 'F' },
+      { href: '/campaign-roi',    icon: Megaphone,      label: '캠페인 ROI',          badge: 'G' },
+      { href: '/network-map',     icon: Map,            label: '권역 경쟁 지도',      badge: 'H' },
+      { href: '/compliance',      icon: ShieldCheck,    label: '약관·가드레일',       badge: 'I' },
+      { href: '/external-signal', icon: Radio,          label: '외부 시그널 융합',    badge: 'J' },
+      { href: '/outlier',         icon: AlertTriangle,  label: '이상 행동 탐지',      badge: 'K' },
+      { href: '/payment',         icon: CreditCard,     label: '결제·멤버십',         badge: 'L' },
+      { href: '/journey',         icon: Compass,        label: '고객 통합 여정',      badge: 'M' },
+      { href: '/weather',         icon: Cloud,          label: '날씨 × 주유 상관',    badge: 'N' },
     ],
   },
   {
     title: '메타 (Ontology)',
     items: [
-      { href: '/schema',     icon: GitBranch,     label: '온톨로지 스키마 (22 클래스)' },
-      { href: '/standards',  icon: BookOpen,      label: '표준 매핑' },
-      { href: '/validation', icon: ClipboardCheck, label: '검증 리포트' },
+      { href: '/meta', icon: GitBranch, label: '온톨로지 (25 클래스 · 표준 · 검증)' },
     ],
   },
   {
-    title: '객체 탐색 (Knowledge Graph)',
+    title: '객체 탐색 (Knowledge Graph · 25 클래스)',
     items: [
-      // BOM 계층 (4)
-      { href: '/objects/Product',     icon: Package,        label: '완제품 (Product)' },
-      { href: '/objects/Module',      icon: Boxes,          label: '모듈 (Module)' },
-      { href: '/objects/Component',   icon: Cpu,            label: '부품 (Component)' },
-      { href: '/objects/RawMaterial', icon: Layers,         label: '원자재 (RawMaterial)' },
-      // Supply (5)
-      { href: '/objects/Manufacturer',    icon: Factory,    label: '제조사 (Manufacturer)' },
-      { href: '/objects/Supplier',        icon: Building2,  label: '1차 협력사 (Supplier)' },
-      { href: '/objects/SubSupplier',     icon: Building,   label: '2차 협력사 (SubSupplier)' },
-      { href: '/objects/CustomerAccount', icon: Briefcase,  label: 'OEM 고객 (CustomerAccount)' },
-      { href: '/objects/Plant',           icon: Building2,  label: '공장 (Plant)' },
-      // Geo / Lane (2)
-      { href: '/objects/Region',      icon: MapPin,         label: '지역 (Region — 7개국)' },
-      { href: '/objects/TradeLane',   icon: Truck,          label: '운송 lane (TradeLane)' },
-      // 표준/규제 (4)
-      { href: '/objects/Standard',      icon: BookOpen,       label: '표준 (Standard)' },
-      { href: '/objects/Certification', icon: Award,          label: '인증 (Certification)' },
-      { href: '/objects/Regulation',    icon: Scale,          label: '규제 (Regulation)' },
-      { href: '/objects/Substance',     icon: FlaskConical,   label: '화학물질 (Substance)' },
-      // 품질 (3)
-      { href: '/objects/QualityIncident', icon: AlertTriangle,  label: '품질 인시던트 (QualityIncident)' },
-      { href: '/objects/EightDReport',    icon: ClipboardList,  label: '8D 리포트 (EightDReport)' },
-      { href: '/objects/RootCause',       icon: GitBranch,      label: '근본원인 (RootCause)' },
-      // 운영/ESG (4)
-      { href: '/objects/Telemetry',        icon: Activity,   label: '텔레메트리 (Telemetry)' },
-      { href: '/objects/MaintenanceEvent', icon: Wrench,     label: '정비 이벤트 (MaintenanceEvent)' },
-      { href: '/objects/ESGIndicator',     icon: Leaf,       label: 'ESG 지표 (ESGIndicator)' },
-      { href: '/objects/CarbonScope',      icon: Cloud,      label: '탄소 Scope (CarbonScope)' },
+      // 고객 코어 (5)
+      { href: '/objects/customer',     icon: Users,          label: '고객 (Customer)' },
+      { href: '/objects/persona',      icon: BadgeCheck,     label: '페르소나 (Persona · 5 부서)' },
+      { href: '/objects/cluster',      icon: Layers,         label: '클러스터 (Cluster)' },
+      { href: '/objects/segment',      icon: Tag,            label: '세그먼트 (Segment)' },
+      { href: '/objects/member',       icon: Smartphone,     label: '멤버십 (Member)' },
+      // 행동 / 거래 (4)
+      { href: '/objects/fuel_transaction', icon: Fuel,         label: '주유 거래 (FuelTransaction)' },
+      { href: '/objects/app_event',        icon: Smartphone,   label: '앱 이벤트 (AppEvent)' },
+      { href: '/objects/survey_response',  icon: ClipboardList, label: '설문 응답 (SurveyResponse)' },
+      { href: '/objects/coupon_use',       icon: Gift,          label: '쿠폰 사용 (CouponUse)' },
+      // 마케팅 / 결제 (6)
+      { href: '/objects/campaign',           icon: Megaphone,     label: '캠페인 (Campaign)' },
+      { href: '/objects/coupon',             icon: Tag,           label: '쿠폰 (Coupon)' },
+      { href: '/objects/offer',              icon: Gift,          label: '오퍼 (Offer)' },
+      { href: '/objects/channel',            icon: PhoneCall,     label: '채널 (Channel)' },
+      { href: '/objects/campaign_sms',       icon: PhoneCall,     label: 'SMS 발송 (CampaignSms)' },
+      { href: '/objects/payment_method',     icon: CreditCard,    label: '결제 수단 (PaymentMethod)' },
+      // 주유소 / 가격 (3)
+      { href: '/objects/gas_station',  icon: Building2,  label: '주유소 (GasStation)' },
+      { href: '/objects/fuel_product', icon: Fuel,       label: '유종 (FuelProduct)' },
+      { href: '/objects/fuel_price',   icon: TrendingUp, label: '가격 시계열 (FuelPrice)' },
+      // 외부 / 컨텍스트 (5)
+      { href: '/objects/region',            icon: Map,         label: '지역 (Region · 시도/시군구)' },
+      { href: '/objects/term',              icon: ScrollText,  label: '약관 (Term)' },
+      { href: '/objects/term_agreement',    icon: ScrollText,  label: '약관 동의 (TermAgreement)' },
+      { href: '/objects/consumption_index', icon: Lightbulb,   label: '소비지수 (ConsumptionIndex)' },
+      { href: '/objects/weather_observation', icon: Cloud,     label: '기상 관측 (WeatherObservation)' },
+      // 시간 (1)
+      { href: '/objects/time_slot',         icon: Clock,       label: '시간대 (TimeSlot)' },
+      // D17 청사진 (1)
+      { href: '/objects/campaign_aggregation', icon: BarChart3, label: '캠페인 집계 (CampaignAggregation)' },
     ],
   },
   {
     title: '파이프라인 (Ops)',
     items: [
       { href: '/ops/ingest',    icon: Database,    label: '데이터 적재' },
-      { href: '/ops/guardrail', icon: ShieldCheck, label: '가드레일 (4 토픽)' },
+      { href: '/ops/guardrail', icon: ShieldCheck, label: '가드레일' },
       { href: '/ops/memory',    icon: Brain,       label: '메모리 히스토리' },
       { href: '/ops/eval',      icon: Activity,    label: '평가 결과' },
       { href: '/ops/trace',     icon: ListTree,    label: '도구 호출 트레이스' },
-    ],
-  },
-  {
-    title: '개발자 도구 (Dev Tools)',
-    items: [
-      { href: '/codegraph', icon: Code2, label: '코드 지식 그래프' },
     ],
   },
 ];
@@ -113,16 +110,17 @@ export function Sidebar() {
   const pathname = usePathname() ?? '/';
   return (
     <aside className="w-72 shrink-0 bg-ink-900 border-r border-ink-700 flex flex-col">
-      <div className="h-14 flex items-center px-5 border-b border-ink-700">
-        <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-md bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center">
+      <div className="h-14 flex items-center justify-between px-5 border-b border-ink-700 gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="w-7 h-7 shrink-0 rounded-md bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center">
             <Network className="w-4 h-4 text-ink-950" />
           </div>
-          <div>
-            <div className="text-sm font-semibold text-ink-100 leading-tight">Ontology GCC</div>
-            <div className="text-[10px] text-ink-400 leading-tight">AMZN Tech v0.2.0</div>
+          <div className="min-w-0">
+            <div className="text-sm font-semibold text-ink-100 leading-tight truncate">Ontology GCC</div>
+            <div className="text-[10px] text-ink-400 leading-tight truncate">M&amp;M본부 Demo · v1.0.0</div>
           </div>
         </div>
+        <CompanyLogo />
       </div>
 
       <nav className="flex-1 overflow-y-auto py-3">
@@ -169,7 +167,7 @@ export function Sidebar() {
       <div className="border-t border-ink-700 px-4 py-3">
         <div className="flex items-center gap-2 text-[11px] text-ink-400">
           <Sparkles className="w-3 h-3 text-accent-400 shrink-0" />
-          <span className="truncate">합성 데이터 · JEDEC / IPC / AEC-Q / IATF / REACH / CBAM</span>
+          <span className="truncate">실 + 합성 + 외부 (KMA/현대카드/Opinet)</span>
         </div>
       </div>
 

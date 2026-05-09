@@ -1,40 +1,46 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
 import GuidedTourGcc from '../components/GuidedTour';
 import {
-  Search, MessageSquare, BarChart3, FileSearch, ShieldCheck, ArrowLeftRight,
-  Wallet, Truck, TrendingUp, ClipboardList, Leaf, Activity,
-  Network, ArrowRight, Package, Boxes, Cpu, Layers, Factory,
-  Building2, Building, Briefcase, MapPin, BookOpen, Award, Scale,
-  FlaskConical, AlertTriangle, Wrench, Cloud, GitBranch,
+  Search, MessageSquare, BarChart3, Users, Layers, GitMerge,
+  Megaphone, Map, ShieldCheck, Radio, AlertTriangle, CreditCard,
+  Compass, Cloud, Network, ArrowRight, Fuel, Tag, Gift, BadgeCheck,
+  PhoneCall, Smartphone, ClipboardList, Building2, Clock, TrendingUp,
+  ScrollText, Lightbulb, GitBranch,
 } from 'lucide-react';
+
+type Color =
+  | 'blue' | 'emerald' | 'amber' | 'violet' | 'rose' | 'cyan'
+  | 'sky' | 'teal' | 'orange' | 'fuchsia' | 'yellow' | 'lime'
+  | 'pink' | 'indigo';
 
 type Scenario = {
   href: string;
   tag: string;
   title: string;
   desc: string;
-  color: 'blue' | 'emerald' | 'amber' | 'violet' | 'rose' | 'cyan' | 'sky' | 'teal' | 'orange' | 'fuchsia' | 'yellow' | 'lime' | 'pink';
+  color: Color;
   icon: React.ComponentType<{ className?: string }>;
 };
 
 const SCENARIOS: Scenario[] = [
-  { href: '/search',     tag: 'A', title: '의미 검색',       desc: '자연어 → BM25 + Cohere KNN 하이브리드 + Reranker → 1-hop 그래프 시각화.',                    color: 'blue',    icon: Search },
-  { href: '/chat',       tag: 'B', title: '대화형 에이전트',  desc: 'Bedrock Converse + AgentCore Memory + Guardrails 4-topic + 4개 도구 호출 SSE 스트리밍.',  color: 'emerald', icon: MessageSquare },
-  { href: '/insights',   tag: 'C', title: '인사이트',         desc: 'Neptune 집계 + Sonnet 4.6 스트리밍 + AgentCore Code Interpreter 차트.',                     color: 'amber',   icon: BarChart3 },
-  { href: '/spec',       tag: 'D', title: '스펙 매치',        desc: '자연어 요구사항 → 후보 부품 + AEC-Q/IPC/JEDEC 표준 커버리지 그래프.',                        color: 'violet',  icon: FileSearch },
-  { href: '/compliance', tag: 'E', title: '규제 검증',        desc: 'REACH SVHC / RoHS / PFAS / AEC-Q 준수 여부 즉시 확인 — 위반 경로 추적.',                    color: 'rose',    icon: ShieldCheck },
-  { href: '/substitute', tag: 'F', title: '대체 부품',        desc: '공급 중단 시 동일 기능 + 공유 표준 기반 대안 산출.',                                          color: 'cyan',    icon: ArrowLeftRight },
-  { href: '/price',      tag: 'G', title: '단가/재고 비교',   desc: '복수 공급사별 단가·납기·OTD 매트릭스 비교.',                                                  color: 'sky',     icon: Wallet },
-  { href: '/lane',       tag: 'H', title: '글로벌 SCM lane', desc: '7개국 trade lane + IRA/USMCA 이벤트 reroute 시뮬레이션.',                                    color: 'teal',    icon: Truck },
-  { href: '/rfm',        tag: 'I', title: '협력사 RFM',      desc: 'Recency·Frequency·Monetary 협력사 등급 + Tier별 납기 신뢰도.',                               color: 'orange',  icon: TrendingUp },
-  { href: '/eight-d',    tag: 'J', title: '8D / RCA',        desc: '품질 인시던트 ID → D1-D8 전체 보고서 자동 생성 + 근본 원인 그래프.',                           color: 'fuchsia', icon: ClipboardList },
-  { href: '/esg',        tag: 'K', title: 'ESG / CBAM',      desc: 'Scope 1/2/3 탄소 배출량 + EU CBAM 2026 부담금 + IRA 적격 여부.',                            color: 'lime',    icon: Leaf },
-  { href: '/pdm',        tag: 'L', title: 'PdM / IoT',       desc: '공장 IoT 텔레메트리 + 예지 보전 알람 + 정비 이벤트 추천.',                                    color: 'pink',    icon: Activity },
+  { href: '/search',          tag: 'A', title: '하이브리드 검색',   desc: '자연어 → BM25 (Nori) + Cohere KNN + Reranker → 1-hop 그래프 시각화.',                            color: 'blue',    icon: Search },
+  { href: '/chat',            tag: 'B', title: '페르소나 챗봇',     desc: 'Bedrock Sonnet 4.6 + AgentCore Memory + Guardrails + 10 도구 호출 SSE 스트리밍.',                color: 'emerald', icon: MessageSquare },
+  { href: '/insights',        tag: 'C', title: '인사이트 카드',     desc: 'Neptune 집계 + Sonnet 요약 + AgentCore Code Interpreter matplotlib (NanumGothic).',              color: 'amber',   icon: BarChart3 },
+  { href: '/persona-match',   tag: 'D', title: '페르소나 매칭',     desc: '5 부서 페르소나 가중치 × Customer KPI → 매칭 점수 + 차별화 포인트.',                                color: 'violet',  icon: Users },
+  { href: '/cluster',         tag: 'E', title: '고객 클러스터링',   desc: 'KMeans 6 + LLM 라벨링 + 프로파일 카드 + Neptune write-back.',                                       color: 'rose',    icon: Layers },
+  { href: '/lookalike',       tag: 'F', title: '룩어라이크 확장',   desc: 'Seed 페르소나 → 50K 합성 코호트 임베딩 KNN → 유사 고객 풀.',                                          color: 'cyan',    icon: GitMerge },
+  { href: '/campaign-roi',    tag: 'G', title: '캠페인 ROI',         desc: 'Bayesian 분포 시뮬레이션 + SMS 발송 효율 + 어트리뷰션.',                                              color: 'sky',     icon: Megaphone },
+  { href: '/network-map',     tag: 'H', title: '권역 경쟁 지도',     desc: '시도 choropleth + GSC vs 경쟁사 매트릭스 + Region 드릴다운.',                                          color: 'teal',    icon: Map },
+  { href: '/compliance',      tag: 'I', title: '약관·가드레일',     desc: 'TermAgreement 추적 + Bedrock Guardrails 4 토픽 + 위반 경로.',                                          color: 'orange',  icon: ShieldCheck },
+  { href: '/external-signal', tag: 'J', title: '외부 시그널 융합',   desc: '현대카드 소비지수 + 앱 행동 + 설문 + 날씨 cross-source narrative.',                                    color: 'fuchsia', icon: Radio },
+  { href: '/outlier',         tag: 'K', title: '이상 행동 탐지',     desc: 'PM+M 92 RON DIY 블렌딩 + 디젤→premium 전환 (PDF 3페이지 시그니처).',                                  color: 'lime',    icon: AlertTriangle },
+  { href: '/payment',         tag: 'L', title: '결제·멤버십',       desc: '결제 수단 × 가격 × 채널 매트릭스 + 멤버십 유지율.',                                                    color: 'pink',    icon: CreditCard },
+  { href: '/journey',         tag: 'M', title: '고객 통합 여정',     desc: 'App + Tx + Term + Coupon 타임라인 + 유종 전환 강조 (PDF 3 시그니처).',                                color: 'yellow',  icon: Compass },
+  { href: '/weather',         tag: 'N', title: '날씨 × 주유 상관',   desc: '기상청 WeatherObservation × FuelTransaction 산점도 + 권역별 상관.',                                  color: 'indigo',  icon: Cloud },
 ];
 
-const CARD_COLOR: Record<Scenario['color'], string> = {
+const CARD_COLOR: Record<Color, string> = {
   blue:    'from-blue-500/20 to-blue-500/0 border-blue-500/40',
   emerald: 'from-emerald-500/20 to-emerald-500/0 border-emerald-500/40',
   amber:   'from-amber-500/20 to-amber-500/0 border-amber-500/40',
@@ -48,6 +54,7 @@ const CARD_COLOR: Record<Scenario['color'], string> = {
   yellow:  'from-yellow-500/20 to-yellow-500/0 border-yellow-500/40',
   lime:    'from-lime-500/20 to-lime-500/0 border-lime-500/40',
   pink:    'from-pink-500/20 to-pink-500/0 border-pink-500/40',
+  indigo:  'from-indigo-500/20 to-indigo-500/0 border-indigo-500/40',
 };
 
 type ObjectType = {
@@ -61,72 +68,68 @@ type ObjectType = {
 
 const OBJECT_GROUPS: { title: string; types: ObjectType[] }[] = [
   {
-    title: 'BOM 계층',
+    title: '고객 코어',
     types: [
-      { href: '/objects/Product',     label_en: 'Product',     label_ko: '완제품',          count: '(50)',    color: '#60a5fa', icon: Package },
-      { href: '/objects/Module',      label_en: 'Module',      label_ko: '모듈',            count: '(200)',   color: '#34d399', icon: Boxes },
-      { href: '/objects/Component',   label_en: 'Component',   label_ko: '부품',            count: '(2,000)', color: '#fbbf24', icon: Cpu },
-      { href: '/objects/RawMaterial', label_en: 'RawMaterial', label_ko: '원자재',          count: '(500)',   color: '#a78bfa', icon: Layers },
+      { href: '/objects/customer', label_en: 'Customer', label_ko: '고객',         count: '(50K)',  color: '#60a5fa', icon: Users },
+      { href: '/objects/persona',  label_en: 'Persona',  label_ko: '페르소나 (5)', count: '',        color: '#34d399', icon: BadgeCheck },
+      { href: '/objects/cluster',  label_en: 'Cluster',  label_ko: '클러스터 (6)', count: '',        color: '#fbbf24', icon: Layers },
+      { href: '/objects/segment',  label_en: 'Segment',  label_ko: '세그먼트',     count: '(12)',    color: '#a78bfa', icon: Tag },
+      { href: '/objects/member',   label_en: 'Member',   label_ko: '멤버십',       count: '(45K)',   color: '#22d3ee', icon: Smartphone },
     ],
   },
   {
-    title: 'Supply Chain',
+    title: '행동 / 거래',
     types: [
-      { href: '/objects/Manufacturer',    label_en: 'Manufacturer',    label_ko: '제조사',        count: '(20)',  color: '#f472b6', icon: Factory },
-      { href: '/objects/Supplier',        label_en: 'Supplier',        label_ko: '1차 협력사',    count: '(150)', color: '#fb923c', icon: Building2 },
-      { href: '/objects/SubSupplier',     label_en: 'SubSupplier',     label_ko: '2차 협력사',    count: '(300)', color: '#94a3b8', icon: Building },
-      { href: '/objects/CustomerAccount', label_en: 'CustomerAccount', label_ko: 'OEM 고객',     count: '(30)',  color: '#22d3ee', icon: Briefcase },
-      { href: '/objects/Plant',           label_en: 'Plant',           label_ko: '공장',          count: '(12)',  color: '#0ea5e9', icon: Building2 },
+      { href: '/objects/fuel_transaction', label_en: 'FuelTransaction', label_ko: '주유 거래',     count: '(420K)', color: '#fb923c', icon: Fuel },
+      { href: '/objects/app_event',        label_en: 'AppEvent',        label_ko: '앱 이벤트',     count: '(2.6M)', color: '#0ea5e9', icon: Smartphone },
+      { href: '/objects/survey_response',  label_en: 'SurveyResponse',  label_ko: '설문 응답',     count: '(34K)',  color: '#facc15', icon: ClipboardList },
+      { href: '/objects/coupon_use',       label_en: 'CouponUse',       label_ko: '쿠폰 사용',     count: '(8.5K)', color: '#f472b6', icon: Gift },
     ],
   },
   {
-    title: '표준·규제',
+    title: '마케팅 / 결제',
     types: [
-      { href: '/objects/Standard',      label_en: 'Standard',      label_ko: '표준',      count: '(80)',  color: '#facc15', icon: BookOpen },
-      { href: '/objects/Certification', label_en: 'Certification', label_ko: '인증',      count: '(200)', color: '#34d399', icon: Award },
-      { href: '/objects/Regulation',    label_en: 'Regulation',    label_ko: '규제',      count: '(60)',  color: '#f87171', icon: Scale },
-      { href: '/objects/Substance',     label_en: 'Substance',     label_ko: '화학물질',  count: '(240)', color: '#c084fc', icon: FlaskConical },
-      { href: '/objects/Region',        label_en: 'Region',        label_ko: '지역 (7개국)', count: '',   color: '#38bdf8', icon: MapPin },
-      { href: '/objects/TradeLane',     label_en: 'TradeLane',     label_ko: '운송 lane', count: '(40)', color: '#14b8a6', icon: Truck },
+      { href: '/objects/campaign',       label_en: 'Campaign',      label_ko: '캠페인',     count: '(220)',   color: '#f87171', icon: Megaphone },
+      { href: '/objects/coupon',         label_en: 'Coupon',        label_ko: '쿠폰',       count: '(1.8K)',  color: '#c084fc', icon: Tag },
+      { href: '/objects/offer',          label_en: 'Offer',         label_ko: '오퍼',       count: '(420)',   color: '#fbbf24', icon: Gift },
+      { href: '/objects/channel',        label_en: 'Channel',       label_ko: '채널',       count: '(12)',    color: '#94a3b8', icon: PhoneCall },
+      { href: '/objects/campaign_sms',   label_en: 'CampaignSms',   label_ko: 'SMS 발송',   count: '(58K)',   color: '#38bdf8', icon: PhoneCall },
+      { href: '/objects/payment_method', label_en: 'PaymentMethod', label_ko: '결제 수단',  count: '(8)',     color: '#14b8a6', icon: CreditCard },
     ],
   },
   {
-    title: '품질',
+    title: '주유소 / 가격',
     types: [
-      { href: '/objects/QualityIncident', label_en: 'QualityIncident', label_ko: '품질 인시던트', count: '(100)', color: '#fca5a5', icon: AlertTriangle },
-      { href: '/objects/EightDReport',    label_en: 'EightDReport',    label_ko: '8D 리포트',    count: '(80)',  color: '#fdba74', icon: ClipboardList },
-      { href: '/objects/RootCause',       label_en: 'RootCause',       label_ko: '근본원인',     count: '(200)', color: '#d9f99d', icon: GitBranch },
+      { href: '/objects/gas_station',  label_en: 'GasStation',  label_ko: '주유소',      count: '(8.5K)',  color: '#0ea5e9', icon: Building2 },
+      { href: '/objects/fuel_product', label_en: 'FuelProduct', label_ko: '유종',        count: '(5)',     color: '#fb923c', icon: Fuel },
+      { href: '/objects/fuel_price',   label_en: 'FuelPrice',   label_ko: '가격 시계열', count: '(1.4M)',  color: '#86efac', icon: TrendingUp },
     ],
   },
   {
-    title: '운영·ESG',
+    title: '외부 / 컨텍스트',
     types: [
-      { href: '/objects/Telemetry',        label_en: 'Telemetry',        label_ko: '텔레메트리',   count: '(5,000)', color: '#6ee7b7', icon: Activity },
-      { href: '/objects/MaintenanceEvent', label_en: 'MaintenanceEvent', label_ko: '정비 이벤트', count: '(300)',   color: '#93c5fd', icon: Wrench },
-      { href: '/objects/ESGIndicator',     label_en: 'ESGIndicator',     label_ko: 'ESG 지표',    count: '(120)',   color: '#86efac', icon: Leaf },
-      { href: '/objects/CarbonScope',      label_en: 'CarbonScope',      label_ko: '탄소 Scope',  count: '(36)',    color: '#a5b4fc', icon: Cloud },
+      { href: '/objects/region',              label_en: 'Region',             label_ko: '지역 (시도/시군구)',      count: '',        color: '#38bdf8', icon: Map },
+      { href: '/objects/term',                label_en: 'Term',               label_ko: '약관',                    count: '(24)',    color: '#a5b4fc', icon: ScrollText },
+      { href: '/objects/term_agreement',      label_en: 'TermAgreement',      label_ko: '약관 동의',               count: '(180K)',  color: '#fda4af', icon: ScrollText },
+      { href: '/objects/consumption_index',   label_en: 'ConsumptionIndex',   label_ko: '소비지수 (현대카드)',     count: '(360)',   color: '#fde047', icon: Lightbulb },
+      { href: '/objects/weather_observation', label_en: 'WeatherObservation', label_ko: '기상 관측 (KMA)',          count: '(1.3K)',  color: '#bfdbfe', icon: Cloud },
+    ],
+  },
+  {
+    title: '시간 / 집계',
+    types: [
+      { href: '/objects/time_slot',            label_en: 'TimeSlot',            label_ko: '시간대',         count: '(96)',  color: '#a3e635', icon: Clock },
+      { href: '/objects/campaign_aggregation', label_en: 'CampaignAggregation', label_ko: '캠페인 집계',    count: '(420)', color: '#f9a8d4', icon: BarChart3 },
     ],
   },
 ];
 
 export default function HomePage() {
-  const [persona, setPersona] = useState('marketing');
   return (
     <div className="min-h-screen flex flex-col">
       <header className="h-14 border-b border-ink-700 bg-ink-900 flex items-center px-6">
         <div className="text-xs text-ink-400">홈 / 대시보드</div>
         <div className="ml-auto flex items-center gap-3 text-xs">
-          <select
-            className="bg-ink-800 border border-ink-700 rounded px-2 py-1 text-xs text-ink-100"
-            value={persona}
-            onChange={(e) => setPersona(e.target.value)}
-          >
-            <option value='marketing'>마케팅</option>
-            <option value='strategy'>고객전략</option>
-            <option value='data-ai'>데이터·AI</option>
-            <option value='crm'>CRM·회원사업</option>
-            <option value='retail-ops'>리테일영업</option>
-          </select>
           <span className="flex items-center gap-1.5 text-ink-300">
             <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft" />
             All systems operational
@@ -135,20 +138,19 @@ export default function HomePage() {
       </header>
 
       <div className="flex-1 px-8 py-10 max-w-7xl mx-auto w-full">
-        <GuidedTourGcc persona={persona} />
         <div className="mb-8">
           <p className="text-xs uppercase tracking-[0.2em] text-accent-400 mb-2 font-semibold">
-            ontology-gcc · 14 시나리오 (A~N) · 25 클래스 · 5 부서 페르소나
+            GS Caltex M&amp;M본부 · 14 시나리오 (A~N) × 5 부서 페르소나 × 25 클래스
           </p>
           <h1 className="text-4xl font-bold text-ink-50 leading-tight mb-3">
-            부품·공급망·표준·품질 데이터를<br />
-            <span className="text-accent-300">온톨로지 그래프</span>로 풀어내는 GCC 데모
+            고객·캠페인·주유 데이터를{" "}
+            <span className="text-accent-300">온톨로지 + Agentic AI</span>로 풀어내는 PoC
           </h1>
-          <p className="text-ink-300 max-w-3xl leading-relaxed">
-            JEDEC / IPC / AEC-Q / IATF 16949 / ISO 9001 + REACH / RoHS / CBAM / IRA / USMCA 표준에
-            한국 Hi-Tech 어댑터를 매핑한 합성 데이터로, 12개 시나리오(의미 검색 → PdM/IoT)와
-            22종 Knowledge Graph 객체 탐색을 한 화면에 제공합니다.
-            우상단에서 페르소나를 전환하면 동일 시나리오가 5가지 시점으로 바뀝니다.
+          <p className="text-ink-300 leading-relaxed">
+            Opinet 가격 + KFDA·KOSTAT 기준 표준 매핑 + KMA 기상 외부 시그널 + 현대카드 소비지수를
+            결합한 실 데이터 500 코호트 + 합성 50K 룩어라이크 위에서, 14개 시나리오 (의미 검색 → 날씨 × 주유)와
+            25종 Knowledge Graph 객체 탐색을 한 화면에 제공합니다. 우상단에서 부서 페르소나를
+            전환하면 사이드바 정렬, 카드 강조, 챗 어조가 5가지 시점으로 바뀝니다.
           </p>
         </div>
 
@@ -185,7 +187,7 @@ export default function HomePage() {
               <Network className="w-5 h-5 text-accent-400" />
               Knowledge Graph 객체 타입
             </h2>
-            <span className="text-xs text-ink-400">22 types · Neptune openCypher · 합성 데이터</span>
+            <span className="text-xs text-ink-400">25 types · Neptune openCypher · 실 + 합성 데이터</span>
           </div>
 
           {OBJECT_GROUPS.map((g) => (
@@ -221,11 +223,28 @@ export default function HomePage() {
           ))}
         </section>
 
+        <section className="mb-10 rounded-lg border border-ink-700 bg-ink-800/50 p-5">
+          <h2 className="text-lg font-semibold text-ink-100 flex items-center gap-2 mb-2">
+            <GitBranch className="w-5 h-5 text-accent-400" /> 메타 페이지
+          </h2>
+          <p className="text-xs text-ink-300 mb-3">
+            ER 다이어그램 (25 클래스) · Standards (Opinet/KFDA/KOSTAT) · Validation (Neptune 카운트 vs 기대 범위) — 3 탭 통합
+          </p>
+          <Link
+            href="/meta"
+            className="inline-flex items-center gap-1.5 text-sm text-accent-300 hover:text-accent-200"
+          >
+            온톨로지 메타 열기 <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </section>
+
         <footer className="border-t border-ink-700 pt-6 text-xs text-ink-400">
-          본 데모의 부품·공급사·공장·인시던트는 합성 데이터입니다.
-          표준 매핑: JEDEC JESD22 · IPC-A-610 · AEC-Q100/Q101/Q200 · IATF 16949 · ISO 9001 ·
-          REACH 240+ SVHC · RoHS Annex II · EU CBAM 2026 · IRA 2022 · USMCA Chapter 4.
+          본 데모: 실 코호트 500명 (raw_data) + 50K 합성 룩어라이크 + 외부 KMA 기상 1,275건.
+          표준 매핑: Opinet 유종 코드 · KFDA 유해성 분류 · KOSTAT 행정구역 코드 · 현대카드 소비지수 카테고리.
+          페르소나: 마케팅 · 고객전략 · 데이터·AI · CRM·회원사업 · 리테일영업 (5 부서).
         </footer>
+
+        <GuidedTourGcc persona="marketing" />
       </div>
     </div>
   );

@@ -26,6 +26,11 @@ class CognitoBearerAuth(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         if any(request.url.path.startswith(p) for p in self.exempt):
             return await call_next(request)
+        if settings.demo_public_mode:
+            # Demo mode: allow anonymous, mark identity as demo user.
+            request.state.user_email = "demo@public-mode"
+            request.state.user_groups = ["demo"]
+            return await call_next(request)
         # Accept either Authorization: Bearer <token> OR gcc_id_token cookie
         auth = request.headers.get("authorization", "")
         token: str | None = None

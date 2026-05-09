@@ -30,3 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Some classes show 0 — to be addressed in Plan 5 polish: Term (no separate generator output), FuelPrice (real 6일/synthetic 1년 generator output mismatch), TimeSlot (5 fixed not in pipeline), Survey anonymous 25,946 (load filter).
 - KMA ETL deferred — no API key registered yet.
 - PM+M 92 RON detection + cohort breakdown verification deferred to Plan 3 (requires functional api/services/neptune.py).
+
+### Phase 3 Vertical Slice ✅ (2026-05-09)
+- Common services: bedrock (Converse+embed+rerank), opensearch (RRF K=60), persona (5 부서 SSOT + ADR 0007), sse, guardrails, neptune (botocore SigV4 openCypher).
+- 시나리오 A search: search_pipeline (embed → BM25+KNN+RRF → rerank → 1-hop subgraph) + /api/search + /api/search/stream (SSE) + web/app/search/ + 5 wow cases.
+- AgentCore Memory + Code Interpreter (NanumGothic) wrappers.
+- 시나리오 B chat agent: TOOL_SPECS 10 tools + ADR 0006 + 10 tool modules + /api/chat (Converse 다회차 + Guardrail + Memory + tool dispatch trace) + 4 chat UI components (ChatThread, ToolCallPanel, PersonaSwitchGcc, page.tsx) + 5 wow cases.
+- behavior_change_detect tool: PDF 3페이지 시그니처 (PM+M 92 RON DIY + 디젤→premium 전환). Property-based cust_id/store_cd join — Plan 2 loaded nodes only, no edges.
+- PM+M detection verified: **28,798 customers** with both premium and regular fuel transactions (well above ≥250 threshold).
+- ECR images rebuilt + pushed (api edd49a0 / web f6aa01d), ECS rolled, /healthz 200, /api/personas 401 (Cognito-protected as designed).

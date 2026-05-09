@@ -1599,6 +1599,75 @@ exports[`GCC stacks snapshot edge stack matches snapshot 1`] = `
     },
   },
   "Resources": {
+    "AuthEdgeFn45E37D35": {
+      "DependsOn": [
+        "AuthEdgeFnServiceRoleE137E433",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-111122223333-us-east-1",
+          "S3Key": "d80ca774627f5607304fe83e426de2466592cbbf760e8e6194ba746c1f9c3053.zip",
+        },
+        "Handler": "index.handler",
+        "Role": {
+          "Fn::GetAtt": [
+            "AuthEdgeFnServiceRoleE137E433",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs20.x",
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "AuthEdgeFnCurrentVersion8E5C4AC2299b247f40f45a05b72e7a96f0aa15b1": {
+      "Metadata": {
+        "aws:cdk:do-not-refactor": true,
+      },
+      "Properties": {
+        "FunctionName": {
+          "Ref": "AuthEdgeFn45E37D35",
+        },
+      },
+      "Type": "AWS::Lambda::Version",
+    },
+    "AuthEdgeFnServiceRoleE137E433": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "edgelambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "CustomCrossRegionExportReaderCustomResourceProviderHandler46647B68": {
       "DependsOn": [
         "CustomCrossRegionExportReaderCustomResourceProviderRole10531BBD",
@@ -1679,6 +1748,14 @@ exports[`GCC stacks snapshot edge stack matches snapshot 1`] = `
           "DefaultCacheBehavior": {
             "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
             "Compress": true,
+            "LambdaFunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "LambdaFunctionARN": {
+                  "Ref": "AuthEdgeFnCurrentVersion8E5C4AC2299b247f40f45a05b72e7a96f0aa15b1",
+                },
+              },
+            ],
             "OriginRequestPolicyId": "216adef6-5c7f-47e4-b989-5492eafa07d3",
             "TargetOriginId": "tedgeDistOrigin1C3262E61",
             "ViewerProtocolPolicy": "redirect-to-https",

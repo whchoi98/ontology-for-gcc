@@ -4,6 +4,8 @@ import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as acm from 'aws-cdk-lib/aws-certificatemanager';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as path from 'path';
 import { Construct } from 'constructs';
 
 export interface EdgeStackProps extends cdk.StackProps {
@@ -27,6 +29,15 @@ export class EdgeStack extends cdk.Stack {
       });
     }
 
+    // ── Lambda@Edge auth function (Plan 5 Task 5.5.1) ─────────────
+    // RS256 Cognito JWT verification with JWKS TTL caching.
+    // Built into the same stack so it ships in us-east-1 alongside the distribution.
+    const authFn = new cf.experimental.EdgeFunction(this, 'AuthEdge', {
+      runtime: lambda.Runtime.NODEJS_20_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '..', 'lambda-edge-auth')),
+    });
+
     // ── CloudFront ────────────────────────────────────────────────
     this.distribution = new cf.Distribution(this, 'Dist', {
       defaultBehavior: {
@@ -39,6 +50,12 @@ export class EdgeStack extends cdk.Stack {
         viewerProtocolPolicy: cf.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cf.CachePolicy.CACHING_DISABLED,
         originRequestPolicy: cf.OriginRequestPolicy.ALL_VIEWER,
+        edgeLambdas: [
+          {
+            functionVersion: authFn.currentVersion,
+            eventType: cf.LambdaEdgeEventType.VIEWER_REQUEST,
+          },
+        ],
       },
       domainNames: props.domainName ? [props.domainName] : undefined,
       certificate: cert,

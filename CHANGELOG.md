@@ -39,3 +39,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - behavior_change_detect tool: PDF 3페이지 시그니처 (PM+M 92 RON DIY + 디젤→premium 전환). Property-based cust_id/store_cd join — Plan 2 loaded nodes only, no edges.
 - PM+M detection verified: **28,798 customers** with both premium and regular fuel transactions (well above ≥250 threshold).
 - ECR images rebuilt + pushed (api edd49a0 / web f6aa01d), ECS rolled, /healthz 200, /api/personas 401 (Cognito-protected as designed).
+
+### Phase 4 12 시나리오 (C~N) ✅ (2026-05-09)
+- C 인사이트 (Code Interpreter matplotlib NanumGothic + Sonnet 요약)
+- D 페르소나 매칭 (PERSONA_REGISTRY × KPI weights)
+- E 클러스터링 KMeans 6 + LLM 라벨링 (PDF Scenario 2)
+- F 룩어라이크 (lookalike_expand tool)
+- G 캠페인 ROI 시뮬 + Bayesian 분포 차트
+- H 주유소 네트워크 지도 (시도 choropleth) — KOSTAT GeoJSON placeholder; load real shapes in Plan 5 polish
+- I 약관·가드레일 (TermAgreement + Bedrock Guardrails) — uses graph traversal (AGREED_TO + FOR edges loaded)
+- J 외부 시그널 융합 (현대카드·앱·설문·날씨) — uses graph traversal (HAS_INDEX + USED_APP + ANSWERED edges loaded)
+- K Outlier (PM+M 92 RON DIY · 디젤→premium 전환) — PDF 3 시그니처
+- L 결제·가격·채널 매트릭스
+- M 고객 통합 여정 timeline (App+Tx+Term+Coupon + 유종 전환) — PDF 3 시그니처
+- N 날씨 × 주유 (기상청 join + 산점도)
+- 60 신규 wow cases (12 시나리오 × 5 페르소나)
+- KoreaChoropleth, JourneyTimeline, ChartImage, WeatherOverlay 컴포넌트
+- 12 라우터 + 12 페이지 + 4 전용 서비스 (insights/cluster/journey/weather pipelines)
+- Hybrid graph traversal: where edges loaded (REFUELED, AGREED_TO, FOR, USED_APP, ANSWERED, IS_MEMBER, HAS_INDEX) prefer graph; otherwise property-join fallback. Plan 5 polish: load remaining 24 edge types.
+- ECR images rebuilt + pushed (api f1fc29a / web f1fc29a), ECS rolled to ontologygccdevcomputeApiTask02010DB0 / ontologygccdevcomputeWebTask08E5C83F (latest revision).

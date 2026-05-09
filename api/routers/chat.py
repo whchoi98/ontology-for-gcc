@@ -16,6 +16,7 @@ from api.services.persona import system_prompt
 from api.services.agent import TOOL_SPECS, dispatch, get_trace_buf
 from api.services.agentcore import write_event
 from api.services.guardrails import apply as guardrail_apply
+from api.services.ops_metrics import push_guardrail
 from api.services.sse import stream_phases
 
 router = APIRouter(prefix='/api', tags=['chat'])
@@ -40,6 +41,7 @@ async def chat(req: ChatRequest):
         cleaned, violations = guardrail_apply(req.message, source='INPUT')
         if violations:
             yield ('log', {'guardrail': 'INPUT', 'violations': violations})
+            push_guardrail('INPUT', violations, cleaned)
 
         # 2) memory write (user turn)
         write_event(
@@ -132,6 +134,7 @@ async def chat(req: ChatRequest):
         clean_out, viol = guardrail_apply(final_text, source='OUTPUT')
         if viol:
             yield ('log', {'guardrail': 'OUTPUT', 'violations': viol})
+            push_guardrail('OUTPUT', viol, final_text)
         write_event(
             _memory_id(), req.persona_id or 'marketing',
             req.session_id, 'assistant', clean_out, req.cust_id,

@@ -351,6 +351,21 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 M (journey — PDF 3페이지 시그니처) ----
+WOW_QUERIES.extend([
+    {'scenario': 'M', 'persona': 'marketing', 'query': {'cust_id': 'c001'},
+     'expects': lambda r: 'events' in r, 'min_results': 0},
+    {'scenario': 'M', 'persona': 'crm', 'query': {'cust_id': 'c002'},
+     'expects': lambda r: 'fuel_grade_transitions' in r, 'min_results': 0},
+    {'scenario': 'M', 'persona': 'data-ai', 'query': {'cust_id': 'c001'},
+     'expects': lambda r: 'event_count' in r, 'min_results': 0},
+    {'scenario': 'M', 'persona': 'strategy', 'query': {'cust_id': 'c003'},
+     'expects': lambda r: 'profile' in r, 'min_results': 0},
+    {'scenario': 'M', 'persona': 'retail-ops', 'query': {'cust_id': 'la-000001'},
+     'expects': lambda r: 'event_count' in r, 'min_results': 0},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

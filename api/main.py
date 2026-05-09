@@ -62,3 +62,10 @@ try:
     app.include_router(search_router.router)
 except Exception as e:
     log.warning("search router not registered: %s", e)
+
+# Plan 3 Task 3.4.3 — /api/chat — Converse 다회차 + 10 도구 + Memory + Guardrail
+try:
+    from api.routers import chat as chat_router
+    app.include_router(chat_router.router)
+except Exception as e:
+    log.warning("chat router not registered: %s", e)

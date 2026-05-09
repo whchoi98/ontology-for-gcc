@@ -1,146 +1,146 @@
-"""Scenario B — Conversational Agent (SSE stream)."""
+"""POST /api/chat — Converse 다회차 + 10 도구 + Memory + Guardrail (SSE).
+
+Plan 3 Task 3.4.3 — replaces the legacy mfg-template chat router.
+"""
 from __future__ import annotations
 import json
-from fastapi import APIRouter, Body
-from pydantic import BaseModel
-from sse_starlette.sse import EventSourceResponse
-from api.services.agent import AgentRunner
-from api.services.search import get_search
-from api.services.neptune import get_neptune
-from api.services.kb import retrieve_kb
-from api.services.compliance_engine import check_component
-from api.services.memory import save_fact
+import os
+from typing import Optional
 
-router = APIRouter(tags=["chat"])
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
+
+from api.services.bedrock import converse_stream, ConverseRequest
+from api.services.persona import system_prompt
+from api.services.agent import TOOL_SPECS, dispatch, get_trace_buf
+from api.services.agentcore import write_event
+from api.services.guardrails import apply as guardrail_apply
+from api.services.sse import stream_phases
+
+router = APIRouter(prefix='/api', tags=['chat'])
 
 
 class ChatRequest(BaseModel):
-    msg: str
-    session_id: str
-    persona: str = "engineer"
+    message: str
+    persona_id: Optional[str] = 'marketing'
+    session_id: str = 'default'
+    cust_id: Optional[str] = None
+    history: list = []  # 이전 turn (Bedrock messages 형식)
 
 
-def _tool_search(_name: str, args: dict) -> dict:
-    hits = get_search().hybrid_search(args.get("q", ""), top_n=5)
-    return {"hits": [{"id": h["_id"], "name": h["_source"].get("name")} for h in hits]}
+def _memory_id() -> str:
+    return os.environ.get('AGENTCORE_MEMORY_ID', '')
 
 
-def _tool_neptune(_name: str, args: dict) -> dict:
-    return {"results": get_neptune().run_cypher(args.get("cypher", ""), args.get("params", {}))}
+@router.post('/chat')
+async def chat(req: ChatRequest):
+    async def gen():
+        # 1) input guardrail
+        cleaned, violations = guardrail_apply(req.message, source='INPUT')
+        if violations:
+            yield ('log', {'guardrail': 'INPUT', 'violations': violations})
 
+        # 2) memory write (user turn)
+        write_event(
+            _memory_id(), req.persona_id or 'marketing',
+            req.session_id, 'user', cleaned, req.cust_id,
+        )
 
-def _tool_kb(_name: str, args: dict) -> dict:
-    return {"results": retrieve_kb(args.get("q", ""), top_k=args.get("top_k", 5))}
+        sys_prompt = system_prompt(req.persona_id, 'B')
+        messages = list(req.history) + [
+            {'role': 'user', 'content': [{'text': cleaned}]},
+        ]
 
+        yield ('phase', {'name': 'turn_start', 'persona': req.persona_id})
 
-def _tool_compliance(_name: str, args: dict) -> dict:
-    from data.schemas import Component
-    comp = Component(id=args.get("component_id", "?"), name="x", category="IC",
-                     substances=args.get("substances", []))
-    return check_component(comp)
+        # 3) Converse loop with tool use (max 6 iterations)
+        max_iters = 6
+        assistant_chunks: list = []
+        it = 0
+        for it in range(max_iters):
+            req_b = ConverseRequest(
+                system=sys_prompt, messages=messages, tool_specs=TOOL_SPECS,
+            )
+            tool_calls_buffer: list = []
+            assistant_chunks = []
+            stop_reason: Optional[str] = None
 
+            try:
+                stream = converse_stream(req_b)
+            except Exception as e:
+                yield ('log', {'bedrock_error': str(e)[:200]})
+                break
 
-def _tool_memory(_name: str, args: dict) -> dict:
-    save_fact(session_id=args.get("session_id", "?"), key=args.get("key", "?"),
-              value=args.get("value", "?"))
-    return {"ok": True}
+            for ev in stream:
+                if 'contentBlockStart' in ev:
+                    block = ev['contentBlockStart']
+                    start = block.get('start') or {}
+                    if 'toolUse' in start:
+                        tu = start['toolUse']
+                        tool_calls_buffer.append({
+                            'name': tu.get('name', ''),
+                            'toolUseId': tu.get('toolUseId', ''),
+                            'input': '',
+                        })
+                elif 'contentBlockDelta' in ev:
+                    delta = ev['contentBlockDelta'].get('delta') or {}
+                    if 'text' in delta:
+                        assistant_chunks.append(delta['text'])
+                        yield ('delta', {'text': delta['text']})
+                    elif 'toolUse' in delta and tool_calls_buffer:
+                        tool_calls_buffer[-1]['input'] += delta['toolUse'].get('input', '')
+                elif 'messageStop' in ev:
+                    stop_reason = ev['messageStop'].get('stopReason')
 
+            if assistant_chunks:
+                messages.append({
+                    'role': 'assistant',
+                    'content': [{'text': ''.join(assistant_chunks)}],
+                })
 
-# Tool definitions with explicit inputSchema (so Bedrock fills required fields).
-# Tuple shape: (name, description, fn, input_schema)
-_TOOLS = [
-    (
-        "search_semantic",
-        "Hybrid Korean+vector search over BOM/components/standards. Returns top-N hits.",
-        _tool_search,
-        {
-            "type": "object",
-            "properties": {
-                "q": {"type": "string", "description": "Korean or English natural-language query, ≥3 chars (e.g. 'AEC-Q100 BGA package')"},
-                "top_n": {"type": "integer", "description": "max hits to return (default 5)"},
-            },
-            "required": ["q"],
-        },
-    ),
-    (
-        "neptune_query",
-        "Run an openCypher query on the gcc knowledge graph (22 classes — Component/Supplier/Plant/TradeLane/Standard/etc.).",
-        _tool_neptune,
-        {
-            "type": "object",
-            "properties": {
-                "cypher": {"type": "string", "description": "Full openCypher query, e.g. 'MATCH (c:Component {id: $id}) RETURN c LIMIT 1'. Must NOT be empty."},
-                "params": {"type": "object", "description": "Optional Cypher parameters keyed by $name", "additionalProperties": True},
-            },
-            "required": ["cypher"],
-        },
-    ),
-    (
-        "kb_retrieve",
-        "Retrieve passages from Bedrock Knowledge Base — datasheets, 8D reports, certifications, regulatory guidance.",
-        _tool_kb,
-        {
-            "type": "object",
-            "properties": {
-                "q": {"type": "string", "description": "Natural-language query for the KB"},
-                "top_k": {"type": "integer", "description": "number of passages to retrieve (1-10, default 5)"},
-            },
-            "required": ["q"],
-        },
-    ),
-    (
-        "compliance_check",
-        "Check a component against REACH-SVHC, RoHS, AEC-Q rules. Returns {compliant, violations[]}.",
-        _tool_compliance,
-        {
-            "type": "object",
-            "properties": {
-                "component_id": {"type": "string", "description": "Component id (e.g. AMZN-CMP-IC-00001)"},
-                "substances": {"type": "array", "items": {"type": "string"}, "description": "Optional CAS-IDs to check explicitly"},
-            },
-            "required": ["component_id"],
-        },
-    ),
-    (
-        "memory_save",
-        "Persist a user fact for future conversations (e.g. 'prefers Tier-1 supplier X', 'budget cap 5M USD').",
-        _tool_memory,
-        {
-            "type": "object",
-            "properties": {
-                "session_id": {"type": "string"},
-                "key":        {"type": "string", "description": "Fact key (e.g. 'preference', 'constraint')"},
-                "value":      {"type": "string", "description": "Fact value"},
-            },
-            "required": ["key", "value"],
-        },
-    ),
-]
+            if not tool_calls_buffer or stop_reason == 'end_turn':
+                break
 
+            # 4) tool dispatch
+            tool_results: list = []
+            for tc in tool_calls_buffer:
+                try:
+                    input_dict = json.loads(tc['input']) if tc['input'] else {}
+                except json.JSONDecodeError:
+                    input_dict = {}
+                yield ('log', {'tool_call': tc['name'], 'input': input_dict})
+                output = dispatch(
+                    tc['name'], input_dict,
+                    req.persona_id or 'marketing', req.session_id, req.cust_id,
+                )
+                yield ('log', {
+                    'tool_result': tc['name'],
+                    'output_summary': str(output)[:200],
+                })
+                tool_results.append({
+                    'toolUseId': tc['toolUseId'],
+                    'content': [{'json': output}],
+                })
+            messages.append({
+                'role': 'user',
+                'content': [{'toolResult': tr} for tr in tool_results],
+            })
 
-_SYSTEM_PROMPT_TEMPLATE = (
-    "You are an AMZN Tech {persona} copilot for a hi-tech manufacturing knowledge graph. "
-    "Domain: 가전 H&A / TV HE / 자동차 전장 VS / 부품 Innotek+Magna ePT JV. "
-    "Always respond in Korean (technical English terms OK). "
-    "When you need data:\n"
-    "  • Use `search_semantic(q)` for fuzzy concept search (e.g. '차량용 -40°C BGA').\n"
-    "  • Use `neptune_query(cypher, params)` for precise BOM/Supplier/Plant/Lane lookups — ALWAYS supply a complete openCypher string.\n"
-    "  • Use `kb_retrieve(q)` for datasheet / 8D / regulation context.\n"
-    "  • Use `compliance_check(component_id)` for REACH/RoHS/AEC-Q verification.\n"
-    "Never call a tool with empty arguments — every tool requires the listed `required` fields. "
-    "If a tool result is empty or errors out, acknowledge briefly and proceed without retrying the same call. "
-    "Format output as Markdown when listing items (tables, bullets, **bold** for IDs)."
-)
+        # 5) output guardrail + memory write (assistant)
+        final_text = ''.join(assistant_chunks)
+        clean_out, viol = guardrail_apply(final_text, source='OUTPUT')
+        if viol:
+            yield ('log', {'guardrail': 'OUTPUT', 'violations': viol})
+        write_event(
+            _memory_id(), req.persona_id or 'marketing',
+            req.session_id, 'assistant', clean_out, req.cust_id,
+        )
 
+        yield ('result', {
+            'final_text': clean_out,
+            'iterations': it + 1,
+            'trace': get_trace_buf()[-10:],
+        })
 
-@router.post("/chat")
-def chat(req: ChatRequest = Body(...)):
-    runner = AgentRunner(
-        tools=_TOOLS,
-        system=_SYSTEM_PROMPT_TEMPLATE.format(persona=req.persona),
-    )
-
-    def gen():
-        for event in runner.run_stream(req.msg, session_id=req.session_id):
-            yield {"event": event["type"], "data": json.dumps(event)}
-    return EventSourceResponse(gen())
+    return StreamingResponse(stream_phases(gen()), media_type='text/event-stream')

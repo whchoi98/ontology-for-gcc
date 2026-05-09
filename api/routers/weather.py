@@ -2,26 +2,17 @@
 from __future__ import annotations
 from typing import Optional
 from fastapi import APIRouter
-from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from api.services.sse import sse_event, stream_phases
-from api.services.persona import get as get_persona
+from api.services.weather_pipeline import correlate_by_sido
 
 router = APIRouter(prefix='/api/weather', tags=['weather'])
 
 
-class WeatherRequest(BaseModel):
-    persona_id: Optional[str] = 'marketing'
+class CorrRequest(BaseModel):
+    persona_id: Optional[str] = 'data-ai'
+    sido_nm: Optional[str] = None
 
 
-@router.post('')
-def weather_sync(req: WeatherRequest):
-    return {'persona': get_persona(req.persona_id)['name_kr'], 'placeholder': 'task 4.x에서 구현'}
-
-
-@router.post('/stream')
-async def weather_streaming(req: WeatherRequest):
-    async def gen():
-        yield ('phase', {'name': 'weather_start'})
-        yield ('result', {'placeholder': True})
-    return StreamingResponse(stream_phases(gen()), media_type='text/event-stream')
+@router.post('/correlate')
+def correlate(req: CorrRequest) -> dict:
+    return correlate_by_sido(req.sido_nm)

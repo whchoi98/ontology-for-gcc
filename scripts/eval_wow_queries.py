@@ -298,6 +298,22 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 N (weather) ----
+WOW_QUERIES.extend([
+    {'scenario': 'N', 'persona': 'data-ai', 'query': {},
+     'expects': lambda r: 'rows' in r and bool(r.get('chart_png_b64')),
+     'min_results': 1},
+    {'scenario': 'N', 'persona': 'marketing', 'query': {'sido_nm': '서울'},
+     'expects': lambda r: 'rows' in r, 'min_results': 0},
+    {'scenario': 'N', 'persona': 'retail-ops', 'query': {'sido_nm': '경기'},
+     'expects': lambda r: bool(r.get('chart_png_b64')), 'min_results': 0},
+    {'scenario': 'N', 'persona': 'strategy', 'query': {},
+     'expects': lambda r: 'rows' in r, 'min_results': 0},
+    {'scenario': 'N', 'persona': 'crm', 'query': {'sido_nm': '부산'},
+     'expects': lambda r: 'rows' in r, 'min_results': 0},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

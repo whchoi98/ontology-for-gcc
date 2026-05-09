@@ -257,6 +257,27 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 G (campaign_roi) ----
+WOW_QUERIES.extend([
+    {'scenario': 'G', 'persona': 'marketing',
+     'query': {'coupon_amt': 1000, 'target_segment_id': 'seg-001'},
+     'expects': lambda r: 'projected_conversion' in r and bool(r.get('chart_png_b64')),
+     'min_results': 1},
+    {'scenario': 'G', 'persona': 'data-ai',
+     'query': {'coupon_amt': 5000, 'target_segment_id': 'seg-005'},
+     'expects': lambda r: r.get('projected_conversion', 0) > 0, 'min_results': 1},
+    {'scenario': 'G', 'persona': 'crm',
+     'query': {'coupon_amt': 2000, 'target_segment_id': 'seg-003'},
+     'expects': lambda r: 'baseline_roi_pct' in r, 'min_results': 1},
+    {'scenario': 'G', 'persona': 'strategy',
+     'query': {'coupon_amt': 500, 'target_segment_id': 'seg-007'},
+     'expects': lambda r: bool(r.get('chart_png_b64')), 'min_results': 1},
+    {'scenario': 'G', 'persona': 'retail-ops',
+     'query': {'coupon_amt': 3000, 'target_segment_id': 'seg-010'},
+     'expects': lambda r: 'projected_conversion' in r, 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

@@ -5,6 +5,12 @@ import boto3
 from api.config import settings
 
 
+@functools.lru_cache(maxsize=1)
+def session() -> boto3.Session:
+    """Shared boto3 Session — region pinned from settings."""
+    return boto3.Session(region_name=settings.aws_region)
+
+
 @functools.lru_cache(maxsize=8)
 def bedrock_runtime():
     return boto3.client("bedrock-runtime", region_name=settings.aws_region)

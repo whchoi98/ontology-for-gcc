@@ -23,5 +23,36 @@ class Settings(BaseModel):
     cognito_region: str = "us-east-1"  # Edge stack region
     log_level: str = os.environ.get("LOG_LEVEL", "INFO")
 
+    # ---- Plan 3 uppercase aliases (used by new services bedrock/opensearch/etc.) ----
+    @property
+    def AWS_REGION(self) -> str:
+        return self.aws_region
+
+    @property
+    def OPENSEARCH_ENDPOINT(self) -> str:
+        return self.opensearch_host
+
+    @property
+    def OPENSEARCH_INDEX(self) -> str:
+        return self.opensearch_index
+
+    @property
+    def BEDROCK_GUARDRAIL_ID(self) -> str:
+        return self.bedrock_guardrail_id
+
+    @property
+    def BEDROCK_CHAT_MODEL_ID(self) -> str:
+        return os.environ.get("BEDROCK_CHAT_MODEL_ID", self.sonnet_model)
+
+    @property
+    def BEDROCK_EMBED_MODEL_ID(self) -> str:
+        # Plan 3 uses Cohere embed-v4 (1024-dim); fall back to existing GCC default.
+        return os.environ.get("BEDROCK_EMBED_MODEL_ID",
+                               os.environ.get("GCC_EMBED_MODEL_ID", "cohere.embed-multilingual-v3"))
+
+    @property
+    def BEDROCK_RERANKER_INFERENCE_PROFILE_ARN(self) -> str:
+        return os.environ.get("BEDROCK_RERANKER_INFERENCE_PROFILE_ARN", self.rerank_model)
+
 
 settings = Settings()

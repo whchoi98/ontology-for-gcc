@@ -218,6 +218,28 @@ WOW_QUERIES.extend([
 ])
 
 
+# ---- Plan 4 시나리오 C (insights) ----
+WOW_QUERIES.extend([
+    {'scenario': 'C', 'persona': 'marketing',
+     'query': {'topic': 'fuel_grade_trend'},
+     'expects': lambda r: bool(r.get('chart_png_b64')) and len(r.get('summary', '')) > 20,
+     'min_results': 1},
+    {'scenario': 'C', 'persona': 'data-ai',
+     'query': {'topic': 'fuel_grade_trend'},
+     'expects': lambda r: 'rows' in r and len(r.get('rows') or []) > 0,
+     'min_results': 1},
+    {'scenario': 'C', 'persona': 'strategy',
+     'query': {'topic': 'fuel_grade_trend'},
+     'expects': lambda r: bool(r.get('chart_png_b64')), 'min_results': 1},
+    {'scenario': 'C', 'persona': 'crm',
+     'query': {'topic': 'fuel_grade_trend'},
+     'expects': lambda r: bool(r.get('summary')), 'min_results': 1},
+    {'scenario': 'C', 'persona': 'retail-ops',
+     'query': {'topic': 'fuel_grade_trend'},
+     'expects': lambda r: bool(r.get('chart_png_b64')), 'min_results': 1},
+])
+
+
 def search_call(domain: str, query: str, persona_id: str, size: int = 10) -> dict:
     url = f"https://{domain}/api/search"
     payload = json.dumps({

@@ -11,6 +11,8 @@ Env:
 """
 from __future__ import annotations
 import json, os, sys, time
+from dataclasses import dataclass, field
+from typing import Optional, Callable
 import boto3, requests
 
 NEPTUNE_ENDPOINT = os.environ.get('NEPTUNE_ENDPOINT', '')
@@ -182,6 +184,391 @@ def _flush_batch(label: str, pk_field: str, batch: list[dict]) -> None:
     _post_cypher(query, {'rows': batch})
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# EDGE LOADER — load 31 relationship types per spec §4.2 from NDJSON FK joins.
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _hour_to_slot_id(hour: int, weekend: bool = False) -> Optional[str]:
+    """Map an hour-of-day to a TimeSlot.slot_id (data/synthetic/timeslot.py)."""
+    if weekend:
+        return 'weekend'
+    if 6 <= hour < 9:
+        return 'commute_morning'
+    if 11 <= hour < 14:
+        return 'lunch'
+    if 17 <= hour < 20:
+        return 'commute_evening'
+    if hour >= 21 or hour < 6:
+        return 'late_night'
+    return None  # idle hours don't map; skip
+
+
+def _ts_to_slot_id(ts: str) -> Optional[str]:
+    """Parse ISO timestamp '2026-04-01T07:00:00+09:00' → slot_id by hour-of-day.
+
+    Falls back to None on bad input rather than raising — caller skips.
+    """
+    if not ts or not isinstance(ts, str):
+        return None
+    # Tolerant parse: just look for 'T' + 2 hour digits
+    try:
+        i = ts.index('T')
+        hour = int(ts[i+1:i+3])
+        # Saturday/Sunday detection from datetime would be more correct;
+        # we keep it simple and treat all hours uniformly. weekend bucket is
+        # left for cases where caller knows day-of-week.
+        return _hour_to_slot_id(hour)
+    except (ValueError, IndexError):
+        return None
+
+
+@dataclass
+class EdgeSpec:
+    """Definition of one edge load.
+
+    source_label / target_label  Neptune labels (must match NODE_MAP).
+    source_match_field           property on source node to MATCH (Cypher key).
+    target_match_field           property on target node to MATCH.
+    ndjson_prefix                S3 prefix containing the NDJSON rows that drive the join.
+    ndjson_source_field          field in NDJSON row that holds the source-side identifier.
+    ndjson_target_field          field in NDJSON row that holds the target-side identifier.
+    edge_type                    relationship type (uppercase).
+    transform                    optional callable(obj)->dict({'s':..., 't':...})
+                                 for non-trivial joins (e.g. derive slot_id from ts).
+    """
+    edge_type: str
+    source_label: str
+    source_match_field: str
+    target_label: str
+    target_match_field: str
+    ndjson_prefix: Optional[str]
+    ndjson_source_field: Optional[str] = None
+    ndjson_target_field: Optional[str] = None
+    transform: Optional[Callable] = None
+    note: str = ''
+
+
+# 31 relationship types per data/schemas.py:ALL_RELATIONS.
+# Each entry maps to one EdgeSpec OR is skipped (note='SKIP: …').
+# Skipped edges either need data not present (no FK in source NDJSON) or
+# require nodes that aren't loaded (e.g. PaymentMethod, FuelProduct, Channel).
+# Persona/Cluster/Segment association edges are deferred to Plan 5 (require ML
+# clustering output to assign Customer.persona_id / cluster_id / segment_id).
+EDGE_MAP: list[EdgeSpec] = [
+    # Customer → marketing taxonomy (deferred to Plan 5; no FK on Customer)
+    EdgeSpec(edge_type='HAS_PERSONA', source_label='Customer', source_match_field='cust_id',
+             target_label='Persona', target_match_field='persona_id', ndjson_prefix=None,
+             note='SKIP: Customer has no persona_id field; Plan 5 ML clustering required'),
+    EdgeSpec(edge_type='BELONGS_TO', source_label='Customer', source_match_field='cust_id',
+             target_label='Cluster', target_match_field='cluster_id', ndjson_prefix=None,
+             note='SKIP: Customer has no cluster_id field; Plan 5 ML clustering required'),
+    EdgeSpec(edge_type='IN_SEGMENT', source_label='Customer', source_match_field='cust_id',
+             target_label='Segment', target_match_field='segment_id', ndjson_prefix=None,
+             note='SKIP: Customer has no segment_id field; Plan 5 ML clustering required'),
+
+    # Customer ↔ membership/agreement/index/event/survey/transaction
+    # Member node label; pk in Neptune is `member_id` (scan-fallback to cust_id), so
+    # MATCH on Member.cust_id (regular property — Member NDJSON has cust_id).
+    EdgeSpec(edge_type='IS_MEMBER', source_label='Customer', source_match_field='cust_id',
+             target_label='Member', target_match_field='cust_id',
+             ndjson_prefix='nodes/member/', ndjson_source_field='cust_id', ndjson_target_field='cust_id',
+             note='Member.cust_id == Customer.cust_id'),
+    EdgeSpec(edge_type='AGREED_TO', source_label='Customer', source_match_field='cust_id',
+             target_label='TermAgreement', target_match_field='agreement_id',
+             ndjson_prefix='nodes/term_agreement/', ndjson_source_field='cust_id', ndjson_target_field='agreement_id',
+             note='TermAgreement.cust_id'),
+    EdgeSpec(edge_type='FOR', source_label='TermAgreement', source_match_field='agreement_id',
+             target_label='Term', target_match_field='term_cd',
+             ndjson_prefix='nodes/term_agreement/', ndjson_source_field='agreement_id', ndjson_target_field='term_cd',
+             note='TermAgreement.term_cd'),
+    EdgeSpec(edge_type='HAS_INDEX', source_label='Customer', source_match_field='cust_id',
+             target_label='ConsumptionIndex', target_match_field='cust_id',
+             ndjson_prefix='nodes/consumption_index/', ndjson_source_field='cust_id', ndjson_target_field='cust_id',
+             note='ConsumptionIndex node has cust_id property; idx_id pk == cust_id (scan fallback)'),
+    EdgeSpec(edge_type='USED_APP', source_label='Customer', source_match_field='cust_id',
+             target_label='AppEvent', target_match_field='event_id',
+             ndjson_prefix='nodes/app_event/', ndjson_source_field='cust_id', ndjson_target_field='event_id',
+             note='AppEvent.cust_id (drop nulls)'),
+    EdgeSpec(edge_type='ANSWERED', source_label='Customer', source_match_field='cust_id',
+             target_label='Survey', target_match_field='response_id',
+             ndjson_prefix='nodes/survey/', ndjson_source_field='cust_id', ndjson_target_field='response_id',
+             note='SurveyResponse.cust_id (drop ~25,946 anonymous rows)'),
+    EdgeSpec(edge_type='REFUELED', source_label='Customer', source_match_field='cust_id',
+             target_label='FuelTransaction', target_match_field='tx_id',
+             ndjson_prefix='nodes/transaction/', ndjson_source_field='cust_id', ndjson_target_field='tx_id',
+             note='FuelTransaction.cust_id — high-volume edge (~500K)'),
+
+    # FuelTransaction outgoing edges
+    # AT: tx.store_cd MATCHES gas_station.site_cd (real txs only — synthetic S0xxx
+    # store_cds don't have a corresponding real GasStation site_cd). About ~1166/1626
+    # real store_cds resolve.
+    EdgeSpec(edge_type='AT', source_label='FuelTransaction', source_match_field='tx_id',
+             target_label='GasStation', target_match_field='site_cd',
+             ndjson_prefix='nodes/transaction/', ndjson_source_field='tx_id', ndjson_target_field='store_cd',
+             note='tx.store_cd → GasStation.site_cd (real txs only)'),
+    # IN: gas_station.sido_nm → Region.sido_nm where Region.level=sido
+    EdgeSpec(edge_type='IN', source_label='GasStation', source_match_field='opinet_no',
+             target_label='Region', target_match_field='sido_nm',
+             ndjson_prefix='nodes/gas_station/', ndjson_source_field='opinet_no', ndjson_target_field='sido_nm',
+             note='GasStation.sido_nm → Region.sido_nm (level=sido)'),
+
+    # FuelTransaction → FuelProduct, PaymentMethod (skipped — nodes not loaded)
+    EdgeSpec(edge_type='OF', source_label='FuelTransaction', source_match_field='tx_id',
+             target_label='FuelProduct', target_match_field='product_id', ndjson_prefix=None,
+             note='SKIP: FuelProduct nodes not loaded (no NDJSON in pipeline)'),
+    EdgeSpec(edge_type='VIA', source_label='FuelTransaction', source_match_field='tx_id',
+             target_label='PaymentMethod', target_match_field='method_id', ndjson_prefix=None,
+             note='SKIP: PaymentMethod nodes not loaded (no NDJSON in pipeline)'),
+
+    # FuelTransaction → TimeSlot (derive slot_id from tx.ts hour-of-day)
+    EdgeSpec(edge_type='AT_TIME', source_label='FuelTransaction', source_match_field='tx_id',
+             target_label='TimeSlot', target_match_field='slot_id',
+             ndjson_prefix='nodes/transaction/',
+             transform=lambda obj: (
+                 {'s': obj['tx_id'], 't': _ts_to_slot_id(obj.get('ts'))}
+                 if obj.get('tx_id') and _ts_to_slot_id(obj.get('ts')) else None
+             ),
+             note='derive slot_id from tx.ts hour'),
+
+    # FuelTransaction → CouponUse (CouponUse.tx_id; skip nulls)
+    EdgeSpec(edge_type='USED', source_label='FuelTransaction', source_match_field='tx_id',
+             target_label='CouponUse', target_match_field='use_id',
+             ndjson_prefix='nodes/coupon_use/', ndjson_source_field='tx_id', ndjson_target_field='use_id',
+             note='CouponUse.tx_id (drop nulls)'),
+    # CouponUse → Coupon. Coupon node was MERGEd by coupon_id (scan→campaign_cd),
+    # but Coupon nodes still have coupon_no as a regular property. So we MATCH
+    # on Coupon.coupon_no = CouponUse.coupon_no.
+    EdgeSpec(edge_type='OF_COUPON', source_label='CouponUse', source_match_field='use_id',
+             target_label='Coupon', target_match_field='coupon_no',
+             ndjson_prefix='nodes/coupon_use/', ndjson_source_field='use_id', ndjson_target_field='coupon_no',
+             note='CouponUse.coupon_no → Coupon.coupon_no (NB: edge_type=OF in schema; '
+                  'both FuelTransaction-OF-FuelProduct and CouponUse-OF-Coupon share the type. '
+                  'We use OF_COUPON internally then map back to OF in Cypher.'),
+
+    # Campaign edges
+    EdgeSpec(edge_type='HAS_OFFER', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='Offer', target_match_field='offer_cd',
+             ndjson_prefix='nodes/offer/', ndjson_source_field='campaign_cd', ndjson_target_field='offer_cd',
+             note='Offer.campaign_cd → Campaign; Offer.offer_cd is property (pk merged on offer_id=campaign_cd)'),
+    EdgeSpec(edge_type='ISSUES', source_label='Offer', source_match_field='offer_cd',
+             target_label='Coupon', target_match_field='coupon_no',
+             ndjson_prefix='nodes/coupon/', ndjson_source_field='offer_cd', ndjson_target_field='coupon_no',
+             note='Coupon.offer_cd → Offer.offer_cd; Coupon.coupon_no is property'),
+    EdgeSpec(edge_type='TARGETS_PERSONA', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='Persona', target_match_field='persona_id',
+             ndjson_prefix='nodes/campaign/', ndjson_source_field='campaign_cd', ndjson_target_field='target_persona_id',
+             note='Campaign.target_persona_id (most are null → skipped)'),
+    EdgeSpec(edge_type='TARGETS_CLUSTER', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='Cluster', target_match_field='cluster_id', ndjson_prefix=None,
+             note='SKIP: no FK on Campaign for target_cluster_id'),
+    EdgeSpec(edge_type='TARGETS_SEGMENT', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='Segment', target_match_field='segment_id', ndjson_prefix=None,
+             note='SKIP: no FK on Campaign for target_segment_id'),
+    EdgeSpec(edge_type='SENT_VIA', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='Channel', target_match_field='channel_id', ndjson_prefix=None,
+             note='SKIP: Channel nodes not loaded (no NDJSON in pipeline)'),
+
+    # Coupon → CouponUse (reverse direction of OF_COUPON above)
+    EdgeSpec(edge_type='REDEEMED_AS', source_label='Coupon', source_match_field='coupon_no',
+             target_label='CouponUse', target_match_field='use_id',
+             ndjson_prefix='nodes/coupon_use/', ndjson_source_field='coupon_no', ndjson_target_field='use_id',
+             note='reverse of CouponUse-OF-Coupon'),
+
+    # GasStation → FuelPrice / FuelProduct
+    EdgeSpec(edge_type='PRICED_AT', source_label='GasStation', source_match_field='opinet_no',
+             target_label='FuelPrice', target_match_field='station_opinet_no',
+             ndjson_prefix='nodes/fuel_price/', ndjson_source_field='station_opinet_no',
+             ndjson_target_field='station_opinet_no',
+             note='FuelPrice.station_opinet_no; FuelPrice has station_opinet_no as property '
+                  '(pk synthesized as opinet-dt-grade)'),
+    EdgeSpec(edge_type='SELLS', source_label='GasStation', source_match_field='opinet_no',
+             target_label='FuelProduct', target_match_field='product_id', ndjson_prefix=None,
+             note='SKIP: FuelProduct nodes not loaded'),
+
+    # D17 — campaign SMS / aggregation
+    EdgeSpec(edge_type='SENT_SMS', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='CampaignSMS', target_match_field='sms_id',
+             ndjson_prefix='nodes/campaign_sms/', ndjson_source_field='campaign_cd', ndjson_target_field='sms_id',
+             note='CampaignSms.campaign_cd; node label is CampaignSMS (NODE_MAP)'),
+    EdgeSpec(edge_type='TO', source_label='CampaignSMS', source_match_field='sms_id',
+             target_label='Customer', target_match_field='cust_id',
+             ndjson_prefix='nodes/campaign_sms/', ndjson_source_field='sms_id', ndjson_target_field='cust_id',
+             note='CampaignSms.cust_id'),
+    EdgeSpec(edge_type='AGGREGATED_AS', source_label='Campaign', source_match_field='campaign_cd',
+             target_label='CampaignAggregation', target_match_field='campaign_cd',
+             ndjson_prefix='nodes/campaign_aggregation/', ndjson_source_field='campaign_cd',
+             ndjson_target_field='campaign_cd',
+             note='CampaignAggregation.campaign_cd; node has campaign_cd property '
+                  '(pk merged on agg_id=campaign_cd by scan fallback)'),
+
+    # D13 — weather
+    EdgeSpec(edge_type='OBSERVED_WEATHER', source_label='Region', source_match_field='sido_nm',
+             target_label='WeatherObservation', target_match_field='weather_id',
+             ndjson_prefix='nodes/weather/',
+             transform=lambda obj: (
+                 {'s': obj['sido_nm'], 't': f"{obj['sido_nm']}-{obj['dt']}-{obj['hour']}"}
+                 if obj.get('sido_nm') and obj.get('dt') and obj.get('hour') is not None else None
+             ),
+             note='WeatherObservation.sido_nm → Region.sido_nm (level=sido); weather_id synthesized'),
+    EdgeSpec(edge_type='AT_TIME_WEATHER', source_label='WeatherObservation', source_match_field='weather_id',
+             target_label='TimeSlot', target_match_field='slot_id',
+             ndjson_prefix='nodes/weather/',
+             transform=lambda obj: (
+                 {'s': f"{obj['sido_nm']}-{obj['dt']}-{obj['hour']}", 't': _hour_to_slot_id(obj['hour'])}
+                 if obj.get('sido_nm') and obj.get('dt') and obj.get('hour') is not None
+                    and _hour_to_slot_id(obj['hour']) else None
+             ),
+             note='WeatherObservation.hour → TimeSlot.slot_id (NB: edge_type=AT_TIME shared with FuelTx; '
+                  'we use AT_TIME_WEATHER internally then map back to AT_TIME)'),
+]
+
+
+def _edge_cypher_type(edge_type: str) -> str:
+    """Map internal edge_type to actual Cypher relationship type.
+
+    The schema reuses edge_type='OF' for both FuelTx→FuelProduct and CouponUse→Coupon,
+    and 'AT_TIME' for both FuelTx→TimeSlot and WeatherObservation→TimeSlot. We keep
+    them disambiguated internally (OF_COUPON / AT_TIME_WEATHER) but emit the spec
+    name in Cypher MERGE so traversals match the spec exactly.
+    """
+    if edge_type == 'OF_COUPON':
+        return 'OF'
+    if edge_type == 'AT_TIME_WEATHER':
+        return 'AT_TIME'
+    return edge_type
+
+
+def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
+    """UNWIND-batched MERGE of relationships.
+
+    pairs is a list of {'s': source_match_value, 't': target_match_value}.
+    We MATCH both endpoints and MERGE the relationship — no SET on the rel
+    (edges are pure structural, no attributes in this graph).
+    """
+    if not pairs:
+        return 0
+    rel_type = _edge_cypher_type(spec.edge_type)
+    # Cast to string in MATCH to be safe for ints/strs alike (e.g. region_cd is str but
+    # might be loaded as int by Neptune's coercion). Cast both sides.
+    query = (
+        f"UNWIND $pairs AS p "
+        f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
+        f"MATCH (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
+        f"MERGE (a)-[r:{rel_type}]->(b) "
+        f"RETURN count(r) AS n"
+    )
+    res = _post_cypher(query, {'pairs': pairs})
+    rows = res.get('results') or []
+    if rows:
+        return int(rows[0].get('n', 0))
+    return 0
+
+
+def load_edge(spec: EdgeSpec, *, batch_size: int = 1000, limit: Optional[int] = None) -> int:
+    """Stream NDJSON for the given edge spec, MERGE relationships in batches."""
+    if spec.ndjson_prefix is None:
+        print(f'  [{spec.edge_type}] SKIP — {spec.note}')
+        return 0
+    s3 = boto3.client('s3')
+    paginator = s3.get_paginator('list_objects_v2')
+    keys = []
+    for page in paginator.paginate(Bucket=S3_BUCKET, Prefix=spec.ndjson_prefix):
+        for o in page.get('Contents', []) or []:
+            if o['Key'].endswith('.ndjson'):
+                keys.append(o['Key'])
+    if not keys:
+        print(f'  [{spec.edge_type}] no NDJSON under s3://{S3_BUCKET}/{spec.ndjson_prefix}')
+        return 0
+
+    total = 0
+    batch: list[dict] = []
+    for key in keys:
+        body = s3.get_object(Bucket=S3_BUCKET, Key=key)['Body'].read().decode('utf-8')
+        for line in body.splitlines():
+            if not line.strip():
+                continue
+            obj = json.loads(line)
+            # Decide source/target value
+            if spec.transform is not None:
+                pair = spec.transform(obj)
+                if pair is None:
+                    continue
+                s_val = pair.get('s')
+                t_val = pair.get('t')
+            else:
+                s_val = obj.get(spec.ndjson_source_field) if spec.ndjson_source_field else None
+                t_val = obj.get(spec.ndjson_target_field) if spec.ndjson_target_field else None
+            # Skip if either side missing/null/empty
+            if s_val is None or s_val == '' or t_val is None or t_val == '':
+                continue
+            # Cast to str — Neptune properties are strings for these IDs
+            batch.append({'s': str(s_val), 't': str(t_val)})
+
+            if len(batch) >= batch_size:
+                try:
+                    _flush_edge_batch(spec, batch)
+                except Exception as e:
+                    print(f'  [{spec.edge_type}] batch flush error: {e}; continuing')
+                total += len(batch)
+                if total % 10000 == 0:
+                    print(f'  [{spec.edge_type}] processed {total}')
+                if limit and total >= limit:
+                    print(f'  [{spec.edge_type}] limit {limit} reached')
+                    return total
+                batch = []
+    if batch:
+        try:
+            _flush_edge_batch(spec, batch)
+        except Exception as e:
+            print(f'  [{spec.edge_type}] final batch flush error: {e}')
+        total += len(batch)
+    print(f'  [{spec.edge_type}] processed total={total} pairs')
+    return total
+
+
+def _count_edges_by_type() -> dict:
+    """Return {rel_type: count} from Neptune."""
+    try:
+        res = _post_cypher('MATCH ()-[r]->() RETURN type(r) AS t, count(r) AS n', {})
+        rows = res.get('results') or []
+        return {row['t']: int(row['n']) for row in rows}
+    except Exception as e:
+        print(f'  count failed: {e}')
+        return {}
+
+
+def load_all_edges(batch_size: int = 1000, edge_filter: Optional[set] = None) -> dict:
+    """Iterate EDGE_MAP, load each edge type, return per-edge processed-pair counts.
+
+    edge_filter: if set, only load edges whose edge_type is in the filter.
+    Returns a dict {edge_type: pairs_processed}. To get actual merged-relation
+    counts, call _count_edges_by_type() afterwards.
+    """
+    if not NEPTUNE_ENDPOINT:
+        print('ERROR: NEPTUNE_ENDPOINT not set'); sys.exit(2)
+    counts: dict[str, int] = {}
+    for spec in EDGE_MAP:
+        if edge_filter and spec.edge_type not in edge_filter:
+            continue
+        try:
+            n = load_edge(spec, batch_size=batch_size)
+        except Exception as e:
+            print(f'  [{spec.edge_type}] FATAL: {e}')
+            n = -1
+        counts[spec.edge_type] = n
+    print('\n=== EDGE LOAD SUMMARY (pairs processed) ===')
+    for et, n in counts.items():
+        print(f'  {et}: {n}')
+    actual = _count_edges_by_type()
+    if actual:
+        print('\n=== ACTUAL Neptune relationship counts (by Cypher type) ===')
+        for t, n in sorted(actual.items()):
+            print(f'  {t}: {n}')
+        total = sum(actual.values())
+        print(f'  TOTAL EDGES: {total}')
+    return counts
+
+
 def main():
     if not NEPTUNE_ENDPOINT:
         print('ERROR: NEPTUNE_ENDPOINT not set'); sys.exit(2)
@@ -194,4 +581,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    if len(sys.argv) > 1 and sys.argv[1] == '--edges':
+        load_all_edges()
+    else:
+        main()

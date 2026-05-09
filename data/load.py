@@ -53,8 +53,17 @@ def main():
     p.add_argument('--neptune', action='store_true', help='Bulk load to Neptune')
     p.add_argument('--opensearch', action='store_true', help='Index to OS')
     p.add_argument('--weather', action='store_true', help='Run KMA ETL')
+    p.add_argument('--edges', action='store_true',
+                   help='Load 31 relationship types via cypher_bulk.load_all_edges (assumes nodes already merged)')
     p.add_argument('--lookalike-target', type=int, default=50_000)
     args = p.parse_args()
+
+    if args.edges:
+        # Edges-only path: skip Phase 1-3 entirely (nodes already in Neptune)
+        from data.loader.cypher_bulk import load_all_edges
+        load_all_edges()
+        print('done (edges only)')
+        return
 
     s3 = boto3.client('s3')
     raw = Path(args.raw_dir)

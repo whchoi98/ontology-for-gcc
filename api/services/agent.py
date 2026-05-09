@@ -1,131 +1,200 @@
-# api/services/agent.py
-"""AgentCore-style tool-use orchestrator using Bedrock Converse API.
+"""TOOL_SPECS 단일 등록점 + dispatch + 트레이스 ring buffer.
 
-Streams 'phase / delta / tool_call / tool_result / guardrail / log / error / stop'
-events compatible with retail's SSE event vocabulary so the web frontend can
-render in real time.
-
-Tool callback signature: (name: str, args: dict) -> dict (any JSON-serializable).
+Plan 3 Task 3.4.1 / ADR 0006. Replaces the legacy mfg-template AgentRunner.
 """
 from __future__ import annotations
-import logging
-from typing import Callable, Generator
-from api.aws_clients import bedrock_runtime
-from api.config import settings
+from collections import deque
+from typing import Any, Optional
 
-log = logging.getLogger("gcc.agent")
+_TRACE_BUF: deque = deque(maxlen=200)
 
 
-class AgentRunner:
-    """Tool tuple shapes accepted:
-    - 3-tuple: (name, description, fn) — uses permissive input schema (legacy)
-    - 4-tuple: (name, description, fn, input_schema_dict) — passes the schema to Bedrock
+def trace_log(name: str, input: dict, output: Any, ms: int) -> None:
+    _TRACE_BUF.append({'tool': name, 'input': input, 'output': output, 'ms': ms})
+
+
+def get_trace_buf() -> list:
+    return list(_TRACE_BUF)
+
+
+TOOL_SPECS: list = [
+    {'toolSpec': {
+        'name': 'memory_recall',
+        'description': (
+            'AgentCore Memory의 long-term namespace에서 의미적으로 관련된 과거 대화·인사이트를 '
+            '회상한다. 마케터가 "지난번에 말씀드렸던..." 처럼 컨텍스트 회복할 때 사용.'
+        ),
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'query': {'type': 'string'},
+                'top_k': {'type': 'integer', 'default': 5},
+            },
+            'required': ['query'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'neptune_subgraph',
+        'description': (
+            '특정 노드 ID를 시드로 1-hop 또는 2-hop subgraph를 가져온다. '
+            '페르소나·시나리오에 적합한 cohort 필터(data_depth)를 자동 적용.'
+        ),
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'seed_ids': {'type': 'array', 'items': {'type': 'string'}},
+                'hops': {'type': 'integer', 'default': 1},
+            },
+            'required': ['seed_ids'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'semantic_search',
+        'description': '자연어 query로 의미 검색 (시나리오 A 재사용). 결과는 reranked 문서 리스트.',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'query': {'type': 'string'},
+                'size': {'type': 'integer', 'default': 10},
+            },
+            'required': ['query'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'kb_lookup',
+        'description': 'Bedrock Knowledge Base에서 정책·약관·매뉴얼 문서 조회.',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'query': {'type': 'string'},
+                'top_k': {'type': 'integer', 'default': 3},
+            },
+            'required': ['query'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'customer_lookup',
+        'description': '비식별고객번호로 단일 고객 노드 + 주요 행동 요약 (최근 거래·약관·앱 활동).',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {'cust_id': {'type': 'string'}},
+            'required': ['cust_id'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'cluster_predict',
+        'description': '고객 set의 클러스터 분포·각 클러스터의 행동 특징 요약 반환. 시나리오 E와 연계.',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'cust_ids': {'type': 'array', 'items': {'type': 'string'}},
+            },
+            'required': ['cust_ids'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'nearest_stations',
+        'description': '위경도·반경(km)을 받아 haversine k-NN으로 GSC + 경쟁사 주유소 반환.',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'lat': {'type': 'number'},
+                'lon': {'type': 'number'},
+                'radius_km': {'type': 'number', 'default': 5.0},
+                'k': {'type': 'integer', 'default': 10},
+            },
+            'required': ['lat', 'lon'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'campaign_simulator',
+        'description': (
+            '쿠폰 액수·타겟 cohort를 받아 예상 전환률·매출·ROI 시뮬레이션. '
+            'CampaignAggregation의 사전계산 KPI를 reference.'
+        ),
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'coupon_amt': {'type': 'integer'},
+                'target_segment_id': {'type': 'string'},
+                'duration_days': {'type': 'integer', 'default': 30},
+            },
+            'required': ['coupon_amt', 'target_segment_id'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'lookalike_expand',
+        'description': '시드 고객 set에서 임베딩 유사도 상위 X% 추출 (시나리오 F와 연계).',
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'seed_cust_ids': {'type': 'array', 'items': {'type': 'string'}},
+                'top_pct': {'type': 'number', 'default': 0.20},
+            },
+            'required': ['seed_cust_ids'],
+        }},
+    }},
+    {'toolSpec': {
+        'name': 'behavior_change_detect',
+        'description': (
+            '시계열 행동 변화 패턴 자동 검출 (디젤→고급휘발유 전환, PM+M 92 RON 혼유 등). '
+            'PDF 3페이지의 시그니처 인사이트.'
+        ),
+        'inputSchema': {'json': {
+            'type': 'object',
+            'properties': {
+                'pattern': {
+                    'type': 'string',
+                    'enum': ['fuel_grade_transition', 'pm_m_mixing', 'app_signup_after_install'],
+                },
+                'cohort_filter': {
+                    'type': 'array',
+                    'items': {'type': 'string'},
+                    'description': 'data_depth filter (e.g. ["deep-history"])',
+                },
+            },
+            'required': ['pattern'],
+        }},
+    }},
+]
+assert len({t['toolSpec']['name'] for t in TOOL_SPECS}) == 10, '10 unique tools required'
+
+
+def dispatch(
+    name: str,
+    input: dict,
+    persona_id: str,
+    session_id: str,
+    cust_id: Optional[str],
+) -> dict:
+    """Route a single tool call to the matching `tools/<name>.py` module.
+
+    Records every call into ``_TRACE_BUF`` (with ms duration) and returns the
+    tool's output dict. Unknown tool names produce ``{'error': ...}``.
     """
-    def __init__(self, tools: list[tuple] | None = None,
-                 system: str = "You are a Korean Hi-Tech GCC copilot.",
-                 max_rounds: int = 8):
-        self.tools = tools or []
-        self.system = system
-        self.max_rounds = max_rounds
-
-    def _tool_specs(self) -> list[dict]:
-        out: list[dict] = []
-        for tool in self.tools:
-            if len(tool) >= 4 and isinstance(tool[3], dict):
-                schema = tool[3]
-            else:
-                schema = {"type": "object", "properties": {}, "additionalProperties": True}
-            out.append({
-                "toolSpec": {
-                    "name": tool[0],
-                    "description": tool[1],
-                    "inputSchema": {"json": schema},
-                }
-            })
-        return out
-
-    def run_stream(self, user_msg: str, session_id: str) -> Generator[dict, None, None]:
-        # Phase 1 — input guardrail (visibility event for UI; actual Guardrails call
-        # is wired in chat router via apply_guardrail when configured).
-        yield {"type": "guardrail", "name": "input_check", "result": "passed",
-                "content": "입력 가드레일 통과 (IP·경쟁사·규제·유해화학 4토픽 검사)"}
-        yield {"type": "phase", "phase": "thinking"}
-
-        messages = [{"role": "user", "content": [{"text": user_msg}]}]
-        log.info("agent.run_stream session=%s tools=%d msg_len=%d", session_id, len(self.tools), len(user_msg))
-
-        for round_idx in range(self.max_rounds):
-            req = {
-                "modelId": settings.sonnet_model,
-                "messages": messages,
-                "system": [{"text": self.system}],
-                "inferenceConfig": {"maxTokens": 2048, "temperature": 0.4},
-            }
-            if self.tools:
-                req["toolConfig"] = {"tools": self._tool_specs()}
-
-            try:
-                resp = bedrock_runtime().converse(**req)
-            except Exception as e:
-                log.error("Bedrock converse failed (round %d, model=%s): %s",
-                           round_idx, settings.sonnet_model, e, exc_info=True)
-                yield {"type": "error",
-                        "name": "bedrock",
-                        "result": {"model": settings.sonnet_model, "error": type(e).__name__, "message": str(e)[:300]},
-                        "content": f"Bedrock 호출 실패 ({type(e).__name__}): {str(e)[:200]}"}
-                yield {"type": "delta",
-                        "text": f"⚠️ 죄송합니다. Bedrock 모델 호출에 실패했습니다.\n\n"
-                                f"- 모델: `{settings.sonnet_model}`\n"
-                                f"- 오류: {type(e).__name__}\n"
-                                f"- 메시지: {str(e)[:200]}\n\n"
-                                f"관리자가 Bedrock 권한·모델 활성화·CRIP 가용성을 점검 중입니다."}
-                yield {"type": "stop", "reason": "bedrock_error"}
-                return
-
-            msg = resp["output"]["message"]
-            content = msg.get("content", [])
-            tool_uses = [c["toolUse"] for c in content if "toolUse" in c]
-            text_blocks = [c["text"] for c in content if "text" in c]
-            for t in text_blocks:
-                yield {"type": "delta", "text": t}
-            messages.append(msg)
-            stop_reason = resp.get("stopReason")
-            log.info("agent round=%d stop=%s text_blocks=%d tool_uses=%d",
-                      round_idx, stop_reason, len(text_blocks), len(tool_uses))
-
-            if stop_reason == "end_turn":
-                # Phase — output guardrail (visibility event for UI)
-                yield {"type": "guardrail", "name": "output_check", "result": "passed",
-                        "content": "응답 가드레일 통과"}
-                yield {"type": "stop", "reason": "end_turn"}
-                return
-
-            if tool_uses:
-                yield {"type": "phase", "phase": "tool_use"}
-                tool_results = []
-                for tu in tool_uses:
-                    name = tu["name"]
-                    args = tu.get("input", {})
-                    tool_id = tu["toolUseId"]
-                    yield {"type": "tool_call", "name": name, "args": args}
-                    # Lookup fn — tool tuples may be 3 or 4 elements
-                    fn = next((t[2] for t in self.tools if t[0] == name), None)
-                    if not fn:
-                        result: dict = {"error": f"unknown tool {name}"}
-                    else:
-                        try:
-                            result = fn(name, args)
-                        except Exception as e:
-                            log.warning("tool %s raised: %s", name, e)
-                            result = {"error": str(e)[:300]}
-                    yield {"type": "tool_result", "name": name, "result": result}
-                    tool_results.append({"toolResult": {"toolUseId": tool_id, "content": [{"json": result}]}})
-                messages.append({"role": "user", "content": tool_results})
-                continue
-
-            # No tool_use and not end_turn — break
-            break
-
-        yield {"type": "guardrail", "name": "output_check", "result": "passed",
-                "content": "응답 가드레일 통과"}
-        yield {"type": "stop", "reason": "max_rounds"}
+    import time
+    t0 = time.monotonic()
+    from api.services.tools import (
+        memory_recall, neptune_subgraph, semantic_search, kb_lookup,
+        customer_lookup, cluster_predict, nearest_stations,
+        campaign_simulator, lookalike_expand, behavior_change_detect,
+    )
+    routes = {
+        'memory_recall': memory_recall.run,
+        'neptune_subgraph': neptune_subgraph.run,
+        'semantic_search': semantic_search.run,
+        'kb_lookup': kb_lookup.run,
+        'customer_lookup': customer_lookup.run,
+        'cluster_predict': cluster_predict.run,
+        'nearest_stations': nearest_stations.run,
+        'campaign_simulator': campaign_simulator.run,
+        'lookalike_expand': lookalike_expand.run,
+        'behavior_change_detect': behavior_change_detect.run,
+    }
+    fn = routes.get(name)
+    if not fn:
+        return {'error': f'unknown tool: {name}'}
+    out = fn(input, persona_id=persona_id, session_id=session_id, cust_id=cust_id)
+    ms = int((time.monotonic() - t0) * 1000)
+    trace_log(name, input, out, ms)
+    return out

@@ -23,7 +23,9 @@ class ConverseRequest(BaseModel):
     tool_specs: Optional[List[dict]] = None
     model_id: Optional[str] = None
     temperature: float = 0.5
-    max_tokens: int = 2048
+    # 한국어 권고/차트 분석 + 후속 단계까지 포함하면 2K로는 자주 잘림. Sonnet 4.6은
+    # 64K까지 지원하므로 안전하게 8K로 상향. 짧은 응답은 어차피 그 이전에 자연 종료.
+    max_tokens: int = 8192
 
 
 def _kwargs(req: ConverseRequest) -> dict[str, Any]:
@@ -51,19 +53,25 @@ def converse_stream(req: ConverseRequest):
 
 
 def embed(texts: list[str]) -> list[list[float]]:
-    """Cohere embed-v4 (1024-dim). Returns list of float vectors."""
+    """Cohere embed-v4 (1024-dim). Returns list of float vectors.
+
+    Response shape varies between Cohere versions and inference profiles —
+    handle dict before list to avoid KeyError(0) on dict-style payloads.
+    """
     body = json.dumps({'texts': texts, 'input_type': 'search_document'})
     resp = _client().invoke_model(modelId=settings.BEDROCK_EMBED_MODEL_ID, body=body)
     payload = json.loads(resp['body'].read())
     embeddings = payload.get('embeddings', [])
-    # Cohere v4 nominal shape: [{'float': [...]}, ...]
-    if embeddings and isinstance(embeddings[0], dict) and 'float' in embeddings[0]:
+    # Cohere v4 dict shape: {'float': [[...], [...]]}
+    if isinstance(embeddings, dict):
+        return embeddings.get('float', embeddings.get('embeddings', []))
+    # Cohere v3 list-of-dicts: [{'float': [...]}, ...]
+    if isinstance(embeddings, list) and embeddings and isinstance(embeddings[0], dict) and 'float' in embeddings[0]:
         return [e['float'] for e in embeddings]
-    # Cohere v3 / older shape: {'float': [[...], [...]]}
-    if isinstance(embeddings, dict) and 'float' in embeddings:
-        return embeddings['float']
-    # Fallback: list of lists already
-    return embeddings
+    # Plain list of lists
+    if isinstance(embeddings, list):
+        return embeddings
+    return []
 
 
 def rerank(query: str, docs: list[dict], top_k: int = 10) -> list[dict]:

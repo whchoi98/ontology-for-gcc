@@ -1,1 +1,23 @@
-{"project":"ontology-for-gcc","evaluatedAt":"2026-05-09T00:00:00Z","score":7.5,"grade":"B","dimensions":{"safety":8.0,"completeness":7.0,"design":7.5},"note":"Plan 5 baseline — 14 시나리오 + 25 클래스 + 5 페르소나 + 3-tier data + ops/meta/objects 풍부화 완료. nightly harness-eval:full 호출은 Claude Skill 외부 트리거 필요."}
+{
+  "timestamp": "2026-05-11T08:14:00Z",
+  "mode": "full",
+  "scores": {
+    "overall": 8.9,
+    "grade": "A"
+  },
+  "dimensions": {
+    "correctness": 10,
+    "safety": 9,
+    "completeness": 8,
+    "consistency": 10,
+    "actionability": 8,
+    "testability": 8,
+    "costEfficiency": 9,
+    "contractBasedTesting": 8,
+    "agentCommunication": 9,
+    "contextManagement": 9,
+    "feedbackLoopMaturity": 9,
+    "evolvability": 9
+  },
+  "id": "eval-2026-05-11-002"
+}

@@ -1,21 +1,11 @@
-export type Persona = "buyer" | "engineer" | "quality" | "scm" | "plant";
-export type Division = "HA" | "HE" | "VS" | "INNOTEK" | "MAGNA";
-
-export interface Component {
-  id: string; name: string; category: string;
-  standards: string[]; substances: string[];
-}
-
-export interface Supplier {
-  id: string; name: string; region: string;
-  rfm_recency: number; rfm_frequency: number; rfm_monetary: number;
-}
-
-export interface TradeLane {
-  id: string; origin_region: string; dest_region: string;
-  mode: "SEA" | "AIR" | "RAIL" | "ROAD";
-  transit_days: number; regulations: string[];
-}
+// GCC M&M본부 5 부서 페르소나 (PERSONA_REGISTRY SSOT와 일치).
+// PersonaContext / PersonaSwitch가 이 타입을 참조한다.
+export type Persona =
+  | 'marketing'
+  | 'strategy'
+  | 'data-ai'
+  | 'crm'
+  | 'retail-ops';
 
 export interface CytoscapeGraph {
   nodes: { data: { id: string; label?: string; [k: string]: unknown } }[];

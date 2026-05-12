@@ -102,29 +102,40 @@ export function CytoscapeView({ graph, anchorIds = [], onNodeTap, height = 480 }
             "text-rotation": "autorotate",
           },
         },
-        // Per-label color coding (BOM hierarchy + Supply + Standards + Quality + ESG)
-        { selector: 'node[label = "Product"]',          style: { "background-color": "#60a5fa", shape: "round-rectangle" } },
-        { selector: 'node[label = "Module"]',           style: { "background-color": "#34d399", shape: "round-rectangle" } },
-        { selector: 'node[label = "Component"]',        style: { "background-color": "#fbbf24", shape: "ellipse" } },
-        { selector: 'node[label = "RawMaterial"]',      style: { "background-color": "#a78bfa", shape: "ellipse" } },
-        { selector: 'node[label = "Manufacturer"]',     style: { "background-color": "#f472b6", shape: "hexagon" } },
-        { selector: 'node[label = "Supplier"]',         style: { "background-color": "#fb923c", shape: "diamond" } },
-        { selector: 'node[label = "SubSupplier"]',      style: { "background-color": "#94a3b8", shape: "diamond" } },
-        { selector: 'node[label = "CustomerAccount"]',  style: { "background-color": "#22d3ee", shape: "rectangle" } },
-        { selector: 'node[label = "Plant"]',            style: { "background-color": "#0ea5e9", shape: "rectangle" } },
-        { selector: 'node[label = "Region"]',           style: { "background-color": "#38bdf8", shape: "round-rectangle" } },
-        { selector: 'node[label = "TradeLane"]',        style: { "background-color": "#14b8a6", shape: "octagon" } },
-        { selector: 'node[label = "Standard"]',         style: { "background-color": "#facc15", shape: "tag" } },
-        { selector: 'node[label = "Certification"]',    style: { "background-color": "#84cc16", shape: "tag" } },
-        { selector: 'node[label = "Regulation"]',       style: { "background-color": "#f87171", shape: "pentagon" } },
-        { selector: 'node[label = "Substance"]',        style: { "background-color": "#c084fc", shape: "ellipse" } },
-        { selector: 'node[label = "QualityIncident"]',  style: { "background-color": "#fca5a5", shape: "diamond" } },
-        { selector: 'node[label = "EightDReport"]',     style: { "background-color": "#fdba74", shape: "round-rectangle" } },
-        { selector: 'node[label = "RootCause"]',        style: { "background-color": "#d9f99d", shape: "triangle" } },
-        { selector: 'node[label = "Telemetry"]',        style: { "background-color": "#6ee7b7", shape: "ellipse" } },
-        { selector: 'node[label = "MaintenanceEvent"]', style: { "background-color": "#93c5fd", shape: "round-rectangle" } },
-        { selector: 'node[label = "ESGIndicator"]',     style: { "background-color": "#86efac", shape: "ellipse" } },
-        { selector: 'node[label = "CarbonScope"]',      style: { "background-color": "#a5b4fc", shape: "octagon" } },
+        // ── GCC 25 클래스 — 5 도메인 그룹 색상 패밀리 ───────────────
+        // 고객·회원 (5) — 오렌지/앰버
+        { selector: 'node[label = "Customer"]',            style: { "background-color": "#fb923c", shape: "round-rectangle" } },
+        { selector: 'node[label = "Persona"]',             style: { "background-color": "#f97316", shape: "hexagon" } },
+        { selector: 'node[label = "Cluster"]',             style: { "background-color": "#fdba74", shape: "ellipse" } },
+        { selector: 'node[label = "Segment"]',             style: { "background-color": "#fcd34d", shape: "tag" } },
+        { selector: 'node[label = "Member"]',              style: { "background-color": "#fbbf24", shape: "round-rectangle" } },
+        // 행동·거래 (5) — 블루/시안
+        { selector: 'node[label = "FuelTransaction"]',     style: { "background-color": "#38bdf8", shape: "rectangle" } },
+        { selector: 'node[label = "AppEvent"]',            style: { "background-color": "#60a5fa", shape: "ellipse" } },
+        { selector: 'node[label = "Survey"]',              style: { "background-color": "#0ea5e9", shape: "round-rectangle" } },
+        { selector: 'node[label = "SurveyResponse"]',      style: { "background-color": "#0ea5e9", shape: "round-rectangle" } },
+        { selector: 'node[label = "CouponUse"]',           style: { "background-color": "#22d3ee", shape: "diamond" } },
+        { selector: 'node[label = "PaymentMethod"]',       style: { "background-color": "#06b6d4", shape: "hexagon" } },
+        // 마케팅 (6) — 핑크/퍼플
+        { selector: 'node[label = "Campaign"]',            style: { "background-color": "#d946ef", shape: "round-rectangle" } },
+        { selector: 'node[label = "Coupon"]',              style: { "background-color": "#f472b6", shape: "tag" } },
+        { selector: 'node[label = "Offer"]',               style: { "background-color": "#a78bfa", shape: "tag" } },
+        { selector: 'node[label = "Channel"]',             style: { "background-color": "#c084fc", shape: "octagon" } },
+        { selector: 'node[label = "CampaignSMS"]',         style: { "background-color": "#ec4899", shape: "round-rectangle" } },
+        { selector: 'node[label = "CampaignSms"]',         style: { "background-color": "#ec4899", shape: "round-rectangle" } },
+        { selector: 'node[label = "CampaignAggregation"]', style: { "background-color": "#818cf8", shape: "octagon" } },
+        // 운영·상품 (4) — 그린/시안 (틸 패밀리)
+        { selector: 'node[label = "FuelProduct"]',         style: { "background-color": "#34d399", shape: "rectangle" } },
+        { selector: 'node[label = "GasStation"]',          style: { "background-color": "#10b981", shape: "round-rectangle" } },
+        { selector: 'node[label = "FuelPrice"]',           style: { "background-color": "#14b8a6", shape: "ellipse" } },
+        { selector: 'node[label = "Region"]',              style: { "background-color": "#2dd4bf", shape: "hexagon" } },
+        // 컴플·외부 (4) — 옐로/라임/앰버
+        { selector: 'node[label = "Term"]',                style: { "background-color": "#fde047", shape: "pentagon" } },
+        { selector: 'node[label = "TermAgreement"]',       style: { "background-color": "#facc15", shape: "tag" } },
+        { selector: 'node[label = "ConsumptionIndex"]',    style: { "background-color": "#f59e0b", shape: "round-rectangle" } },
+        { selector: 'node[label = "WeatherObservation"]',  style: { "background-color": "#84cc16", shape: "ellipse" } },
+        // 시간 (1) — 회색
+        { selector: 'node[label = "TimeSlot"]',            style: { "background-color": "#9ca3af", shape: "ellipse" } },
         // Anchor highlighting (the user-selected node from list selection)
         {
           selector: "node.anchor",
@@ -250,15 +261,35 @@ export default function CytoscapeViewSimple({ elements }: { elements: any[] }) {
       cy = cytoscape({
         container: ref.current,
         elements,
+        // Dark-mode styling — text colors switched to light tokens so the
+        // labels are readable against the bg-ink-950 container.
         style: [
           { selector: 'node', style: {
-              'background-color': (n: any) => GROUP_COLORS[n.data('group')] ?? '#999',
-              label: 'data(label)', 'font-size': 11,
+              'background-color': (n: any) => GROUP_COLORS[n.data('group')] ?? '#64748b',
+              label: 'data(label)',
+              'font-size': 11,
+              color: '#e2e8f0',
+              'text-valign': 'bottom',
+              'text-margin-y': 4,
+              'text-outline-color': '#0f172a',
+              'text-outline-width': 2,
+              width: 28,
+              height: 28,
+              'border-width': 1.5,
+              'border-color': '#1e293b',
           } as any },
           { selector: 'edge', style: {
-              width: 1, 'line-color': '#bbb', 'curve-style': 'bezier',
-              'target-arrow-shape': 'triangle', 'target-arrow-color': '#bbb',
-              label: 'data(edge)', 'font-size': 9, color: '#666',
+              width: 1,
+              'line-color': '#475569',
+              'curve-style': 'bezier',
+              'target-arrow-shape': 'triangle',
+              'target-arrow-color': '#475569',
+              label: 'data(edge)',
+              'font-size': 9,
+              color: '#94a3b8',
+              'text-rotation': 'autorotate',
+              'text-outline-color': '#0f172a',
+              'text-outline-width': 1.5,
           } as any },
         ],
         layout: { name: 'cose', animate: false },
@@ -266,5 +297,5 @@ export default function CytoscapeViewSimple({ elements }: { elements: any[] }) {
     })();
     return () => { cy?.destroy(); };
   }, [elements]);
-  return <div ref={ref} className='w-full h-[600px] border rounded' />;
+  return <div ref={ref} className='w-full h-[600px] border border-ink-700 rounded-lg bg-ink-950' />;
 }

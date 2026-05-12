@@ -1,7 +1,7 @@
 "use client";
 
-// PersonaContext — global "active persona" for the gcc demo.
-// 5 fixed personas (buyer / engineer / quality / scm / plant).
+// PersonaContext — global "active persona" for the GCC demo.
+// 5 부서 (마케팅/고객전략/데이터·AI/CRM·회원사업/리테일영업).
 // PersonaSwitch in the topbar writes; scenario pages read.
 // Backed by localStorage so choice survives reload.
 
@@ -9,22 +9,22 @@ import { createContext, useContext, useEffect, useState } from "react";
 import type { Persona } from "./types";
 
 const STORAGE_KEY = "ontology-gcc.active-persona";
+const VALID: Persona[] = ["marketing", "strategy", "data-ai", "crm", "retail-ops"];
 
 interface Ctx {
   active: Persona;
   setActive: (p: Persona) => void;
 }
 
-const PersonaContext = createContext<Ctx>({ active: "buyer", setActive: () => {} });
+const PersonaContext = createContext<Ctx>({ active: "marketing", setActive: () => {} });
 
 export function PersonaProvider({ children }: { children: React.ReactNode }) {
-  const [active, setActiveState] = useState<Persona>("buyer");
+  const [active, setActiveState] = useState<Persona>("marketing");
 
-  // Hydrate from localStorage on mount (client-only — SSR-safe).
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw && ["buyer","engineer","quality","scm","plant"].includes(raw)) {
+      if (raw && (VALID as string[]).includes(raw)) {
         setActiveState(raw as Persona);
       }
     } catch {

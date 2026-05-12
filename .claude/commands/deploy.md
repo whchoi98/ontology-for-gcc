@@ -41,13 +41,83 @@ export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output te
    docker push $AWS_ACCOUNT_ID.dkr.ecr.ap-northeast-2.amazonaws.com/ontology-gcc-dev-web:latest
    ```
 
-5. **Register SHA-pinned task definitions** (avoids ECR `:latest` cache):
-   - Describe current task definition.
-   - Replace the container image with the SHA tag.
-   - Register a new revision.
-   - Update the service to use the new revision with `--force-new-deployment`.
+5. **Register SHA-pinned task definitions** (avoids ECR `:latest` cache).
 
-6. **Wait for rollout** to reach `COMPLETED` for both services.
+   Repeat the block below with `SERVICE=api`, then `SERVICE=web` (or run both
+   in parallel — see step 5e).
+
+   ```bash
+   SERVICE=api
+   CLUSTER=ontology-gcc-dev-cluster
+   REGION=ap-northeast-2
+   IMAGE="$AWS_ACCOUNT_ID.dkr.ecr.${REGION}.amazonaws.com/ontology-gcc-dev-${SERVICE}:${TAG}"
+
+   TD_ARN="$(aws ecs describe-services \
+     --cluster "$CLUSTER" --services "ontology-gcc-dev-${SERVICE}" \
+     --region "$REGION" \
+     --query 'services[0].taskDefinition' --output text)"
+
+   # del(): register-task-definition rejects these read-only fields if echoed back.
+   aws ecs describe-task-definition \
+     --task-definition "$TD_ARN" \
+     --region "$REGION" \
+     --query 'taskDefinition' \
+   | jq --arg img "$IMAGE" --arg name "$SERVICE" '
+       .containerDefinitions = (.containerDefinitions | map(
+         if .name == $name then .image = $img else . end
+       ))
+       | del(.taskDefinitionArn, .revision, .status, .requiresAttributes,
+             .compatibilities, .registeredAt, .registeredBy)
+     ' > /tmp/td-${SERVICE}-${TAG}.json
+
+   NEW_TD_ARN="$(aws ecs register-task-definition \
+     --cli-input-json file:///tmp/td-${SERVICE}-${TAG}.json \
+     --region "$REGION" \
+     --query 'taskDefinition.taskDefinitionArn' --output text)"
+
+   aws ecs update-service \
+     --cluster "$CLUSTER" \
+     --service "ontology-gcc-dev-${SERVICE}" \
+     --task-definition "$NEW_TD_ARN" \
+     --force-new-deployment \
+     --region "$REGION" \
+     --query 'service.deployments[*].{state:rolloutState,desired:desiredCount,running:runningCount}' \
+     --output table
+   ```
+
+   **5e. (Optional) Parallel api + web**: both services are independent — wrap
+   the above block in a function and background it:
+
+   ```bash
+   register_and_update() { SERVICE="$1"; <위 블록 본문>; }
+   register_and_update api &
+   register_and_update web &
+   wait
+   ```
+
+6. **Wait for rollout** to reach `COMPLETED` for both services. The loop
+   captures `describe-services` once per iteration (ECS API is throttled) and
+   waits api + web concurrently:
+
+   ```bash
+   wait_rollout() {
+     local svc="$1"
+     while :; do
+       out=$(aws ecs describe-services \
+         --cluster "$CLUSTER" --services "ontology-gcc-dev-${svc}" \
+         --region "$REGION" \
+         --query 'services[0].deployments[?status==`PRIMARY`].{state:rolloutState,running:runningCount}' \
+         --output text)
+       echo "[$svc] $out"
+       echo "$out" | grep -q COMPLETED && break
+       sleep 15
+     done
+   }
+   wait_rollout api &
+   wait_rollout web &
+   wait
+   echo "==> Both services COMPLETED"
+   ```
 
 7. **Verify** with the smoke checks from `/test-all`.
 

@@ -7,7 +7,11 @@ from pydantic import BaseModel
 class Settings(BaseModel):
     aws_region: str = os.environ.get("AWS_REGION", "ap-northeast-2")
     neptune_endpoint: str = os.environ.get("NEPTUNE_ENDPOINT", "")
-    opensearch_host: str = os.environ.get("OPENSEARCH_HOST", "")
+    # ECS task def는 OPENSEARCH_ENDPOINT 이름을 사용 — 두 변수 모두 받아 fallback.
+    opensearch_host: str = (
+        os.environ.get("OPENSEARCH_HOST", "")
+        or os.environ.get("OPENSEARCH_ENDPOINT", "")
+    )
     opensearch_index: str = os.environ.get("OPENSEARCH_INDEX", "gcc-search")
     aurora_secret_arn: str = os.environ.get("AURORA_SECRET_ARN", "")
     bedrock_guardrail_id: str = os.environ.get("BEDROCK_GUARDRAIL_ID", "356xcbgyqcpq")

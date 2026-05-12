@@ -19,7 +19,7 @@ def test_search_post_returns_results():
         'results': [{'id': 'X', 'text': 'x'}],
         'subgraph': {'nodes': [], 'edges': []},
     }
-    with patch('api.routers.search.search', return_value=fake):
+    with patch('api.routers.search._run_search', return_value=fake):
         r = client.post(
             '/api/search',
             json={'query': '고급휘발유 충성', 'persona_id': 'marketing'},
@@ -35,7 +35,7 @@ def test_search_stream_yields_phases():
         'results': [{'id': 'X'}],
         'subgraph': {'nodes': [], 'edges': []},
     }
-    with patch('api.routers.search.search', return_value=fake):
+    with patch('api.routers.search._run_search', return_value=fake):
         with client.stream(
             'POST',
             '/api/search/stream',

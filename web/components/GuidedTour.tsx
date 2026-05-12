@@ -1,14 +1,14 @@
 'use client';
 
-// 60-min guided tour — 12 scenarios A-L.
+// 60-min guided tour — GCC 14 scenarios A-N + 메타.
 // Triggers on first visit (localStorage gate) and via topbar button.
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   Play, X, ChevronLeft, ChevronRight, Search, MessageSquare, BarChart3,
-  FileSearch, ShieldCheck, ArrowLeftRight, Wallet, Truck, TrendingUp,
-  ClipboardList, Leaf, Activity, BookOpen, Map,
+  Users, Layers, GitMerge, Megaphone, Map, ShieldCheck, Radio,
+  AlertTriangle, CreditCard, Compass, Cloud, GitBranch, Sparkles,
 } from 'lucide-react';
 
 const STORAGE_KEY = 'ontology-gcc.tour-seen';
@@ -26,129 +26,147 @@ type Step = {
 const STEPS: Step[] = [
   {
     badge: '시작',
-    ko: '60분 가이드 투어',
+    ko: '60분 가이드 투어 — GS Caltex M&M본부',
     href: '/',
-    icon: Map,
-    pitch: 'AMZN Tech Hi-Tech GCC 온톨로지 데모입니다 — Bedrock + AgentCore + Neptune 위에 12개 시나리오(A-L)가 올라갑니다. 5개 페르소나(Buyer·Engineer·Quality·SCM·Plant)가 동일한 그래프를 다른 시점에서 봅니다.',
-    try_it: '우상단 페르소나 버튼으로 역할을 선택해두면 모든 시나리오가 해당 페르소나 시점을 반영합니다.',
-    tech: 'Next.js 14 + FastAPI + Bedrock Sonnet 4.6 + AgentCore Memory/Code Interpreter + Neptune + OpenSearch Serverless',
+    icon: Sparkles,
+    pitch: 'GS Caltex 마케팅·고객전략·데이터·AI·CRM·리테일영업 5 부서 페르소나가 동일한 25 클래스 고객 온톨로지를 각자 KPI 시점으로 보는 데모입니다. 14개 시나리오 A-N + 객체 탐색 + 메타 + 운영 콘솔이 좌측 사이드바에 있습니다.',
+    try_it: '우상단 페르소나 버튼으로 부서를 선택하면 사이드바 정렬·홈 카드 하이라이트·챗 어조·KPI 우선순위가 모두 그 부서 시점으로 전환됩니다.',
+    tech: 'Next.js 14 + FastAPI + Bedrock Sonnet 4.6 + AgentCore Memory/Code Interpreter + Neptune + OpenSearch Serverless · SSE 14/14 시나리오 streaming',
   },
   {
     badge: 'A',
-    ko: '의미 검색',
+    ko: '하이브리드 검색',
     href: '/search',
     icon: Search,
-    pitch: '자연어 질의를 BM25(한국어/영문) + Cohere KNN 하이브리드로 인덱싱하고 Bedrock Reranker로 정렬합니다. 결과는 Cytoscape 1-hop 그래프로 실시간 시각화됩니다.',
-    try_it: '"차량용 -40°C 보장 BGA 패키지" 검색 — 우측 그래프에서 공급사·표준·규제 간 연결을 확인하세요. Cytoscape 그래프 노드 클릭 시 세부 부품 트리가 자동 확장됩니다.',
-    tech: 'OpenSearch Serverless · Cohere embed-v4 · cohere.rerank-v3 · Neptune openCypher 1-hop',
+    pitch: '자연어 질의를 OpenSearch BM25(Nori 한국어) + Cohere embed-v4 KNN 하이브리드로 인덱싱하고 Cohere rerank-v3로 정렬합니다. 50,517 Customer + GasStation + Campaign 노드 대상.',
+    try_it: '"서울 강남 30대 PLCC 보유 충성 고객" 검색 — Cytoscape 1-hop 그래프와 BM25/KNN 점수 차이를 함께 확인하세요.',
+    tech: 'OpenSearch Serverless (Nori + Cohere embed-v4 1024d) · cross-region rerank-v3 · Neptune openCypher 1-hop',
   },
   {
     badge: 'B',
-    ko: '대화형 에이전트',
+    ko: '페르소나 챗봇',
     href: '/chat',
     icon: MessageSquare,
-    pitch: 'Bedrock Converse 다회차 + AgentCore Memory short/long-term + 4개 tool(memory_recall, neptune_subgraph, semantic_search, kb_lookup) + Guardrails 4-topic 스크럽 — 도구 호출이 SSE 스트리밍으로 실시간 표시됩니다.',
-    try_it: '"COMP-CAP-2023 부품의 REACH SVHC 위반 가능성이 있나?" — Memory 패널에서 이전 세션 기억 재활성화와 Guardrail 발동 로그를 확인하세요.',
-    tech: 'Bedrock Converse Stream · AgentCore Memory · Bedrock Guardrails · 4 tool definitions',
+    pitch: 'Bedrock Converse 다회차 + AgentCore Memory short/long-term + 10개 도구 (nearest_stations, neptune_subgraph, semantic_search, customer_lookup, fuel_grade_lookup, lookalike_expand, campaign_simulator 등) + Guardrails 4-topic 스크럽.',
+    try_it: '"서울 권역 GSC 셀프 주유소 상위 5곳" 또는 "S0148 주유소 인근 5km 경쟁사" 입력 — 도구 호출이 SSE delta로 실시간 표시되고 Memory 패널에 turn이 기록됩니다.',
+    tech: 'Bedrock Converse Stream · AgentCore Memory namespace=gcc · 10 tool specs · Guardrails',
   },
   {
     badge: 'C',
-    ko: '인사이트',
+    ko: '인사이트 카드',
     href: '/insights',
     icon: BarChart3,
-    pitch: 'Neptune 집계 쿼리 → Sonnet 4.6 한국어 답변 (토큰 스트리밍) → AgentCore Code Interpreter 샌드박스에서 차트 렌더링.',
-    try_it: '"지난 6개월간 납기 지연이 가장 많은 협력사 Top 5는?" — 답변이 흐른 뒤 차트가 도착합니다.',
-    tech: 'Neptune openCypher · Bedrock Converse Stream · AgentCore Code Interpreter Firecracker',
+    pitch: 'Neptune 월별 유종 거래 집계 → AgentCore Code Interpreter Firecracker microVM에서 matplotlib + NanumGothic 차트 → Sonnet 4.6 한국어 5섹션 요약 (token streaming).',
+    try_it: '"인사이트 생성" 클릭 — 5-phase chip이 흐르고 차트와 요약이 SSE로 실시간 도착합니다. 부서를 바꾸면 동일 데이터에 다른 시점이 적용됩니다.',
+    tech: 'Neptune openCypher · AgentCore Code Interpreter · Bedrock Converse Stream · NanumGothic 한글 폰트',
   },
   {
     badge: 'D',
-    ko: '스펙 매치',
-    href: '/spec',
-    icon: FileSearch,
-    pitch: '자연어 요구사항을 그래프 워크 + 유사도 점수로 후보 부품 목록과 표준 커버리지로 매핑합니다.',
-    try_it: '"동작 온도 -40~125°C, AEC-Q100 Grade 0, SOP-8 패키지" — 후보 부품과 규격 그래프를 확인하세요.',
-    tech: 'Neptune graph traversal · Cohere embed · spec similarity scoring',
+    ko: '페르소나 매칭',
+    href: '/persona-match',
+    icon: Users,
+    pitch: '5 부서 KPI 가중치 (마케팅 ROAS · CRM PLCC · 리테일 station_volume 등) × Customer 속성을 곱해 best_persona를 산출. margin이 큰 고객일수록 부서별 차별화 명확.',
+    try_it: 'cust_id "1,2,3,4,5,460,401,288,471,342" 입력 — deep-history vs coupon-only 코호트 혼합 매칭. score bar + margin chip으로 시각 비교.',
+    tech: 'Neptune Customer + FuelTransaction 집계 · PERSONA_REGISTRY 5 KPI 가중치 · Sonnet 4.6 5섹션 SSE',
   },
   {
     badge: 'E',
-    ko: '규제 검증',
-    href: '/compliance',
-    icon: ShieldCheck,
-    pitch: 'REACH SVHC / RoHS / PFAS / AEC-Q 표준 준수 여부를 부품 ID 입력만으로 즉시 확인합니다.',
-    try_it: '"COMP-MCU-001" 입력 — 위반 사항과 세부 규정 경로가 함께 표시됩니다.',
-    tech: 'Neptune COMPLIES_WITH / CONTAINS_SUBSTANCE edges · REACH 240+ SVHC list',
+    ko: '고객 클러스터링',
+    href: '/cluster',
+    icon: Layers,
+    pitch: 'sklearn KMeans 6 군집화 + Sonnet 4.6 한국어 라벨링 ("충전형", "출퇴근형", "주말장거리", "디젤상시", "premium성향", "신규유입") + 옵션 Neptune Cluster 노드 write-back.',
+    try_it: '"클러스터 생성" 클릭 — fetching_features → clustering → labeling → summary_streaming 5단계 chip + PCA 2D 산점도가 SSE로 흐릅니다.',
+    tech: 'sklearn KMeans · Bedrock Sonnet 4.6 라벨 generator · matplotlib · Neptune Cluster write-back',
   },
   {
     badge: 'F',
-    ko: '대체 부품',
-    href: '/substitute',
-    icon: ArrowLeftRight,
-    pitch: '공급 중단·단종 시 동일 기능·다른 공급사의 대안을 공유 표준·전기 특성 유사도로 산출합니다.',
-    try_it: '"COMP-MCU-001" → 대체 후보와 공통 규격 그래프가 나타납니다.',
-    tech: 'Neptune COMPATIBLE_WITH traversal · shared standard scoring',
+    ko: '룩어라이크 확장',
+    href: '/lookalike',
+    icon: GitMerge,
+    pitch: 'seed 고객 임베딩 + Cohere embed-v4 KNN 유사도 검색 → top X% 후보 확장. 50,517 인덱싱된 Customer (deep-history 33 + coupon-only 484 + la-XXXXXX 합성 50K) 대상.',
+    try_it: 'seed "1,2,3" + top 20% — 연령·등급·시도 분포 차이로 seed cohort vs 확장 cohort 특성 비교.',
+    tech: 'OpenSearch Cohere-v4 KNN · seed embedding · top-X% ranking · 5섹션 SSE',
   },
   {
     badge: 'G',
-    ko: '단가/재고 비교',
-    href: '/price',
-    icon: Wallet,
-    pitch: '특정 부품에 대한 복수 공급사별 단가·납기·OTD를 매트릭스로 비교합니다.',
-    try_it: '"COMP-CAP-2023" — 공급사별 단가 차이와 납기 일수를 바로 비교하세요.',
-    tech: 'Neptune SUPPLIES edges · price/lead-time synthesis · OTD aggregation',
+    ko: '캠페인 ROI 시뮬',
+    href: '/campaign-roi',
+    icon: Megaphone,
+    pitch: '쿠폰액 × 타겟 세그먼트 × 기간 → Bayesian 사후 분포에서 5000 sample 추출 → 평균 전환률 + confidence 분포 차트 + baseline ROI uplift.',
+    try_it: '"쿠폰 1,000원 × seg-001 × 30일 (기본)" 클릭 — 정규분포 히스토그램 + 부서 시점 인사이트가 SSE로 흐릅니다.',
+    tech: 'Bayesian posterior simulation · matplotlib · AgentCore Code Interpreter + 로컬 fallback · Sonnet 4.6 SSE',
   },
   {
     badge: 'H',
-    ko: '글로벌 SCM lane',
-    href: '/lane',
-    icon: Truck,
-    pitch: '7개국 trade lane 지도 + IRA/USMCA 관세 이벤트 reroute 시뮬레이션. 규제 변화 시 최적 대체 경로를 자동 산출합니다.',
-    try_it: '"Trigger IRA 2026" 버튼 클릭 — 멕시코 및 중국 경유 lane이 즉시 재계산되고 지도 위 경로가 바뀌는 것을 확인하세요.',
-    tech: 'Neptune TradeLane traversal · regulation-aware reroute · SCMMap visualization',
+    ko: '권역 경쟁 지도',
+    href: '/network-map',
+    icon: Map,
+    pitch: '8.5K GasStation 노드를 시도×브랜드(GSC/현대/SK/S-Oil)로 집계 → 한반도 choropleth + 시도×브랜드 매트릭스 + 주유소 도우미 chat (nearest_stations · neptune_subgraph · semantic_search 도구).',
+    try_it: '추천 질문 "디젤 평균 가격이 가장 저렴한 시군구 5곳" 또는 "S0148 주유소 인근 5km" 클릭 — choropleth 옆 chat에 도구 호출 결과가 실시간 표시.',
+    tech: 'Neptune GasStation 집계 · KOSTAT 시도 GeoJSON · react-simple-maps · 도우미 chat 도구 chain · Sonnet 4.6 SSE',
   },
   {
     badge: 'I',
-    ko: '협력사 RFM',
-    href: '/rfm',
-    icon: TrendingUp,
-    pitch: 'Recency·Frequency·Monetary 기반 협력사 등급 분석. Tier별 상위 공급사와 납기 신뢰도를 한 화면에.',
-    try_it: '"Tier 1" 선택 후 조회 — RFM 합산 점수 상위 공급사와 세부 R·F·M 값을 비교하세요.',
-    tech: 'Neptune supplier RFM aggregation · tier-based filtering',
+    ko: '약관·가드레일',
+    href: '/compliance',
+    icon: ShieldCheck,
+    pitch: '대상 고객의 TermAgreement (마케팅 동의) 매트릭스 + Bedrock Guardrail 4-topic 액션 텍스트 스크럽 → 적격/차단 판정 + 권고.',
+    try_it: 'cust_id "1,2,3,4,5" + action "고급휘발유 충성 고객 SMS 캠페인" — 약관 미동의 차단 + Guardrail INPUT 위반 분석 + 부서 권고 SSE.',
+    tech: 'Neptune AGREED_TO/FOR edges · Bedrock Guardrails · 4 토픽 · Sonnet 4.6 5섹션 SSE',
   },
   {
     badge: 'J',
-    ko: '8D / RCA',
-    href: '/eight-d',
-    icon: ClipboardList,
-    pitch: '품질 인시던트 ID 입력만으로 D1-D8 전체 보고서를 자동 생성합니다. 근본 원인 + 시정 조치 + 재발 방지까지 Bedrock이 초안을 작성합니다.',
-    try_it: '"INC-2026-0412" 입력 — 15초 안에 8개 섹션 전체 8D 보고서가 완성됩니다.',
-    tech: 'Bedrock Sonnet 4.6 · Neptune QualityIncident + RootCause graph · 8D template generation',
+    ko: '외부 시그널 융합',
+    href: '/external-signal',
+    icon: Radio,
+    pitch: '현대카드 ConsumptionIndex (78필드) + 에어브릿지 AppEvent + 운전중 SurveyResponse + KMA WeatherObservation 4 source를 한 고객 단위로 join → Sonnet 4.6 cross-source narrative + 5섹션 인사이트.',
+    try_it: 'cust_id "1" — 6-phase chip (querying_neptune → narrative_streaming → summary_streaming) + narrative와 5섹션 markdown이 별도 SSE 채널로 실시간 흐릅니다.',
+    tech: 'Neptune 4-source LEFT JOIN · Sonnet 4.6 dual SSE channel (narrative + summary) · max_tokens 4096',
   },
   {
     badge: 'K',
-    ko: 'ESG / CBAM',
-    href: '/esg',
-    icon: Leaf,
-    pitch: '공장별 Scope 1/2/3 탄소 배출량과 EU CBAM 2026 부담금을 산출합니다. IRA 세액 공제 적격 여부도 함께 확인.',
-    try_it: '"PLANT-KR-01" 선택 — Scope별 배출 KPI와 CBAM 예상 비용이 표시됩니다.',
-    tech: 'Neptune ESGIndicator + CarbonScope · CBAM 2026 rate tables · IRA domestic content check',
+    ko: '이상 행동 탐지',
+    href: '/outlier',
+    icon: AlertTriangle,
+    pitch: 'PDF 3페이지 시그니처 — (1) PM+M 92 RON DIY 혼유 (premium+regular 양방향), (2) 디젤→premium 유종 전환, (3) 앱 설치 후 가입. cohort 전체 100% coverage 검사.',
+    try_it: '"PM+M 혼유 (92 RON DIY)" 패턴 선택 → "탐지 실행" — 매치 고객 행동 변화 의미 + false positive 검토 + 후속 액션 권고 SSE.',
+    tech: 'Neptune FuelTransaction signature query · cohort 100% scan · Sonnet 4.6 SSE',
   },
   {
     badge: 'L',
-    ko: 'PdM / IoT',
-    href: '/pdm',
-    icon: Activity,
-    pitch: '공장 IoT 센서 텔레메트리 실시간 모니터링 + 예지 보전 알람. 임계값 초과 센서를 즉시 식별하고 정비 일정을 추천합니다.',
-    try_it: '"PLANT-VN-01" 선택 — 센서 테이블에서 CRITICAL 상태 항목과 알람 목록을 확인하세요.',
-    tech: 'Neptune Telemetry + MaintenanceEvent · threshold alerting · predictive maintenance scoring',
+    ko: '결제·멤버십',
+    href: '/payment',
+    icon: CreditCard,
+    pitch: '139K FuelTransaction × PaymentMethod (PLCC/credit/smart/point/cash 8종) × 시도 매트릭스 → 결제수단·유종·시도 3차원 집계 + 부서별 KPI 시점 해석.',
+    try_it: '"재분석" 클릭 — 부서 변경 시 자동 재분석. PLCC 보유율, 앱페이 vs credit 비중, 시도별 평균가가 SSE delta로 실시간 표시.',
+    tech: 'Neptune FuelTransaction × GasStation 매트릭스 집계 · auto-rerun on persona change · Sonnet 4.6 SSE',
+  },
+  {
+    badge: 'M',
+    ko: '고객 통합 여정',
+    href: '/journey',
+    icon: Compass,
+    pitch: '한 cust_id의 4 source (AppEvent · FuelTransaction · TermAgreement · CouponUse)를 timestamp 기준 단일 타임라인으로 merge + 유종 전환 시점 강조 (PDF 3페이지 PM+M 시그니처).',
+    try_it: 'cust_id "1" — deep-history 전체 여정 + 유종 전환 (디젤→premium) 강조. 프로필 + 타임라인 + 부서 시점 인사이트 SSE.',
+    tech: 'Neptune 4-source timeline merge · transition detection · Sonnet 4.6 SSE',
+  },
+  {
+    badge: 'N',
+    ko: '날씨 × 주유 패턴',
+    href: '/weather',
+    icon: Cloud,
+    pitch: 'KMA 기상청 1,275 WeatherObservation × FuelTransaction을 시도·날짜 단위로 LEFT JOIN → Pearson r(강수×거래) + matplotlib 산점도 + Sonnet 4.6 풍부한 5섹션 cross-channel 인사이트 (4096 토큰).',
+    try_it: '"서울 — 강수 vs 거래량 탄력성" 클릭 — 7-phase chip + 산점도 + Sonnet 인사이트가 SSE로 흐릅니다. 폭염일·폭설일·강수일 시도별 차이가 명확.',
+    tech: 'KMA API · Neptune WeatherObservation × FuelTransaction · Pearson 상관 · max_tokens 4096 SSE',
   },
   {
     badge: '메타',
-    ko: '온톨로지 / KG 탐색 / 운영',
-    href: '/schema',
-    icon: BookOpen,
-    pitch: '시나리오 외에도 — 22 클래스 온톨로지 ER 다이어그램 / 표준 매핑 (JEDEC·IPC·AEC-Q·IATF·REACH·CBAM) / 검증 리포트 / 22종 객체 탐색 / 운영 콘솔이 좌측 사이드바에 모두 들어 있습니다.',
-    try_it: '/schema에서 22 클래스 ER을 둘러보고, /validation에서 노드·엣지 수가 스펙과 일치하는지 확인하세요.',
-    tech: 'Cytoscape ER · Neptune node/edge count validation · in-process trace ring buffer',
+    ko: '온톨로지 / 객체 탐색 / 운영 / 코드그래프',
+    href: '/meta',
+    icon: GitBranch,
+    pitch: '시나리오 외에도 — 25 클래스 온톨로지 ER + 표준 매핑 (Opinet·KOSTAT·KFDA·KMA·현대카드) + 검증 리포트 + 25종 객체 탐색 (3-pane Cytoscape 1-hop) + 운영 콘솔 5 영역 + graphify 코드 지식 그래프.',
+    try_it: '/meta에서 25 클래스 ER 둘러보고, /objects/customer에서 50,517 고객을 3-pane (리스트 + 1-hop graph + inspector)로 탐색하세요. /codegraph는 이 코드베이스 자체의 graphify 분석.',
+    tech: 'Cytoscape ER · 25 클래스 3-pane · graphify AST + Sonnet 4.6 community 라벨링 · 운영 콘솔 5 영역 live',
   },
 ];
 
@@ -298,6 +316,14 @@ const SCENARIO_META: Record<string, { code: string; label: string; desc: string;
   N: { code: 'N', label: '날씨 × 주유',      desc: '기상청 단기예보 × 시도 거래 상관.',               href: '/weather' },
 };
 
+const PERSONA_LABEL_FOR_TOUR: Record<string, string> = {
+  marketing:    '마케팅',
+  strategy:     '고객전략',
+  'data-ai':    '데이터·AI',
+  crm:          'CRM·회원사업',
+  'retail-ops': '리테일영업',
+};
+
 export default function GuidedTourGcc({ persona }: { persona: string }) {
   const [priority, setPriority] = _useState<string[]>([]);
   _useEffect(() => {
@@ -310,12 +336,17 @@ export default function GuidedTourGcc({ persona }: { persona: string }) {
       })
       .catch(() => setPriority(['A', 'B', 'C']));
   }, [persona]);
+  const personaLabel = PERSONA_LABEL_FOR_TOUR[persona] ?? persona;
   return (
-    <div className='border rounded p-4 bg-amber-50 mb-6'>
-      <h3 className='font-semibold mb-3 text-sm text-amber-900'>
-        이 페르소나에 추천하는 시나리오 (Plan 5 GuidedTour)
-      </h3>
-      <div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
+    <div className="rounded-lg border border-ink-700 bg-ink-900/60 p-5 mb-6">
+      <div className="flex items-center gap-2 mb-3">
+        <Sparkles className="w-4 h-4 text-accent-300" />
+        <h3 className="text-sm font-semibold text-ink-100">
+          {personaLabel} 부서 추천 시나리오
+        </h3>
+        <span className="text-[10px] font-mono text-ink-500">Top 3</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {priority.map((code) => {
           const m = SCENARIO_META[code];
           if (!m) return null;
@@ -323,11 +354,17 @@ export default function GuidedTourGcc({ persona }: { persona: string }) {
             <Link
               key={code}
               href={m.href}
-              className='block border rounded p-3 bg-white hover:shadow transition'
+              className="group block rounded-md border border-ink-700 bg-ink-800 p-3 hover:border-accent-500/60 hover:bg-ink-700/50 transition"
             >
-              <div className='font-mono text-xs text-amber-700'>시나리오 {m.code}</div>
-              <div className='font-semibold mt-1 text-sm'>{m.label}</div>
-              <div className='text-xs text-slate-600 mt-1'>{m.desc}</div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-accent-500/40 bg-accent-500/10 text-accent-200">
+                  {m.code}
+                </span>
+                <span className="text-sm font-semibold text-ink-100 group-hover:text-accent-200">
+                  {m.label}
+                </span>
+              </div>
+              <div className="text-xs text-ink-400 leading-snug">{m.desc}</div>
             </Link>
           );
         })}

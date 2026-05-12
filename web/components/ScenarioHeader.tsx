@@ -1,30 +1,28 @@
 "use client";
-// Per-scenario top header — shows scenario badge (A-L), Korean title,
-// technology pipeline (BM25/KNN/RRF/Reranker/Cypher/etc.), active persona.
-// Used by all 12 scenario pages + objects/[type] explorer.
+// Per-scenario top header — 시나리오 코드 (A~N) + 한국어 제목 + 기술 파이프라인 + active persona.
 
 import { useActivePersona } from "@/lib/persona-context";
 
 interface Props {
-  scenario?: string;          // "A" .. "L" (omit for objects/meta pages)
-  title: string;              // 의미 검색
-  tech: string;               // 자연어 → BM25 + Cohere KNN + ... → 1-hop 그래프
-  showPersona?: boolean;      // default true
-  rightSlot?: React.ReactNode;// optional extras (counts, toggle buttons)
+  scenario?: string;          // "A" .. "N"
+  title: string;
+  tech: string;
+  showPersona?: boolean;
+  rightSlot?: React.ReactNode;
 }
 
 const PERSONA_LABEL: Record<string, string> = {
-  buyer: "Buyer 구매",
-  engineer: "Engineer R&D",
-  quality: "Quality 품질",
-  scm: "SCM 공급망",
-  plant: "Plant 생산",
+  marketing:    '마케팅',
+  strategy:     '고객전략',
+  'data-ai':    '데이터·AI',
+  crm:          'CRM·회원사업',
+  'retail-ops': '리테일영업',
 };
 
 export function ScenarioHeader({ scenario, title, tech, showPersona = true, rightSlot }: Props) {
   const persona = useActivePersona();
   return (
-    <header className="border-b border-ink-700 bg-ink-900 px-6 py-2.5 flex flex-wrap items-center gap-x-3 gap-y-1">
+    <header className="border-b border-ink-700 bg-ink-900 px-6 py-2.5 pr-72 lg:pr-80 flex flex-wrap items-center gap-x-3 gap-y-1">
       <div className="flex items-center gap-2 shrink-0">
         {scenario && (
           <span className="text-[11px] font-mono px-2 py-0.5 rounded border border-accent-500/40 bg-accent-500/10 text-accent-200 font-bold">

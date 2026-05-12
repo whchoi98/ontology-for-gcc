@@ -56,7 +56,8 @@ export class ComputeStack extends cdk.Stack {
     });
     taskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('NeptuneFullAccess'));
     taskRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['bedrock:InvokeModel', 'bedrock:Converse', 'bedrock:Retrieve',
+      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream',
+                'bedrock:Converse', 'bedrock:ConverseStream', 'bedrock:Retrieve',
                 'bedrock:ApplyGuardrail', 'aoss:APIAccessAll'],
       resources: ['*'],
     }));

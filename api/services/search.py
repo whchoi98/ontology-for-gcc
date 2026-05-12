@@ -5,8 +5,7 @@ Mirrors retail's pipeline. RRF k=60 default. Returns Top-N rerank hits.
 """
 from __future__ import annotations
 import boto3
-from opensearchpy import OpenSearch, RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 from api.config import settings
 from api.services.embedding import embed_text
 
@@ -17,9 +16,11 @@ class HybridSearchService:
         self.host = host or settings.opensearch_host
         self.region = region or settings.aws_region
         self.index = index or settings.opensearch_index
-        creds = boto3.Session().get_credentials()
-        auth = AWS4Auth(creds.access_key, creds.secret_key, self.region, "aoss",
-                        session_token=creds.token)
+        # AWSV4SignerAuth signs per-request — survives ECS Fargate task-role
+        # temp-credential rotation (~6h). AWS4Auth froze creds and 403'd later.
+        auth = AWSV4SignerAuth(
+            boto3.Session().get_credentials(), self.region, "aoss",
+        )
         self.client = OpenSearch(
             hosts=[{"host": self.host, "port": 443}],
             http_auth=auth, use_ssl=True, verify_certs=True,

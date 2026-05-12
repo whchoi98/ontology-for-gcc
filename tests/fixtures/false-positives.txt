@@ -1,0 +1,24 @@
+# False positive — scrub-secrets.sh 가 통과시켜야 할 패턴.
+# 진짜 비밀 같지만 비밀이 아닌 것들.
+
+# 예시·placeholder
+AKIA_EXAMPLE_KEY_FOR_DOCS
+your-aws-access-key-id-here
+<your-jwt-token>
+${AWS_ACCESS_KEY_ID}
+
+# 16진수 해시 (커밋 SHA 등)
+9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+
+# 단순 base64 — 40+ 문자지만 의미 없음
+SGVsbG8gV29ybGQhIFRoaXMgaXMgYSBoYXJtbGVzcyBzdHJpbmcgZm9yIHRlc3RpbmcgcHVycG9zZXM=
+
+# .env.example 의 placeholder
+BEDROCK_CHAT_MODEL_ID=global.anthropic.claude-sonnet-4-6
+NEPTUNE_ENDPOINT=<cluster>.cluster-<id>.ap-northeast-2.neptune.amazonaws.com
+
+# 코드 SHA / docker image digest
+sha256:f9720e7a65284c3e6a3d8d6ec5bc310a5315f2d89aa3cffc729b8b4b0b06da8d
+
+# 영문 + 숫자 혼합이지만 의미 없는 토큰
+abc123def456ghi789jkl

@@ -1,7 +1,6 @@
 'use client';
 
-/** Plan 3 Task 3.4.4 — tool dispatch trace timeline.
- *  Renders tool_call (→) followed by tool_result (←) entries. */
+/** Tool dispatch trace — 다크 테마. tool_call (→) / tool_result (←) 시간순. */
 type Call = {
   tool_call?: string;
   tool_result?: string;
@@ -11,29 +10,42 @@ type Call = {
 
 export default function ToolCallPanel({ calls }: { calls: Call[] }) {
   return (
-    <div className="border rounded p-2 bg-slate-50 h-[480px] overflow-y-auto text-xs space-y-1">
-      <div className="font-semibold text-slate-700 mb-2">Tool Trace</div>
-      {calls.length === 0 && <div className="text-slate-400">도구 호출 없음</div>}
-      {calls.map((c, i) => (
-        <div key={i} className="border-l-2 border-blue-400 pl-2">
-          {c.tool_call && (
-            <div>
-              <span className="font-mono text-blue-600">→ {c.tool_call}</span>
-              <pre className="text-[10px] text-slate-500">
-                {JSON.stringify(c.input, null, 2).slice(0, 150)}
-              </pre>
-            </div>
-          )}
-          {c.tool_result && (
-            <div>
-              <span className="font-mono text-emerald-600">← {c.tool_result}</span>
-              <pre className="text-[10px] text-slate-500">
-                {(c.output_summary || '').slice(0, 150)}
-              </pre>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    <aside className="border-l border-ink-700 pl-4">
+      <h2 className="text-sm font-semibold text-ink-100 mb-3 flex items-center gap-2">
+        <span>도구 호출 로그</span>
+        <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-ink-800 border border-ink-700 text-ink-400">
+          {calls.length}건
+        </span>
+      </h2>
+      {calls.length === 0 && (
+        <p className="text-xs text-ink-500 italic">아직 도구 호출이 없습니다.</p>
+      )}
+      <ul className="space-y-2">
+        {calls.map((c, i) => (
+          <li key={i} className="p-2 rounded border border-ink-700 bg-ink-900">
+            {c.tool_call && (
+              <div>
+                <div className="font-mono text-xs text-accent-300">→ {c.tool_call}</div>
+                {c.input !== undefined && (
+                  <pre className="text-[10px] text-ink-400 overflow-x-auto whitespace-pre-wrap break-all mt-1">
+                    {JSON.stringify(c.input, null, 2).slice(0, 200)}
+                  </pre>
+                )}
+              </div>
+            )}
+            {c.tool_result && (
+              <div className={c.tool_call ? 'mt-1' : ''}>
+                <div className="font-mono text-xs text-emerald-300">← {c.tool_result}</div>
+                {c.output_summary && (
+                  <pre className="text-[10px] text-ink-400 overflow-x-auto whitespace-pre-wrap break-all mt-1">
+                    {String(c.output_summary).slice(0, 200)}
+                  </pre>
+                )}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </aside>
   );
 }

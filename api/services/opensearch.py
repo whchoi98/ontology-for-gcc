@@ -1,33 +1,25 @@
-"""Hybrid search: BM25 (Nori) + KNN (Cohere embed-v4) → RRF fusion (K=60).
-
-Plan 3 common service — replaces older HybridSearchService for new pipeline.
-SigV4 auth via aws4auth + opensearch-py RequestsHttpConnection.
-"""
+"""Hybrid search: BM25 (Nori) + KNN (Cohere embed-v4) → RRF fusion (K=60)."""
 from __future__ import annotations
 from collections import defaultdict
 from functools import lru_cache
 from typing import List
 
-from opensearchpy import OpenSearch, RequestsHttpConnection
-from requests_aws4auth import AWS4Auth
+from opensearchpy import OpenSearch, RequestsHttpConnection, AWSV4SignerAuth
 
 from api.aws_clients import session
 from api.config import settings
 
-RRF_K = 60  # Reciprocal Rank Fusion constant
+RRF_K = 60
 
 
 @lru_cache
 def client() -> OpenSearch:
+    # AWSV4SignerAuth pulls credentials at sign time (not at construction),
+    # so the cached client survives ECS task-role temp-credential rotation
+    # (~6h). The prior AWS4Auth path froze creds via get_frozen_credentials()
+    # and caused 403 after rotation on long-running Fargate tasks.
     region = settings.AWS_REGION
-    creds = session().get_credentials().get_frozen_credentials()
-    auth = AWS4Auth(
-        creds.access_key,
-        creds.secret_key,
-        region,
-        'aoss',
-        session_token=creds.token,
-    )
+    auth = AWSV4SignerAuth(session().get_credentials(), region, 'aoss')
     host = settings.OPENSEARCH_ENDPOINT.replace('https://', '').replace('http://', '')
     return OpenSearch(
         hosts=[{'host': host, 'port': 443}],

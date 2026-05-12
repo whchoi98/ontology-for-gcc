@@ -26,11 +26,16 @@ def healthz():
     return {"status": "ok"}
 
 
+# 인프라 자원 가시성 — ops 라우터의 catch-all /{area}보다 먼저 등록되어야
+# /api/ops/resources가 정확한 경로로 매칭된다 (FastAPI는 등록 순서대로 시도).
+try:
+    from api.routers import ops_resources
+    app.include_router(ops_resources.router)
+except Exception as e:
+    log.warning("ops_resources router not registered: %s", e)
+
+
 # Plan 3 — only auth + ops routers retained from the legacy loop.
-# The 12 mfg-template scenario routers (search/chat/insights/spec_match/compliance/
-# substitute/price/scm_lane/supplier_rfm/eight_d/esg_cbam/pdm) are decommissioned;
-# Plan 3.2/3.4 will introduce GCC-flavored search.py and chat.py with their own
-# explicit registration below. Everything else (objects, personas) carries its own prefix.
 def _try_register():
     for module_name in ["auth", "ops"]:
         try:
@@ -88,3 +93,7 @@ try:
     app.include_router(ontology_router.router)
 except Exception as e:
     log.warning("ontology router not registered: %s", e)
+
+# Note: 인프라 자원 가시성 라우터는 main.py 상단의 ops 라우터 (catch-all /{area})
+# 보다 먼저 등록되어야 FastAPI가 정확한 /api/ops/resources 경로를 우선 매칭한다.
+# 등록 순서가 빠른 라우트가 먼저 시도되므로 위쪽으로 이동.

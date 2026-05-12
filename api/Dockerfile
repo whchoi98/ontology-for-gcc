@@ -1,6 +1,10 @@
 FROM --platform=linux/arm64 public.ecr.aws/docker/library/python:3.12-slim
 WORKDIR /app
-RUN apt-get update && apt-get install -y --no-install-recommends gcc curl && rm -rf /var/lib/apt/lists/*
+# fonts-nanum: matplotlib NanumGothic 한글 폰트 (시나리오 C 인사이트 차트).
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      gcc curl fonts-nanum fontconfig \
+    && fc-cache -f \
+    && rm -rf /var/lib/apt/lists/*
 COPY api/requirements.txt /app/api/requirements.txt
 RUN pip install --no-cache-dir -r /app/api/requirements.txt
 COPY api /app/api

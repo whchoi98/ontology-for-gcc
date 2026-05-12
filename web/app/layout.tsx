@@ -3,9 +3,7 @@ import { Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 
 import { PersonaProvider } from '@/lib/persona-context';
-import { Sidebar } from '@/components/Sidebar';
-import { PersonaSwitch } from '@/components/PersonaSwitch';
-import { GuidedTour } from '@/components/GuidedTour';
+import LayoutShell from '@/components/LayoutShell';
 
 // Pretendard isn't on Google Fonts and the GitHub release ZIP exceeds
 // CDN limits — using Noto Sans KR (Google Fonts CDN-friendly) for reliable
@@ -26,18 +24,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko" className={`${pretendard.variable} dark`}>
-      <body className="font-sans antialiased min-h-screen bg-ink-950 text-ink-200">
+      <body className="font-sans antialiased h-screen overflow-hidden bg-ink-950 text-ink-200">
         <PersonaProvider>
-          <div className="flex min-h-screen">
-            <Sidebar />
-            <main className="flex-1 min-w-0 overflow-x-hidden relative">
-              <div className="absolute top-3 right-6 z-30 flex items-center gap-2">
-                <GuidedTour />
-                <PersonaSwitch />
-              </div>
-              {children}
-            </main>
-          </div>
+          {/* LayoutShell이 경로별로 분기 — /cally는 사이드바·플로팅 챗봇 없는
+              minimal shell, 나머지는 기본 3-zone (sidebar + main + floating). */}
+          <LayoutShell>{children}</LayoutShell>
         </PersonaProvider>
       </body>
     </html>

@@ -402,7 +402,7 @@ python3 scripts/eval_wow_queries.py
 - 이메일: whchoi98@gmail.com
 
 <!-- harness-eval-badge:start -->
-![Harness Score](https://img.shields.io/badge/harness-7.5%2F10-yellow)
-![Harness Grade](https://img.shields.io/badge/grade-B-yellow)
-![Last Eval](https://img.shields.io/badge/eval-2026-05-09-blue)
+![Harness Score](https://img.shields.io/badge/harness-8.9%2F10-green)
+![Harness Grade](https://img.shields.io/badge/grade-A-green)
+![Last Eval](https://img.shields.io/badge/eval-2026--05--11-blue)
 <!-- harness-eval-badge:end -->

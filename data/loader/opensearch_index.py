@@ -28,23 +28,31 @@ INDEX_BODY = {
             'doc_id': {'type': 'keyword'},
             'class_name': {'type': 'keyword'},
             'text': {'type': 'text', 'analyzer': 'nori_korean'},
-            'embedding': {'type': 'knn_vector', 'dimension': 1024,
+            # Cohere embed-v4 응답 차원은 1536 (multimodal-ready). 인덱스도 동일.
+            'embedding': {'type': 'knn_vector', 'dimension': 1536,
                           'method': {'name':'hnsw', 'engine':'nmslib', 'space_type':'cosinesimil'}},
             'metadata': {'type': 'object', 'enabled': False},
         }
     }
 }
 
-def ensure_index():
+def ensure_index(recreate: bool = False):
+    """기본은 idempotent. recreate=True면 기존 인덱스 삭제 후 새로 만들어 mapping mismatch 해결."""
     cl = client()
+    if recreate and cl.indices.exists(index=INDEX):
+        cl.indices.delete(index=INDEX)
     if not cl.indices.exists(index=INDEX):
         cl.indices.create(index=INDEX, body=INDEX_BODY)
 
 def bulk_index(docs: list[dict]):
-    """docs: [{'doc_id', 'class_name', 'text', 'embedding', 'metadata'}, ...]"""
+    """docs: [{'doc_id', 'class_name', 'text', 'embedding', 'metadata'}, ...].
+
+    OpenSearch Serverless는 명시적 _id를 지원하지 않으므로 doc_id는 source
+    필드로만 보관하고 OpenSearch가 _id를 자동 할당하도록 둔다.
+    """
     cl = client()
     body = []
     for d in docs:
-        body.append({'index': {'_index': INDEX, '_id': d['doc_id']}})
+        body.append({'index': {'_index': INDEX}})
         body.append(d)
-    cl.bulk(body=body, refresh=False)
+    cl.bulk(body=body)

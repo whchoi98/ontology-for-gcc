@@ -1,8 +1,8 @@
 'use client';
 
 // Global persona-switch widget rendered top-right of layout.
-// 5 fixed gcc personas (buyer / engineer / quality / scm / plant).
-// No API call — list is hardcoded.
+// GCC M&M본부 5 부서 (마케팅/고객전략/데이터·AI/CRM·회원사업/리테일영업).
+// PERSONA_REGISTRY (api/services/persona.py) SSOT와 일치.
 
 import { useRef, useState } from 'react';
 import { ChevronDown, UserCheck } from 'lucide-react';
@@ -10,19 +10,19 @@ import { useActivePersona } from '@/lib/persona-context';
 import type { Persona } from '@/lib/types';
 
 const PERSONAS: { id: Persona; label: string; emoji: string }[] = [
-  { id: 'buyer',    label: 'Buyer 구매',    emoji: '🛒' },
-  { id: 'engineer', label: 'Engineer R&D', emoji: '⚙️' },
-  { id: 'quality',  label: 'Quality 품질',  emoji: '✅' },
-  { id: 'scm',      label: 'SCM 공급망',    emoji: '🚚' },
-  { id: 'plant',    label: 'Plant 생산',    emoji: '🏭' },
+  { id: 'marketing',  label: '마케팅',         emoji: '📢' },
+  { id: 'strategy',   label: '고객전략',       emoji: '🎯' },
+  { id: 'data-ai',    label: '데이터·AI',     emoji: '🧪' },
+  { id: 'crm',        label: 'CRM·회원사업', emoji: '💳' },
+  { id: 'retail-ops', label: '리테일영업',    emoji: '⛽' },
 ];
 
 const PERSONA_LABEL: Record<Persona, string> = {
-  buyer:    'Buyer 구매',
-  engineer: 'Engineer R&D',
-  quality:  'Quality 품질',
-  scm:      'SCM 공급망',
-  plant:    'Plant 생산',
+  'marketing':  '마케팅',
+  'strategy':   '고객전략',
+  'data-ai':    '데이터·AI',
+  'crm':        'CRM·회원사업',
+  'retail-ops': '리테일영업',
 };
 
 export function PersonaSwitch() {
@@ -30,7 +30,6 @@ export function PersonaSwitch() {
   const [open, setOpen] = useState(false);
   const popRef = useRef<HTMLDivElement | null>(null);
 
-  // Close on outside click
   const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
     if (!popRef.current?.contains(e.relatedTarget as Node)) setOpen(false);
   };
@@ -41,7 +40,7 @@ export function PersonaSwitch() {
         onClick={() => setOpen((o) => !o)}
         className={[
           'flex items-center gap-2 px-3 py-1.5 rounded-md border text-xs font-medium transition',
-          active !== 'buyer'
+          active !== 'marketing'
             ? 'border-orange-500/40 bg-orange-500/10 text-orange-200 hover:bg-orange-500/15'
             : 'border-ink-700 bg-ink-800 text-ink-300 hover:border-ink-600',
         ].join(' ')}

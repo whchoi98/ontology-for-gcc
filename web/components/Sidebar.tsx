@@ -8,7 +8,7 @@ import {
   Compass, Cloud, GitBranch, Database, Brain, ListTree, Network,
   Sparkles, ChevronRight, Activity, Fuel, Tag, Gift, BadgeCheck,
   PhoneCall, Smartphone, ClipboardList, Building2, Calendar, Clock,
-  TrendingUp, ScrollText, Lightbulb,
+  TrendingUp, ScrollText, Lightbulb, Code2,
 } from 'lucide-react';
 
 import { SidebarAuth } from './SidebarAuth';
@@ -26,7 +26,7 @@ type Section = { title: string; items: Item[] };
 
 const SECTIONS: Section[] = [
   {
-    title: '시나리오 (Scenarios A~N)',
+    title: '인사이트 페르소나 (5 부서 · 14 시나리오)',
     items: [
       { href: '/',                icon: Home,           label: '홈' },
       { href: '/search',          icon: Search,         label: '하이브리드 검색',     badge: 'A' },
@@ -48,7 +48,8 @@ const SECTIONS: Section[] = [
   {
     title: '메타 (Ontology)',
     items: [
-      { href: '/meta', icon: GitBranch, label: '온톨로지 (25 클래스 · 표준 · 검증)' },
+      { href: '/meta',      icon: GitBranch, label: '온톨로지 (25 클래스 · 표준 · 검증)' },
+      { href: '/codegraph', icon: Code2,     label: '코드 지식 그래프 (graphify)' },
     ],
   },
   {
@@ -91,6 +92,7 @@ const SECTIONS: Section[] = [
   {
     title: '파이프라인 (Ops)',
     items: [
+      { href: '/ops/resources', icon: Network,     label: '인프라 자원 상태' },
       { href: '/ops/ingest',    icon: Database,    label: '데이터 적재' },
       { href: '/ops/guardrail', icon: ShieldCheck, label: '가드레일' },
       { href: '/ops/memory',    icon: Brain,       label: '메모리 히스토리' },
@@ -117,7 +119,7 @@ export function Sidebar() {
           </div>
           <div className="min-w-0">
             <div className="text-sm font-semibold text-ink-100 leading-tight truncate">Ontology GCC</div>
-            <div className="text-[10px] text-ink-400 leading-tight truncate">M&amp;M본부 Demo · v1.0.0</div>
+            <div className="text-[10px] text-ink-400 leading-tight truncate font-mono">{process.env.NEXT_PUBLIC_APP_VERSION ?? 'v1.0.56'}</div>
           </div>
         </div>
         <CompanyLogo />

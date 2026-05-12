@@ -78,8 +78,11 @@ export class DataStack extends cdk.Stack {
     });
     cluster.addDependency(subnetGroup);
 
+    // t4g.medium (4GB)는 2.16M 노드 + 113K 엣지 + 동시 쿼리에서 OOM 빈발 (FreeableMemory ~600MB).
+    // Neptune 1.4는 t-series가 4GB만 지원 → r7g.2xlarge (8 vCPU, 64GB ARM64)로 상향.
+    // 검색·시나리오 트래픽 + 향후 엣지 적재 보강 + 동시 다중 페르소나 모두 안정 동작.
     new neptune.CfnDBInstance(this, 'NeptuneInstance', {
-      dbInstanceClass: 'db.t4g.medium',
+      dbInstanceClass: 'db.r7g.2xlarge',
       dbClusterIdentifier: cluster.ref,
       dbInstanceIdentifier: 'ontology-gcc-dev-neptune-1',
     });

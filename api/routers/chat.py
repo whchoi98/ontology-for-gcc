@@ -18,6 +18,7 @@ from api.services.agentcore import write_event
 from api.services.guardrails import apply as guardrail_apply
 from api.services.ops_metrics import push_guardrail
 from api.services.sse import stream_phases
+from api.services.followups import generate as generate_followups
 
 router = APIRouter(prefix='/api', tags=['chat'])
 
@@ -95,22 +96,36 @@ async def chat(req: ChatRequest):
                 elif 'messageStop' in ev:
                     stop_reason = ev['messageStop'].get('stopReason')
 
+            # Assistant content는 text 블록 + toolUse 블록을 모두 포함해야 다음 turn의
+            # toolResult가 ConverseStream validation을 통과한다 (이전엔 text만 보존해
+            # toolUse N개 ↔ toolResult N개 mismatch로 ValidationException 발생).
+            parsed_tool_calls: list = []
+            for tc in tool_calls_buffer:
+                try:
+                    input_dict = json.loads(tc['input']) if tc['input'] else {}
+                except json.JSONDecodeError:
+                    input_dict = {}
+                parsed_tool_calls.append({**tc, 'input_dict': input_dict})
+
+            assistant_content: list = []
             if assistant_chunks:
-                messages.append({
-                    'role': 'assistant',
-                    'content': [{'text': ''.join(assistant_chunks)}],
-                })
+                assistant_content.append({'text': ''.join(assistant_chunks)})
+            for tc in parsed_tool_calls:
+                assistant_content.append({'toolUse': {
+                    'toolUseId': tc['toolUseId'],
+                    'name': tc['name'],
+                    'input': tc['input_dict'],
+                }})
+            if assistant_content:
+                messages.append({'role': 'assistant', 'content': assistant_content})
 
             if not tool_calls_buffer or stop_reason == 'end_turn':
                 break
 
             # 4) tool dispatch
             tool_results: list = []
-            for tc in tool_calls_buffer:
-                try:
-                    input_dict = json.loads(tc['input']) if tc['input'] else {}
-                except json.JSONDecodeError:
-                    input_dict = {}
+            for tc in parsed_tool_calls:
+                input_dict = tc['input_dict']
                 yield ('log', {'tool_call': tc['name'], 'input': input_dict})
                 output = dispatch(
                     tc['name'], input_dict,
@@ -140,10 +155,13 @@ async def chat(req: ChatRequest):
             req.session_id, 'assistant', clean_out, req.cust_id,
         )
 
+        followups = generate_followups(clean_out, req.persona_id or 'marketing', cleaned)
+
         yield ('result', {
             'final_text': clean_out,
             'iterations': it + 1,
             'trace': get_trace_buf()[-10:],
+            'suggested_followups': followups,
         })
 
     return StreamingResponse(stream_phases(gen()), media_type='text/event-stream')

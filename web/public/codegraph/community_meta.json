@@ -1,0 +1,4516 @@
+{
+  "0": {
+    "label": "코드그래프 커뮤니티 보고서",
+    "description": "코드베이스 자동 군집화 결과를 문서화한 그래프 리포트의 커뮤니티 목록 섹션",
+    "key_concepts": [
+      "커뮤니티 군집화",
+      "그래프 리포트",
+      "코드베이스 분석"
+    ],
+    "top_files": [
+      "web/public/codegraph/GRAPH_REPORT.md"
+    ],
+    "node_count": 142
+  },
+  "1": {
+    "label": "CDK Lambda 번들 자산",
+    "description": "AWS CDK가 합성한 Lambda 함수용 번들 자산 파일로, AWS SDK 클라이언트 초기화 및 API 호출 로직을 포함한다.",
+    "key_concepts": [
+      "CDK 자산 번들",
+      "Lambda 핸들러",
+      "AWS SDK 클라이언트 초기화"
+    ],
+    "top_files": [
+      "infra-cdk/cdk.out/asset.56f7467bbde8a5efebcf57ae9e460027607099bab9f844669dcf5d800172ee5a/index.js",
+      "infra-cdk/cdk.out/asset.faa95a81ae7d7373f3e1f242268f904eb748d8d0fdd306e8a6fe515a1905a7d6/index.js"
+    ],
+    "node_count": 45
+  },
+  "2": {
+    "label": "그래프 데이터 로딩",
+    "description": "Neptune 그래프 DB에 노드/엣지 및 온톨로지 스키마를 Cypher 쿼리로 업로드하는 데이터 적재 모듈",
+    "key_concepts": [
+      "Amazon Neptune",
+      "Cypher 쿼리",
+      "그래프 스키마 업로드"
+    ],
+    "top_files": [
+      "data/load_graph.py",
+      "data/load_search.py",
+      "ontology/upload.py"
+    ],
+    "node_count": 42
+  },
+  "3": {
+    "label": "AWS CDK 인프라 스택",
+    "description": "AWS CDK로 네트워크, 컴퓨팅, AI, 데이터, 엣지, 모니터링 등 클라우드 인프라 스택을 정의하고 배포한다.",
+    "key_concepts": [
+      "AWS CDK 스택",
+      "클라우드 인프라 프로비저닝",
+      "멀티 스택 아키텍처"
+    ],
+    "top_files": [
+      "infra-cdk/bin/gcc.ts",
+      "infra-cdk/test/stacks.test.ts",
+      "infra-cdk/lib/data-stack.ts",
+      "infra-cdk/lib/ai-stack.ts",
+      "infra-cdk/lib/observability-stack.ts"
+    ],
+    "node_count": 42
+  },
+  "4": {
+    "label": "GCC 고객 온톨로지 설계",
+    "description": "GS Caltex 고객 온톨로지 PoC의 아키텍처, 클래스 구조, 데이터 전략 및 빌드 검증 절차를 정의하는 설계 명세",
+    "key_concepts": [
+      "온톨로지 클래스 및 관계 모델링",
+      "데이터 적재 파이프라인",
+      "CI 검증 게이트"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-08-ontology-gcc-design.md"
+    ],
+    "node_count": 41
+  },
+  "5": {
+    "label": "실데이터 어댑터 구현 계획",
+    "description": "CSV 원본 데이터를 14개 도메인 클래스로 변환하는 실데이터 어댑터 태스크 및 코드 명세",
+    "key_concepts": [
+      "CSV 데이터 어댑터",
+      "cp949 정규화 및 비식별화",
+      "도메인 모델 매핑"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 37
+  },
+  "6": {
+    "label": "데이터 로더 및 색인 처리",
+    "description": "OpenSearch 및 Neptune에 데이터를 벌크 로드하고 인덱스를 생성·관리하는 데이터 적재 파이프라인",
+    "key_concepts": [
+      "OpenSearch 벌크 인덱싱",
+      "Neptune 그래프 데이터 로드",
+      "고객 데이터 색인화"
+    ],
+    "top_files": [
+      "data/loader/opensearch_customer_index.py",
+      "data/load.py",
+      "data/loader/opensearch_index.py",
+      "data/loader/bulk_neptune.py",
+      "data/loader/opensearch_seed.py"
+    ],
+    "node_count": 36
+  },
+  "7": {
+    "label": "프로젝트 README 문서",
+    "description": "ontology-gcc 프로젝트의 영문 및 한국어 이중 언어 README 문서로 설치, 사용법, 구조, 테스트를 안내",
+    "key_concepts": [
+      "이중 언어 문서화",
+      "프로젝트 개요 및 설치",
+      "사용법 및 구조 안내"
+    ],
+    "top_files": [
+      "README.md"
+    ],
+    "node_count": 36
+  },
+  "8": {
+    "label": "온톨로지 MFG 데모 검증 계획",
+    "description": "제조 온톨로지 데모를 위한 쿼리 평가, 라이브 데이터 검증, E2E 테스트, 성능 측정 등 7개 태스크 실행 계획",
+    "key_concepts": [
+      "데모 검증 자동화",
+      "Neptune 라이브 데이터 검증",
+      "CloudWatch 성능 모니터링"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-validation.md"
+    ],
+    "node_count": 36
+  },
+  "9": {
+    "label": "데이터 스키마 및 모델 정의",
+    "description": "캠페인, 쿠폰, 회원 등 도메인 엔티티의 Pydantic 기반 데이터 스키마와 로딩 함수를 정의하는 클러스터",
+    "key_concepts": [
+      "Pydantic BaseModel",
+      "도메인 스키마 정의",
+      "캠페인/쿠폰/회원 엔티티"
+    ],
+    "top_files": [
+      "data/schemas.py",
+      "data/real/coupon_fact.py",
+      "data/synthetic/member.py",
+      "api/routers/pdm.py"
+    ],
+    "node_count": 34
+  },
+  "10": {
+    "label": "Neo4j 벌크 데이터 로더",
+    "description": "Cypher 쿼리를 이용해 노드와 엣지를 Neo4j 그래프 DB에 배치 단위로 대량 적재하는 모듈",
+    "key_concepts": [
+      "Cypher 벌크 로딩",
+      "그래프 엣지/노드 배치 처리",
+      "PK 합성 및 속성 변환"
+    ],
+    "top_files": [
+      "data/loader/cypher_bulk.py"
+    ],
+    "node_count": 34
+  },
+  "12": {
+    "label": "ESG·CBAM 공급망 규제 대응",
+    "description": "탄소국경조정(CBAM), REACH, JEDEC 등 글로벌 규제를 국내 기준으로 변환하고 공급망 경로를 최적화하는 API 및 온톨로지 어댑터 클러스터",
+    "key_concepts": [
+      "CBAM 탄소 계산",
+      "공급망 경로 재설정",
+      "규제 온톨로지 매핑"
+    ],
+    "top_files": [
+      "api/routers/scm_lane.py",
+      "api/services/carbon_calc.py",
+      "ontology/adapters/cbam_to_kets.py",
+      "api/routers/esg_cbam.py",
+      "api/services/lane_router.py"
+    ],
+    "node_count": 32
+  },
+  "11": {
+    "label": "API 클라이언트 모듈",
+    "description": "백엔드 API와의 HTTP 통신을 담당하는 클라이언트 함수 및 유틸리티 모음",
+    "key_concepts": [
+      "HTTP 요청 처리",
+      "인증 및 권한 관리",
+      "스트리밍 응답 파싱"
+    ],
+    "top_files": [
+      "web/lib/api-client.ts"
+    ],
+    "node_count": 32
+  },
+  "13": {
+    "label": "합성 데이터 생성 모듈",
+    "description": "시드 기반 난수와 가중치 선택을 활용해 고객, 연료 거래, 유사 고객 등 합성 데이터를 생성하는 클러스터",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "시드 기반 난수",
+      "고객 및 거래 모델링"
+    ],
+    "top_files": [
+      "data/synthetic/_common.py",
+      "data/schemas.py",
+      "data/synthetic/customer.py",
+      "data/synthetic/lookalike.py",
+      "data/synthetic/seeds.py"
+    ],
+    "node_count": 30
+  },
+  "14": {
+    "label": "합성 데이터 생성기 설계",
+    "description": "고객·거래·룩어라이크 등 11개 합성 데이터 생성 클래스의 구현 계획 및 코드 명세",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "PRNG 시드 기반 통계 시뮬레이션",
+      "룩어라이크 고객 확장"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 29
+  },
+  "15": {
+    "label": "페르소나 매칭 파이프라인",
+    "description": "사용자 페르소나를 분석하고 파이프라인 단계별 톤·레이블로 매칭하는 UI 클러스터",
+    "key_concepts": [
+      "페르소나 매칭",
+      "파이프라인 단계 칩",
+      "톤 및 레이블 메타데이터"
+    ],
+    "top_files": [
+      "web/app/payment/page.tsx",
+      "web/lib/persona-context.tsx",
+      "web/app/persona-match/page.tsx",
+      "web/components/PipelineChips.tsx"
+    ],
+    "node_count": 28
+  },
+  "16": {
+    "label": "외부신호 인사이트 리포트",
+    "description": "외부 신호 분석 페이지와 마크다운 기반 인사이트 리포트 및 채팅 스레드 UI 컴포넌트 모음",
+    "key_concepts": [
+      "인사이트 리포트",
+      "마크다운 렌더링",
+      "외부 신호 분석"
+    ],
+    "top_files": [
+      "web/app/external-signal/page.tsx",
+      "web/components/InsightReport.tsx",
+      "web/components/MarkdownView.tsx",
+      "web/components/ChatThread.tsx"
+    ],
+    "node_count": 27
+  },
+  "17": {
+    "label": "검색 UI 및 그래프 시각화",
+    "description": "페르소나 기반 검색 페이지와 서브그래프 시각화 컴포넌트를 구성하는 프론트엔드 클러스터",
+    "key_concepts": [
+      "페르소나 검색",
+      "서브그래프 시각화",
+      "노드 팔레트"
+    ],
+    "top_files": [
+      "web/app/search/page.tsx",
+      "web/components/SubgraphView.tsx"
+    ],
+    "node_count": 26
+  },
+  "18": {
+    "label": "AI 채팅 UI 및 도구 호출",
+    "description": "AI 채팅 페이지의 메시지 흐름, 페르소나 설정, 도구 호출 패널을 관리하는 프론트엔드 컴포넌트",
+    "key_concepts": [
+      "채팅 세션 관리",
+      "페르소나 및 톤 설정",
+      "도구 호출 패널"
+    ],
+    "top_files": [
+      "web/app/chat/page.tsx",
+      "web/components/ToolCallPanel.tsx"
+    ],
+    "node_count": 23
+  },
+  "19": {
+    "label": "객체 API 라우터",
+    "description": "그래프 객체의 목록 조회, 검색, 상세 정보 및 서브그래프 반환을 처리하는 API 라우터",
+    "key_concepts": [
+      "객체 목록/검색/상세 API",
+      "그래프 노드 식별 및 변환",
+      "응답 스키마 모델"
+    ],
+    "top_files": [
+      "api/routers/objects.py"
+    ],
+    "node_count": 22
+  },
+  "20": {
+    "label": "사용자 여정 타임라인",
+    "description": "사용자 여정 이벤트와 전환을 타임라인 형태로 시각화하는 페이지 및 컴포넌트",
+    "key_concepts": [
+      "여정 타임라인",
+      "이벤트 전환",
+      "페르소나 샘플"
+    ],
+    "top_files": [
+      "web/app/journey/page.tsx",
+      "web/components/JourneyTimeline.tsx"
+    ],
+    "node_count": 21
+  },
+  "21": {
+    "label": "Cytoscape 그래프 뷰",
+    "description": "코드베이스 그래프를 Cytoscape.js로 렌더링하고 노드 선택 및 오류 상태를 관리하는 컴포넌트",
+    "key_concepts": [
+      "그래프 시각화",
+      "노드/엣지 렌더링",
+      "React 컴포넌트 상태 관리"
+    ],
+    "top_files": [
+      "web/components/CytoscapeView.tsx",
+      "web/lib/types.ts"
+    ],
+    "node_count": 20
+  },
+  "22": {
+    "label": "코드그래프 페이지",
+    "description": "코드베이스 그래프 시각화 페이지에서 커뮤니티 레이블·메타·크기 상태를 관리하는 메인 컴포넌트",
+    "key_concepts": [
+      "커뮤니티 클러스터 상태 관리",
+      "매니페스트 로딩",
+      "그래프 시각화 UI"
+    ],
+    "top_files": [
+      "web/app/codegraph/page.tsx"
+    ],
+    "node_count": 20
+  },
+  "23": {
+    "label": "API/Web 컨테이너 기초 설정",
+    "description": "FastAPI 헬스체크 엔드포인트와 Next.js 웹 앱의 최소 컨테이너 구성 및 초기 설정 코드",
+    "key_concepts": [
+      "FastAPI /healthz 엔드포인트",
+      "Docker 컨테이너 설정",
+      "Next.js 웹 앱 초기화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 20
+  },
+  "24": {
+    "label": "에이전트 운영 메트릭",
+    "description": "AI 에이전트 툴 디스패치, 트레이스 버퍼 관리 및 운영 메트릭 수집을 담당하는 서비스 계층",
+    "key_concepts": [
+      "툴 디스패치",
+      "트레이스 링 버퍼",
+      "운영 메트릭 수집"
+    ],
+    "top_files": [
+      "api/services/ops_metrics.py",
+      "api/services/agent.py"
+    ],
+    "node_count": 19
+  },
+  "26": {
+    "label": "클러스터 결과 시각화",
+    "description": "군집 분석 결과를 차트 이미지와 페르소나 레이블, 단계별 메타 정보로 시각화하는 페이지",
+    "key_concepts": [
+      "군집 분석 결과 표시",
+      "차트 이미지 렌더링",
+      "페이즈 단계 시각화"
+    ],
+    "top_files": [
+      "web/app/cluster/page.tsx",
+      "web/components/ChartImage.tsx"
+    ],
+    "node_count": 19
+  },
+  "25": {
+    "label": "날씨 기반 코디 추천",
+    "description": "지역별 날씨 데이터를 기반으로 페르소나 톤에 맞는 의상 코디를 추천하는 날씨 오버레이 페이지",
+    "key_concepts": [
+      "날씨 오버레이",
+      "시도별 날씨",
+      "페르소나 코디 추천"
+    ],
+    "top_files": [
+      "web/app/weather/page.tsx",
+      "web/components/WeatherOverlay.tsx"
+    ],
+    "node_count": 19
+  },
+  "27": {
+    "label": "프로젝트 개발 가이드",
+    "description": "코드베이스의 구조, 기술 스택, 핵심 명령어, 코딩 컨벤션 등 프로젝트 전반의 개발 지침을 정의하는 문서 클러스터",
+    "key_concepts": [
+      "프로젝트 구조 및 기술 스택",
+      "개발 컨벤션 및 코딩 규칙",
+      "인프라 및 보안 가이드라인"
+    ],
+    "top_files": [
+      "CLAUDE.md"
+    ],
+    "node_count": 19
+  },
+  "32": {
+    "label": "합성 물류 데이터 생성",
+    "description": "고객, 공장, 운송 레인 등 물류 시뮬레이션용 합성 데이터를 생성하고 검증하는 모듈",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "물류 네트워크",
+      "멀티모달 운송 레인"
+    ],
+    "top_files": [
+      "data/synthetic/lanes.py",
+      "data/synthetic/customers.py",
+      "data/synthetic/plants.py",
+      "tests/data/test_customers_plants_lanes_gen.py"
+    ],
+    "node_count": 18
+  },
+  "28": {
+    "label": "실거래 데이터 정규화 유틸",
+    "description": "CSV 원천 데이터의 고객번호·날짜·시간을 표준 형식으로 정규화하는 공통 유틸 및 거래 데이터 로더",
+    "key_concepts": [
+      "고객번호 정규화",
+      "날짜/시간 병합",
+      "CP949 CSV 어댑터"
+    ],
+    "top_files": [
+      "data/real/_common.py",
+      "data/real/transaction.py",
+      "tests/data/test_real_common.py"
+    ],
+    "node_count": 18
+  },
+  "29": {
+    "label": "SSE 스트리밍 API 라우터",
+    "description": "채팅, 클러스터, 네트워크맵 등 다단계 SSE 스트리밍 파이프라인을 제공하는 API 라우터 및 서비스 모듈",
+    "key_concepts": [
+      "Server-Sent Events(SSE)",
+      "다단계 스트리밍 파이프라인",
+      "FastAPI 라우터"
+    ],
+    "top_files": [
+      "api/services/sse.py",
+      "api/routers/chat.py",
+      "api/routers/network_map.py",
+      "api/routers/external_signal.py",
+      "api/routers/cluster.py"
+    ],
+    "node_count": 18
+  },
+  "30": {
+    "label": "컴플라이언스 시나리오 UI",
+    "description": "페르소나 기반 컴플라이언스 시나리오 헤더 및 샘플 데이터 처리 페이지 컴포넌트",
+    "key_concepts": [
+      "페르소나 라벨/톤 설정",
+      "컴플라이언스 시나리오",
+      "CSV 액션 상태 관리"
+    ],
+    "top_files": [
+      "web/app/compliance/page.tsx",
+      "web/components/ScenarioHeader.tsx"
+    ],
+    "node_count": 18
+  },
+  "31": {
+    "label": "인사이트 분석 페이지",
+    "description": "샘플 데이터 기반 페르소나·단계별 인사이트를 차트와 요약으로 시각화하는 페이지",
+    "key_concepts": [
+      "페르소나 분석",
+      "단계별 시각화",
+      "인사이트 차트"
+    ],
+    "top_files": [
+      "web/app/insights/page.tsx"
+    ],
+    "node_count": 18
+  },
+  "33": {
+    "label": "실데이터 CSV 로딩 파이프라인",
+    "description": "CSV 파일을 읽어 AppEvent, SurveyResponse, ConsumptionIndex 스키마로 변환하는 실데이터 로딩 모듈",
+    "key_concepts": [
+      "CSV 파싱 및 인코딩 정규화",
+      "데이터 스키마 매핑",
+      "실데이터 코호트 로딩"
+    ],
+    "top_files": [
+      "data/real/_common.py",
+      "data/real/consumption_index.py",
+      "data/real/survey.py",
+      "data/real/airbridge.py",
+      "data/schemas.py"
+    ],
+    "node_count": 17
+  },
+  "34": {
+    "label": "Bedrock AI 서비스 레이어",
+    "description": "AWS Bedrock 기반 대화, 스트리밍, 임베딩, 재순위화 기능을 제공하는 AI 서비스 모듈",
+    "key_concepts": [
+      "AWS Bedrock Converse API",
+      "Cohere 임베딩/재순위화",
+      "스트리밍 응답 처리"
+    ],
+    "top_files": [
+      "api/services/bedrock.py",
+      "tests/services/test_bedrock.py"
+    ],
+    "node_count": 17
+  },
+  "35": {
+    "label": "페르소나 컨텍스트 관리",
+    "description": "사용자 페르소나 상태를 Context API로 전역 관리하고 전환 UI를 제공하는 클러스터",
+    "key_concepts": [
+      "PersonaContext",
+      "PersonaProvider",
+      "PersonaSwitch"
+    ],
+    "top_files": [
+      "web/lib/persona-context.tsx",
+      "web/lib/types.ts",
+      "web/components/PersonaSwitch.tsx",
+      "web/app/layout.tsx"
+    ],
+    "node_count": 17
+  },
+  "36": {
+    "label": "검색 파이프라인 구현",
+    "description": "BM25+KNN 하이브리드 검색 및 RRF 리랭킹 파이프라인과 검색 UI 컴포넌트 구현 계획",
+    "key_concepts": [
+      "하이브리드 검색(BM25+KNN+RRF)",
+      "검색 UI 컴포넌트",
+      "골드 스탠다드 평가"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 17
+  },
+  "37": {
+    "label": "연료가격 스키마 및 데이터",
+    "description": "연료가격·날씨·고객 등 핵심 데이터 스키마 정의와 실데이터·합성데이터 로드 및 검증 테스트를 담당",
+    "key_concepts": [
+      "FuelPrice 스키마",
+      "합성/실데이터 생성",
+      "스키마 단위 테스트"
+    ],
+    "top_files": [
+      "data/schemas.py",
+      "tests/data/test_schemas.py",
+      "data/real/opinet_price.py",
+      "data/synthetic/price_synth.py"
+    ],
+    "node_count": 16
+  },
+  "45": {
+    "label": "합성 운영 데이터 생성",
+    "description": "텔레메트리, 유지보수, ESG 합성 데이터를 생성하고 검증하는 모듈 및 테스트 클러스터",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "텔레메트리/유지보수/ESG",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/synthetic/telemetry.py",
+      "data/synthetic/maintenance.py",
+      "data/synthetic/esg.py",
+      "tests/data/test_ops_esg_gen.py"
+    ],
+    "node_count": 16
+  },
+  "38": {
+    "label": "CDK 번들 큐 자료구조",
+    "description": "AWS CDK 배포 에셋으로 번들링된 큐(Queue) 자료구조의 핵심 연산 구현체",
+    "key_concepts": [
+      "큐 자료구조",
+      "CDK 에셋 번들링",
+      "enqueue/dequeue 연산"
+    ],
+    "top_files": [
+      "infra-cdk/cdk.out/asset.f06f7035054cb2aada184c7c251ec5cb31fb6b5e975284939b9ff097603ea769/index.js"
+    ],
+    "node_count": 16
+  },
+  "40": {
+    "label": "하이브리드 검색 서비스",
+    "description": "BM25와 KNN을 RRF로 결합한 하이브리드 검색 및 스펙 매칭 API 처리",
+    "key_concepts": [
+      "하이브리드 검색",
+      "BM25/KNN 융합",
+      "스펙 매칭"
+    ],
+    "top_files": [
+      "api/services/search.py",
+      "api/routers/spec_match.py",
+      "api/services/embedding.py",
+      "tests/api/services/test_search_service.py"
+    ],
+    "node_count": 16
+  },
+  "41": {
+    "label": "페르소나 기반 인사이트 생성",
+    "description": "부서별 페르소나 시스템 프롬프트를 활용해 마크다운 인사이트를 스트리밍 방식으로 생성하는 서비스",
+    "key_concepts": [
+      "부서 페르소나 SSOT",
+      "시스템 프롬프트 구성",
+      "인사이트 스트리밍"
+    ],
+    "top_files": [
+      "api/services/persona.py",
+      "api/routers/insights.py",
+      "tests/services/test_persona.py"
+    ],
+    "node_count": 16
+  },
+  "39": {
+    "label": "에이전트 메모리 관리",
+    "description": "단기(세션) 및 장기(사용자) 네임스페이스 기반 에이전트 메모리 저장·회상 서비스",
+    "key_concepts": [
+      "메모리 네임스페이스",
+      "대화 이벤트 기록",
+      "시맨틱 메모리 회상"
+    ],
+    "top_files": [
+      "api/services/agentcore.py",
+      "tests/services/test_agentcore.py",
+      "api/services/tools/memory_recall.py"
+    ],
+    "node_count": 16
+  },
+  "44": {
+    "label": "한국 네트워크 지도 시각화",
+    "description": "한국 지역별 코로플레스 지도와 브랜드/페르소나 데이터를 연동한 네트워크 맵 페이지",
+    "key_concepts": [
+      "코로플레스 지도",
+      "지역 데이터 시각화",
+      "브랜드 네트워크 분석"
+    ],
+    "top_files": [
+      "web/app/network-map/page.tsx",
+      "web/components/KoreaChoropleth.tsx"
+    ],
+    "node_count": 16
+  },
+  "42": {
+    "label": "객체 타입별 그래프 뷰",
+    "description": "타입별 객체 목록을 Cytoscape 그래프로 시각화하고 노드 선택 시 상세 정보를 인스펙터로 표시하는 페이지",
+    "key_concepts": [
+      "Cytoscape 그래프 시각화",
+      "동적 라우팅 객체 탐색",
+      "노드 선택 및 상세 인스펙터"
+    ],
+    "top_files": [
+      "web/app/objects/[type]/page.tsx"
+    ],
+    "node_count": 16
+  },
+  "43": {
+    "label": "유사 고객 탐색 페이지",
+    "description": "시드 프로필 기반으로 유사 고객(Lookalike)을 탐색하고 페르소나 분석 결과를 표시하는 페이지",
+    "key_concepts": [
+      "Lookalike 분석",
+      "페르소나 프로필",
+      "시드 기반 탐색"
+    ],
+    "top_files": [
+      "web/app/lookalike/page.tsx"
+    ],
+    "node_count": 16
+  },
+  "46": {
+    "label": "Lambda@Edge JWT 인증",
+    "description": "CloudFront Lambda@Edge에서 JWKS 기반 JWT 토큰을 검증하는 엣지 인증 처리 모듈",
+    "key_concepts": [
+      "JWT 검증",
+      "JWKS/JWK-to-PEM 변환",
+      "Lambda@Edge 인증"
+    ],
+    "top_files": [
+      "infra-cdk/lambda-edge-auth/index.js"
+    ],
+    "node_count": 15
+  },
+  "47": {
+    "label": "AWS 리소스 상태 모니터링",
+    "description": "Neptune, OpenSearch, ECS, S3 등 7개 AWS 서비스 그룹의 현재 상태를 조회하는 운영 API",
+    "key_concepts": [
+      "boto3 세션 관리",
+      "AWS 서비스 상태 조회",
+      "운영 대시보드 API"
+    ],
+    "top_files": [
+      "api/aws_clients.py",
+      "api/routers/ops_resources.py"
+    ],
+    "node_count": 15
+  },
+  "49": {
+    "label": "공급업체 RFM 점수 산출",
+    "description": "공급업체의 납기율·불량률·응답성을 정규화하여 RFM 복합 점수를 계산하고 순위를 매기는 서비스",
+    "key_concepts": [
+      "RFM 점수 산출",
+      "공급업체 평가 지표 정규화",
+      "복합 점수 기반 순위화"
+    ],
+    "top_files": [
+      "api/services/rfm_scorer.py",
+      "api/routers/supplier_rfm.py",
+      "tests/api/services/test_rfm_scorer.py"
+    ],
+    "node_count": 15
+  },
+  "48": {
+    "label": "캠페인 ROI 분석 페이지",
+    "description": "마케팅 캠페인의 투자 대비 수익(ROI)을 입력 조건별로 계산하고 결과를 시각화하는 페이지",
+    "key_concepts": [
+      "ROI 계산",
+      "캠페인 세그먼트 필터링",
+      "페르소나 기반 분석"
+    ],
+    "top_files": [
+      "web/app/campaign-roi/page.tsx"
+    ],
+    "node_count": 15
+  },
+  "50": {
+    "label": "공통 서비스 레이어 구현",
+    "description": "Bedrock, OpenSearch, SSE, Guardrails 등 API 공통 서비스 모듈 구현 및 테스트 계획",
+    "key_concepts": [
+      "Bedrock Converse/임베딩",
+      "OpenSearch 하이브리드 검색(BM25+KNN)",
+      "SSE 헬퍼 및 Guardrails"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 15
+  },
+  "51": {
+    "label": "마케터 챗 에이전트 구현",
+    "description": "시나리오 B 마케터 챗 에이전트의 10개 도구 설계, SSE 기반 대화 라우터, 평가 쿼리 구현 계획",
+    "key_concepts": [
+      "TOOL_SPECS 10도구",
+      "SSE 스트리밍 챗",
+      "ADR 0006"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 15
+  },
+  "52": {
+    "label": "LLM 기반 인사이트 생성",
+    "description": "Bedrock LLM을 활용해 외부 신호 융합, 클러스터 라벨링, 마크다운 인사이트 요약을 수행하는 서비스 계층",
+    "key_concepts": [
+      "Bedrock LLM 연동",
+      "외부 신호 융합",
+      "클러스터 자동 라벨링"
+    ],
+    "top_files": [
+      "api/services/insight_summary.py",
+      "api/services/bedrock.py",
+      "api/routers/external_signal.py",
+      "api/services/cluster_pipeline.py"
+    ],
+    "node_count": 14
+  },
+  "54": {
+    "label": "Neptune 그래프 쿼리 도구",
+    "description": "AWS Neptune에 openCypher 쿼리를 실행하고 고객 조회·클러스터 예측·캠페인 시뮬레이션 도구를 제공하는 서비스 레이어",
+    "key_concepts": [
+      "AWS Neptune openCypher",
+      "고객 그래프 조회",
+      "캠페인 ROI 시뮬레이션"
+    ],
+    "top_files": [
+      "api/services/neptune.py",
+      "api/services/tools/customer_lookup.py",
+      "api/services/tools/cluster_predict.py",
+      "api/services/tools/campaign_simulator.py"
+    ],
+    "node_count": 14
+  },
+  "53": {
+    "label": "날씨-거래 상관분석 파이프라인",
+    "description": "기상 관측 데이터와 연료 거래량을 시도·일자 단위로 조인하여 피어슨 상관분석, 산점도, AI 요약을 제공하는 파이프라인",
+    "key_concepts": [
+      "날씨-거래량 상관분석",
+      "시도별 데이터 조인",
+      "Bedrock AI 인사이트 요약"
+    ],
+    "top_files": [
+      "api/services/weather_pipeline.py"
+    ],
+    "node_count": 14
+  },
+  "55": {
+    "label": "실시간 스트리밍 채팅",
+    "description": "SSE 기반 스트리밍으로 역 정보 채팅 메시지를 송수신하는 채팅 패널 컴포넌트",
+    "key_concepts": [
+      "SSE 스트리밍",
+      "채팅 메시지 상태 관리",
+      "세션 기반 대화"
+    ],
+    "top_files": [
+      "web/components/StationChatPanel.tsx",
+      "web/lib/api-client.ts"
+    ],
+    "node_count": 14
+  },
+  "56": {
+    "label": "AI 에이전트 도구 구현",
+    "description": "api/services/tools 하위에 메모리 회상, 그래프 탐색, 시맨틱 검색 등 10개 AI 에이전트 도구를 구현하고 테스트하는 계획",
+    "key_concepts": [
+      "에이전트 도구 모듈",
+      "서비스 레이어 구현",
+      "도구 디스패치 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 14
+  },
+  "57": {
+    "label": "커스텀 도메인 추가 런북",
+    "description": "CDK 재배포와 Cognito 콜백 URL 설정을 통해 커스텀 도메인을 추가하는 운영 절차 문서",
+    "key_concepts": [
+      "커스텀 도메인 설정",
+      "CDK 배포",
+      "Cognito 콜백 URL"
+    ],
+    "top_files": [
+      "docs/runbooks/02-add-custom-domain.md"
+    ],
+    "node_count": 14
+  },
+  "58": {
+    "label": "Ops 파이프라인 라우터",
+    "description": "사이드바 파이프라인 메뉴용 Ops 라우터로 ingest, memory, eval, trace, guardrail 데모 엔드포인트 제공",
+    "key_concepts": [
+      "Ops 라우터",
+      "파이프라인 엔드포인트",
+      "데모 스텁"
+    ],
+    "top_files": [
+      "api/routers/ops.py"
+    ],
+    "node_count": 13
+  },
+  "59": {
+    "label": "온톨로지 메타 API",
+    "description": "25개 클래스 스키마, 표준 코드, 유효성 검증 결과를 REST API로 제공하는 온톨로지 메타데이터 서비스",
+    "key_concepts": [
+      "온톨로지 스키마 조회",
+      "opinet 표준 코드",
+      "데이터 적재 검증"
+    ],
+    "top_files": [
+      "api/routers/ontology.py",
+      "api/services/ontology_meta.py"
+    ],
+    "node_count": 13
+  },
+  "60": {
+    "label": "온톨로지 데이터 흐름 시나리오",
+    "description": "제조/하이테크 온톨로지 설계에서 시맨틱 검색, 대화형 에이전트, SCM, 품질, ESG 등 주요 데이터 흐름 시나리오를 정의",
+    "key_concepts": [
+      "데이터 흐름 시나리오",
+      "LLM 자동 추출",
+      "SCM/ESG/품질 온톨로지"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 13
+  },
+  "61": {
+    "label": "시그니처 시나리오 K·M 구현",
+    "description": "이상치(outlier) 연료 행동 분석과 고객 통합 여정(journey) 타임라인 PDF 시나리오 구현 계획",
+    "key_concepts": [
+      "outlier 시나리오",
+      "journey 타임라인",
+      "PDF 시그니처 시나리오"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 13
+  },
+  "62": {
+    "label": "주유소 및 지역 데이터 로딩",
+    "description": "오피넷 주유소 데이터와 지리적 지역 메타데이터를 로드하고 스키마로 변환하는 클러스터",
+    "key_concepts": [
+      "GasStation 스키마",
+      "Region 메타데이터",
+      "오피넷 데이터 파싱"
+    ],
+    "top_files": [
+      "data/real/opinet_station.py",
+      "data/schemas.py",
+      "data/public/geo.py",
+      "tests/data/test_geo.py"
+    ],
+    "node_count": 12
+  },
+  "63": {
+    "label": "기상청 날씨 ETL 파이프라인",
+    "description": "기상청 단기예보 API를 호출해 날씨 데이터를 수집하고 S3에 저장하는 ETL 모듈",
+    "key_concepts": [
+      "기상청 단기예보 API",
+      "WeatherObservation 변환",
+      "S3 캐시 저장"
+    ],
+    "top_files": [
+      "data/external/kma_weather.py",
+      "data/external/run_etl.py"
+    ],
+    "node_count": 12
+  },
+  "64": {
+    "label": "의미 검색 파이프라인",
+    "description": "쿼리 임베딩부터 BM25+KNN 하이브리드 검색, 리랭킹, 1-hop 서브그래프 조회까지 전체 검색 흐름을 조합하는 파이프라인",
+    "key_concepts": [
+      "하이브리드 검색(BM25+KNN/RRF)",
+      "1-hop 서브그래프",
+      "리랭킹"
+    ],
+    "top_files": [
+      "api/services/search_pipeline.py",
+      "api/services/tools/semantic_search.py",
+      "tests/services/test_search_pipeline.py"
+    ],
+    "node_count": 12
+  },
+  "65": {
+    "label": "메인 페이지 가이드 투어",
+    "description": "앱 메인 페이지의 시나리오·색상·객체 타입 정의 및 단계별 가이드 투어 UI 컴포넌트",
+    "key_concepts": [
+      "가이드 투어 단계",
+      "시나리오 정의",
+      "객체 그룹 색상"
+    ],
+    "top_files": [
+      "web/app/page.tsx",
+      "web/components/GuidedTour.tsx"
+    ],
+    "node_count": 12
+  },
+  "66": {
+    "label": "이상치 탐지 페이지",
+    "description": "페르소나 전환 및 패턴 선택을 통해 데이터 이상치를 탐지하고 결과를 표시하는 페이지",
+    "key_concepts": [
+      "이상치 탐지",
+      "페르소나 전환",
+      "패턴 분석"
+    ],
+    "top_files": [
+      "web/app/outlier/page.tsx",
+      "web/components/PersonaSwitchGcc.tsx"
+    ],
+    "node_count": 12
+  },
+  "67": {
+    "label": "제조업 온톨로지 설계 명세",
+    "description": "한국 첨단 제조업 도메인을 위한 온톨로지 데모의 설계 명세 및 프로젝트 구조, 리스크, 미결 사항을 정의한 문서 클러스터",
+    "key_concepts": [
+      "온톨로지 설계 명세",
+      "첨단 제조업 도메인",
+      "리스크 레지스터"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 12
+  },
+  "68": {
+    "label": "Code Interpreter 시나리오 구현",
+    "description": "인사이트 파이프라인 및 캠페인 ROI 시나리오의 Python/TSX 코드와 matplotlib 차트 구현 계획",
+    "key_concepts": [
+      "Code Interpreter 시나리오",
+      "인사이트 파이프라인",
+      "캠페인 ROI 분석"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 12
+  },
+  "69": {
+    "label": "사이드바 UI 컴포넌트",
+    "description": "웹 앱의 사이드바 레이아웃, 인증 정보, 회사 로고 등 좌측 네비게이션 UI를 구성하는 컴포넌트 모음",
+    "key_concepts": [
+      "사이드바 네비게이션",
+      "인증 사용자 표시",
+      "회사 로고"
+    ],
+    "top_files": [
+      "web/components/Sidebar.tsx",
+      "web/components/SidebarAuth.tsx",
+      "web/components/CompanyLogo.tsx"
+    ],
+    "node_count": 11
+  },
+  "71": {
+    "label": "운영 관리 패널 UI",
+    "description": "가드레일, 수집, 메모리, 평가 등 AI 운영 기능을 탭 패널로 구성한 Ops 페이지 컴포넌트 모음",
+    "key_concepts": [
+      "운영 대시보드",
+      "패널 컴포넌트",
+      "AI 파이프라인 관리"
+    ],
+    "top_files": [
+      "web/app/ops/page.tsx",
+      "web/components/GuardrailPanel.tsx",
+      "web/components/IngestPanel.tsx",
+      "web/components/MemoryPanel.tsx",
+      "web/components/EvalPanel.tsx"
+    ],
+    "node_count": 11
+  },
+  "70": {
+    "label": "메타 스키마 탭 페이지",
+    "description": "메타데이터 스키마와 표준을 탭 기반으로 조회하고 유효성 검사 상태를 관리하는 페이지",
+    "key_concepts": [
+      "탭 네비게이션",
+      "스키마 관리",
+      "그룹 분류"
+    ],
+    "top_files": [
+      "web/app/meta/page.tsx"
+    ],
+    "node_count": 11
+  },
+  "72": {
+    "label": "보안 정책 및 가이드라인",
+    "description": "ontology-gcc 프로젝트의 네트워크, 인증, 데이터, IAM, LLM 등 전반적인 보안 정책을 정의하는 클러스터",
+    "key_concepts": [
+      "보안 정책",
+      "IAM 및 인증",
+      "LLM 가드레일"
+    ],
+    "top_files": [
+      "SECURITY.md"
+    ],
+    "node_count": 11
+  },
+  "73": {
+    "label": "벌크 로더 및 검색 인덱싱",
+    "description": "Neptune 벌크 로더와 OpenSearch 하이브리드 인덱스를 통합하는 데이터 적재 CLI 구현 계획",
+    "key_concepts": [
+      "Neptune Bulk Loader",
+      "OpenSearch 하이브리드 인덱스",
+      "통합 데이터 적재 CLI"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 11
+  },
+  "74": {
+    "label": "검색·챗봇 시나리오 실행계획",
+    "description": "검색(A)과 마케터 챗 에이전트(B) 시나리오의 골드스탠다드 구현 및 CI 검증·릴리즈 절차를 정의한 실행 계획 문서",
+    "key_concepts": [
+      "골드스탠다드 시나리오",
+      "CI 검증 및 태깅",
+      "CHANGELOG 릴리즈"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 11
+  },
+  "75": {
+    "label": "컴플라이언스·결제 시나리오 구현",
+    "description": "약관·규제 가드레일(compliance)과 결제·가격·채널 분석(payment) 시나리오의 API 라우터 및 웹 페이지 템플릿 직접 적용 태스크",
+    "key_concepts": [
+      "compliance 시나리오",
+      "payment 시나리오",
+      "템플릿 직접 적용"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 11
+  },
+  "76": {
+    "label": "객체 탐색 기능 강화",
+    "description": "API 라우터와 웹 페이지에 객체 검색·필터·페이지네이션 및 1-hop 서브그래프 시각화를 추가하는 계획",
+    "key_concepts": [
+      "객체 API 보강",
+      "Cytoscape 1-hop 그래프",
+      "검색·필터·페이지네이션"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 11
+  },
+  "77": {
+    "label": "Next.js 프론트엔드 스캐폴딩",
+    "description": "Next.js 14 기반 웹 프론트엔드 초기 구성 및 Tailwind, shadcn/ui, Pretendard 설정 코드 정의",
+    "key_concepts": [
+      "Next.js 14 스캐폴드",
+      "Tailwind CSS 설정",
+      "Docker 컨테이너화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 11
+  },
+  "79": {
+    "label": "온톨로지 기반 구현 계획",
+    "description": "LLM 보조 합성 데이터 생성을 위한 Bedrock 헬퍼 구현 및 온톨로지 MFG 파운데이션 설정 계획",
+    "key_concepts": [
+      "온톨로지 MFG 파운데이션",
+      "AWS Bedrock LLM 헬퍼",
+      "합성 데이터 생성"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 11
+  },
+  "78": {
+    "label": "제조 온톨로지 프로젝트 초기화",
+    "description": "제조 온톨로지 프로젝트의 git 저장소 초기화, 디렉터리 구조 생성 및 기본 설정 파일 구성 작업",
+    "key_concepts": [
+      "프로젝트 스켈레톤 초기화",
+      "git 저장소 설정",
+      "의존성 및 디렉터리 구조"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 11
+  },
+  "80": {
+    "label": "프로젝트 기반 파일 구조 계획",
+    "description": "2026년 파운데이션 플랜의 Phase 0~1 단계별 디렉토리 및 파일 구조 설계 문서",
+    "key_concepts": [
+      "파일 구조 설계",
+      "Phase 단계별 초기화",
+      "프로젝트 스캐폴딩"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 11
+  },
+  "81": {
+    "label": "Bedrock 합성 데이터 헬퍼",
+    "description": "LLM 기반 합성 데이터 생성을 위한 AWS Bedrock 도구 스키마 빌드 및 호출 유틸리티",
+    "key_concepts": [
+      "AWS Bedrock",
+      "도구 스키마",
+      "합성 데이터 생성"
+    ],
+    "top_files": [
+      "data/synthetic/_bedrock.py",
+      "tests/data/test_bedrock_helper.py"
+    ],
+    "node_count": 10
+  },
+  "83": {
+    "label": "CDK 커스텀 리소스 진입점",
+    "description": "AWS CDK 커스텀 리소스 Lambda의 진입점으로 CloudFormation 응답 처리 및 HTTP 요청을 담당",
+    "key_concepts": [
+      "CloudFormation 커스텀 리소스",
+      "Lambda 핸들러",
+      "HTTP 응답 제출"
+    ],
+    "top_files": [
+      "infra-cdk/cdk.out/asset.d2191f6f199b95d1c044799f514b1ceca87200b3014c43c34839aad03dc69b8c/__entrypoint__.js"
+    ],
+    "node_count": 10
+  },
+  "84": {
+    "label": "CDK Lambda 진입점 핸들러",
+    "description": "CDK 커스텀 리소스 Lambda의 진입점으로 CloudFormation 응답 제출 및 HTTP 요청 처리를 담당",
+    "key_concepts": [
+      "CloudFormation 커스텀 리소스",
+      "Lambda 핸들러",
+      "HTTP 응답 제출"
+    ],
+    "top_files": [
+      "infra-cdk/cdk.out/asset.f06f7035054cb2aada184c7c251ec5cb31fb6b5e975284939b9ff097603ea769/__entrypoint__.js"
+    ],
+    "node_count": 10
+  },
+  "82": {
+    "label": "AWS 서비스 환경 설정",
+    "description": "AWS Bedrock 및 OpenSearch 연동에 필요한 환경 변수를 중앙 집중식으로 관리하는 설정 모듈",
+    "key_concepts": [
+      "환경 변수 설정",
+      "AWS Bedrock 모델 구성",
+      "OpenSearch 엔드포인트 관리"
+    ],
+    "top_files": [
+      "api/config.py"
+    ],
+    "node_count": 10
+  },
+  "85": {
+    "label": "Cognito OAuth 인증 라우터",
+    "description": "AWS Cognito 기반 OAuth 로그인·콜백·로그아웃·인증 상태 확인 엔드포인트를 처리하는 인증 라우터",
+    "key_concepts": [
+      "AWS Cognito OAuth",
+      "JWT 쿠키 인증",
+      "인증 콜백 처리"
+    ],
+    "top_files": [
+      "api/routers/auth.py"
+    ],
+    "node_count": 10
+  },
+  "86": {
+    "label": "대체 부품 추천 라우터",
+    "description": "원본 부품에 대한 대체 후보를 분석하고 컬러 코딩된 서브그래프와 함께 추천 결과를 반환하는 API 라우터",
+    "key_concepts": [
+      "대체 부품 탐색",
+      "서브그래프 시각화",
+      "부품 카테고리 분류"
+    ],
+    "top_files": [
+      "api/routers/substitute.py"
+    ],
+    "node_count": 10
+  },
+  "87": {
+    "label": "8D 보고서 SSE 스트리밍",
+    "description": "8D 문제해결 보고서를 Markdown으로 조립하고 SSE로 실시간 스트리밍하는 API 라우터",
+    "key_concepts": [
+      "8D 보고서 생성",
+      "SSE 스트리밍",
+      "Bedrock 폴백 처리"
+    ],
+    "top_files": [
+      "api/routers/eight_d.py"
+    ],
+    "node_count": 10
+  },
+  "88": {
+    "label": "캠페인 ROI 시뮬레이션",
+    "description": "캠페인 ROI를 시뮬레이션하고 정규분포 차트를 생성하여 SSE 스트리밍으로 결과를 반환하는 API 라우터",
+    "key_concepts": [
+      "ROI 시뮬레이션",
+      "정규분포 차트 시각화",
+      "SSE 스트리밍 응답"
+    ],
+    "top_files": [
+      "api/routers/campaign_roi.py"
+    ],
+    "node_count": 10
+  },
+  "89": {
+    "label": "고객 군집화 파이프라인",
+    "description": "KMeans 기반 고객 특성 군집화 후 LLM 라벨링 및 Neo4j 클러스터 노드 업데이트를 수행하는 파이프라인",
+    "key_concepts": [
+      "KMeans 군집화",
+      "LLM 클러스터 라벨링",
+      "그래프 노드 업데이트"
+    ],
+    "top_files": [
+      "api/services/cluster_pipeline.py"
+    ],
+    "node_count": 10
+  },
+  "90": {
+    "label": "운영 영역별 페이지",
+    "description": "특정 운영 도메인 영역의 데이터를 로드하고 노드 및 그룹 통계를 표시하는 동적 페이지",
+    "key_concepts": [
+      "동적 라우팅",
+      "도메인 메타데이터",
+      "데이터 로딩 상태 관리"
+    ],
+    "top_files": [
+      "web/app/ops/[area]/page.tsx"
+    ],
+    "node_count": 10
+  },
+  "91": {
+    "label": "커뮤니티 자동 라벨링",
+    "description": "Bedrock AI를 활용해 코드 커뮤니티를 분석하고 한국어/영어 라벨을 자동 생성·패치하는 스크립트",
+    "key_concepts": [
+      "커뮤니티 군집화",
+      "Bedrock LLM 호출",
+      "그래프 JSON/HTML 패치"
+    ],
+    "top_files": [
+      "scripts/label_communities.py"
+    ],
+    "node_count": 10
+  },
+  "92": {
+    "label": "프로젝트 변경 이력",
+    "description": "프로젝트의 버전별 릴리즈 내역과 개발 단계별 완료 사항을 기록한 CHANGELOG 문서",
+    "key_concepts": [
+      "버전 릴리즈",
+      "개발 단계 추적",
+      "변경 이력 관리"
+    ],
+    "top_files": [
+      "CHANGELOG.md"
+    ],
+    "node_count": 10
+  },
+  "93": {
+    "label": "기상청 API ETL 파이프라인",
+    "description": "기상청 외부 API 클라이언트 구현, S3 캐시 전략, Secrets Manager 연동 및 NDJSON ETL 실행기 설계",
+    "key_concepts": [
+      "기상청 API 클라이언트",
+      "S3 캐시 전략",
+      "ETL 파이프라인"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 10
+  },
+  "94": {
+    "label": "시나리오 C~N 구현 계획",
+    "description": "차트 이미지 컴포넌트 및 12개 시나리오 보일러플레이트 자동 생성을 포함한 Plan 4 구현 계획 문서",
+    "key_concepts": [
+      "시나리오 라우터 보일러플레이트",
+      "ChartImage 컴포넌트",
+      "자동화 스크립트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 10
+  },
+  "95": {
+    "label": "플랜5 폴리시 작업 계획",
+    "description": "2026-05-08 기준 플랜5 완성도 향상을 위한 라우터·서비스·ETL·배포 등 세부 작업 항목 정의",
+    "key_concepts": [
+      "신규 라우터 및 서비스 구성",
+      "Lambda@Edge 도메인 배포",
+      "README 및 문서 정합화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 10
+  },
+  "96": {
+    "label": "원샷 데이터 로더 배포",
+    "description": "ARM64 Docker 이미지 기반 ECS 원샷 로더를 빌드·배포하고 Neptune에 데이터를 적재하는 CDK 인프라 태스크",
+    "key_concepts": [
+      "One-shot ECS Task",
+      "Docker/ECR 이미지 빌드",
+      "AWS CDK 인프라"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 10
+  },
+  "97": {
+    "label": "제조 API 라우터 구현",
+    "description": "구매자 인사이트, 사양 매칭, 규정 준수, 대체 부품 조회를 위한 API 라우터 및 테스트 코드 구현",
+    "key_concepts": [
+      "API 라우터",
+      "규정 준수(REACH/RoHS)",
+      "부품 사양 매칭"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 10
+  },
+  "99": {
+    "label": "CDK 인프라 배포 절차",
+    "description": "AWS CDK를 이용한 인프라 스택의 synth, bootstrap, deploy 전체 배포 절차 문서화",
+    "key_concepts": [
+      "AWS CDK 배포",
+      "CloudFormation 스택",
+      "인프라 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 10
+  },
+  "98": {
+    "label": "Phase 1 종료 및 배포 검증",
+    "description": "CDK 스택 배포 후 도메인 검증, CHANGELOG·README 업데이트, sanity 체크로 Phase 1을 마무리하는 태스크",
+    "key_concepts": [
+      "Phase 1 종료 체크리스트",
+      "harness-eval baseline",
+      "CDK 배포 검증"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 10
+  },
+  "100": {
+    "label": "코드그래프 분석 보고서",
+    "description": "코드베이스의 온톨로지 그래프 구조를 분석하고 커뮤니티 허브, 핵심 노드, 지식 공백 등을 요약한 보고서",
+    "key_concepts": [
+      "그래프 보고서",
+      "커뮤니티 허브",
+      "지식 공백"
+    ],
+    "top_files": [
+      "web/public/codegraph/GRAPH_REPORT.md"
+    ],
+    "node_count": 10
+  },
+  "105": {
+    "label": "미국 무역규정 데이터 모듈",
+    "description": "IRA Section 30D, FEOC, USMCA Chapter 4 RVC 등 미국 무역규정 데이터 로드 및 테스트",
+    "key_concepts": [
+      "IRA Section 30D",
+      "USMCA RVC 규칙",
+      "FEOC 국가 목록"
+    ],
+    "top_files": [
+      "tests/data/test_us_trade.py",
+      "data/public/us_trade.py"
+    ],
+    "node_count": 9
+  },
+  "101": {
+    "label": "공급업체 데이터 생성",
+    "description": "Tier-1/Tier-2 공급업체 합성 데이터를 결정론적으로 생성하고 지역 분포를 검증하는 모듈",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "공급업체 계층 구조",
+      "지역 분포"
+    ],
+    "top_files": [
+      "data/synthetic/suppliers.py",
+      "tests/data/test_suppliers_gen.py"
+    ],
+    "node_count": 9
+  },
+  "103": {
+    "label": "검색 API 라우터",
+    "description": "OpenSearch와 Neptune을 연동한 REST 및 SSE 스트리밍 검색 API 엔드포인트 구현",
+    "key_concepts": [
+      "검색 파이프라인",
+      "SSE 스트리밍",
+      "1-hop 서브그래프"
+    ],
+    "top_files": [
+      "api/routers/search.py"
+    ],
+    "node_count": 9
+  },
+  "102": {
+    "label": "페르소나 매칭 API",
+    "description": "페르소나 쿼리 및 점수 계산을 수행하는 매칭 API 라우터 (JSON 및 SSE 스트리밍 지원)",
+    "key_concepts": [
+      "페르소나 매칭",
+      "SSE 스트리밍",
+      "점수 집계"
+    ],
+    "top_files": [
+      "api/routers/persona_match.py"
+    ],
+    "node_count": 9
+  },
+  "104": {
+    "label": "코호트 및 행동분석 도구",
+    "description": "데이터 깊이·페르소나·시나리오 기반 코호트 선정과 그래프 서브그래프 탐색 및 행동 변화 감지 도구 모음",
+    "key_concepts": [
+      "코호트 풀 결정",
+      "Neptune 서브그래프 탐색",
+      "행동 변화 감지"
+    ],
+    "top_files": [
+      "api/services/cohort.py",
+      "api/services/tools/neptune_subgraph.py",
+      "api/services/tools/behavior_change_detect.py"
+    ],
+    "node_count": 9
+  },
+  "106": {
+    "label": "코드그래프 커뮤니티 라벨링",
+    "description": "코드베이스 그래프의 커뮤니티를 AI 호출로 분석해 한국어 시맨틱 메타데이터를 자동 부여하는 스크립트",
+    "key_concepts": [
+      "커뮤니티 군집화",
+      "Bedrock LLM 호출",
+      "그래프 메타데이터 어노테이션"
+    ],
+    "top_files": [
+      "scripts/label_codegraph_communities.py"
+    ],
+    "node_count": 9
+  },
+  "107": {
+    "label": "데이터 파이프라인 구현 계획",
+    "description": "온톨로지 스키마 카탈로그 구축을 포함한 데이터 파이프라인 단계별 구현 계획 문서",
+    "key_concepts": [
+      "데이터 파이프라인",
+      "온톨로지 스키마",
+      "OPINET 표준 코드"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 9
+  },
+  "110": {
+    "label": "데이터 파이프라인 설계 계획",
+    "description": "Phase 2 데이터 레이어 구축 계획으로 도메인 모델, 실데이터 어댑터, 합성 생성기, 외부 API 연동, 로더, API/UI, 테스트를 단계별로 정의",
+    "key_concepts": [
+      "도메인 모델 및 어댑터",
+      "합성 데이터 생성기",
+      "기상청 외부 API 연동"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 9
+  },
+  "108": {
+    "label": "Cytoscape ER UI 구현",
+    "description": "Cytoscape 기반 ER 다이어그램과 오브젝트 탐색기 스텁 UI 컴포넌트 구현 계획",
+    "key_concepts": [
+      "Cytoscape ER 다이어그램",
+      "Object Explorer Stub",
+      "Next.js TSX 컴포넌트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 9
+  },
+  "109": {
+    "label": "Phase 2 검증 및 종료",
+    "description": "Neptune 데이터 로드 검증 스크립트 실행 및 CI 통과 후 Phase 2 데이터 파이프라인을 공식 종료하는 작업",
+    "key_concepts": [
+      "validate_load.py",
+      "CI 4-job 통과",
+      "CHANGELOG 태깅"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 9
+  },
+  "112": {
+    "label": "메타 페이지 풍부화 계획",
+    "description": "온톨로지 API 라우터와 메타 페이지에 스키마·표준·검증 탭을 추가하는 구현 계획",
+    "key_concepts": [
+      "온톨로지 메타 API",
+      "메타 페이지 3탭 UI",
+      "스키마 검증"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 9
+  },
+  "113": {
+    "label": "운영 콘솔 API 구현",
+    "description": "ops 라우터와 메트릭 서비스를 통해 운영 콘솔 및 가드레일 로그 훅을 구현하는 계획",
+    "key_concepts": [
+      "운영 콘솔",
+      "ops_metrics 서비스",
+      "가드레일 로그 훅"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 9
+  },
+  "114": {
+    "label": "Opinet ETL 가격 보강 계획",
+    "description": "opinet 공개 API를 활용한 1년치 유가 시계열 데이터 ETL 작업 계획 및 실행 핸드오프 문서",
+    "key_concepts": [
+      "opinet ETL",
+      "가격 시계열 보강",
+      "실행 계획 문서화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 9
+  },
+  "111": {
+    "label": "harness-eval 자동화 및 릴리스",
+    "description": "harness-eval 자동화 스크립트, CI 워크플로우 설정, README 및 CHANGELOG 1.0.0 최종 릴리스 작업",
+    "key_concepts": [
+      "harness-eval 자동화",
+      "README 한영 정합",
+      "1.0.0 릴리스"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 9
+  },
+  "115": {
+    "label": "FastAPI 제조 온톨로지 스캐폴드",
+    "description": "제조 온톨로지 애플리케이션을 위한 FastAPI 프로젝트 구조, 설정, AWS 클라이언트, Docker 배포 및 테스트 초기 구성",
+    "key_concepts": [
+      "FastAPI 프로젝트 스캐폴딩",
+      "boto3 AWS 클라이언트 팩토리",
+      "Docker ARM64 컨테이너 배포"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 9
+  },
+  "116": {
+    "label": "웹 프론트엔드 페르소나 라우트",
+    "description": "구매자·엔지니어·품질·SCM 등 페르소나별 Next.js 라우트 레이아웃 및 시나리오 페이지 구현 계획",
+    "key_concepts": [
+      "페르소나별 라우트 그룹",
+      "Next.js App Router",
+      "시나리오 페이지 구성"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 9
+  },
+  "117": {
+    "label": "유해물질 규제 표준 모듈",
+    "description": "REACH-SVHC 및 RoHS 유해물질 규제 데이터 모듈 구현 및 테스트 코드 정의",
+    "key_concepts": [
+      "REACH-SVHC",
+      "RoHS 제한물질",
+      "온톨로지 표준 매핑"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 9
+  },
+  "118": {
+    "label": "AWS CDK 인프라 스택 구성",
+    "description": "CDK 기반 AI 스택(Bedrock KB·Guardrails)과 옵저버빌리티 스택(CloudWatch 대시보드·알람)을 포함한 클라우드 인프라 파운데이션 구축 계획",
+    "key_concepts": [
+      "AWS CDK 스택",
+      "Bedrock AI 통합",
+      "CloudWatch 옵저버빌리티"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 9
+  },
+  "119": {
+    "label": "RoHS 규제 물질 데이터",
+    "description": "EU RoHS 지침(2011/65/EU)의 제한 물질 목록을 로드하고 검증하는 모듈",
+    "key_concepts": [
+      "RoHS 규제",
+      "유해물질 제한",
+      "EU 환경 지침"
+    ],
+    "top_files": [
+      "data/public/rohs.py",
+      "tests/data/test_rohs.py"
+    ],
+    "node_count": 8
+  },
+  "128": {
+    "label": "합성 인시던트 데이터 생성",
+    "description": "품질 인시던트, 8D 보고서, 근본원인 분석 등 합성 테스트 데이터를 생성하고 검증하는 모듈",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "품질 인시던트",
+      "8D 보고서"
+    ],
+    "top_files": [
+      "data/synthetic/incidents.py",
+      "tests/data/test_incidents_gen.py"
+    ],
+    "node_count": 8
+  },
+  "120": {
+    "label": "오피넷 유가 ETL",
+    "description": "오피넷 공개 API에서 시도별 일별 평균 유가를 수집해 S3에 NDJSON으로 저장하는 ETL 파이프라인",
+    "key_concepts": [
+      "오피넷 API 연동",
+      "시도별 유가 수집",
+      "S3 NDJSON 적재"
+    ],
+    "top_files": [
+      "data/external/opinet_etl.py"
+    ],
+    "node_count": 8
+  },
+  "121": {
+    "label": "CDK 번들 Lambda 핸들러",
+    "description": "AWS CDK 빌드 산출물로 패키징된 Lambda 함수의 번들링된 JavaScript 실행 코드",
+    "key_concepts": [
+      "CDK 애셋 번들링",
+      "Lambda 핸들러",
+      "minified JavaScript"
+    ],
+    "top_files": [
+      "infra-cdk/cdk.out/asset.d2191f6f199b95d1c044799f514b1ceca87200b3014c43c34839aad03dc69b8c/index.js"
+    ],
+    "node_count": 8
+  },
+  "124": {
+    "label": "AWS 클라이언트 및 KB 서비스",
+    "description": "boto3 기반 AWS 클라이언트 팩토리와 Knowledge Base 검색 서비스를 제공하는 모듈",
+    "key_concepts": [
+      "boto3 클라이언트 캐싱",
+      "Bedrock Knowledge Base 검색",
+      "AWS 서비스 통합"
+    ],
+    "top_files": [
+      "api/aws_clients.py",
+      "api/services/kb.py",
+      "tests/api/services/test_bedrock_services.py"
+    ],
+    "node_count": 8
+  },
+  "125": {
+    "label": "8D 보고서 자동 작성",
+    "description": "AWS Bedrock LLM을 활용해 8D 문제해결 보고서 초안을 자동 생성하고 결과를 재순위화하는 서비스",
+    "key_concepts": [
+      "8D 보고서 생성",
+      "AWS Bedrock 연동",
+      "재순위화(Reranker)"
+    ],
+    "top_files": [
+      "api/services/eight_d_writer.py",
+      "api/aws_clients.py",
+      "api/services/reranker.py",
+      "tests/api/services/test_eight_d_writer.py"
+    ],
+    "node_count": 8
+  },
+  "122": {
+    "label": "Cognito JWT 인증 미들웨어",
+    "description": "AWS Cognito 사용자 풀의 JWKS를 이용해 Bearer JWT 서명을 검증하는 HTTP 미들웨어",
+    "key_concepts": [
+      "JWT 서명 검증",
+      "AWS Cognito 인증",
+      "Bearer 토큰 미들웨어"
+    ],
+    "top_files": [
+      "api/middleware_auth.py"
+    ],
+    "node_count": 8
+  },
+  "123": {
+    "label": "가격 산정 라우터",
+    "description": "오퍼 데이터를 수집·합성·점수화하여 최적 가격을 산출하는 API 라우터 모듈",
+    "key_concepts": [
+      "오퍼 점수화",
+      "가격 최적화",
+      "서브그래프 빌드"
+    ],
+    "top_files": [
+      "api/routers/price.py"
+    ],
+    "node_count": 8
+  },
+  "127": {
+    "label": "날씨 상관관계 분석 API",
+    "description": "KMA 날씨 데이터를 기반으로 상관관계를 분석하고 SSE 스트리밍으로 인사이트를 제공하는 라우터",
+    "key_concepts": [
+      "날씨 데이터 상관관계",
+      "SSE 스트리밍 파이프라인",
+      "Claude Sonnet 인사이트"
+    ],
+    "top_files": [
+      "api/routers/weather.py"
+    ],
+    "node_count": 8
+  },
+  "126": {
+    "label": "컴플라이언스 검사 API",
+    "description": "규정 준수 여부를 확인하고 SSE 스트리밍으로 결과를 반환하는 컴플라이언스 라우터",
+    "key_concepts": [
+      "규정 준수 검사",
+      "SSE 스트리밍",
+      "적격성 평가"
+    ],
+    "top_files": [
+      "api/routers/compliance.py"
+    ],
+    "node_count": 8
+  },
+  "129": {
+    "label": "전체 데이터셋 통합 테스트",
+    "description": "생성된 전체 데이터셋의 노드 수, 컴포넌트 유효성, 레인 균형, 인시던트 존재 여부를 검증하는 테스트 모음",
+    "key_concepts": [
+      "데이터셋 검증",
+      "픽스처 생성기",
+      "통합 테스트"
+    ],
+    "top_files": [
+      "tests/data/test_full_dataset.py"
+    ],
+    "node_count": 8
+  },
+  "130": {
+    "label": "제조 온톨로지 데이터 모델",
+    "description": "제조·하이테크 도메인의 핵심 클래스, 관계, BOM 계층 및 한국어 어댑터 매핑을 정의하는 온톨로지 데이터 모델 설계 명세",
+    "key_concepts": [
+      "온톨로지 코어 클래스/관계",
+      "BOM 계층 구조",
+      "표준-한국어 어댑터 매핑"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 8
+  },
+  "131": {
+    "label": "Phase3 시나리오 개발계획",
+    "description": "2026년 5월 기준 Phase 3의 시나리오 A/B 구현 단계별 계획 및 문서 구조 정의",
+    "key_concepts": [
+      "시나리오 A/B 분기 구현",
+      "Phase 단계별 로드맵",
+      "ADR 및 평가 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 8
+  },
+  "132": {
+    "label": "AgentCore 메모리·코드 인터프리터",
+    "description": "AgentCore의 단기/장기 메모리 클라이언트와 샌드박스 코드 인터프리터 서비스를 구현하는 Phase 3.3 계획 및 코드",
+    "key_concepts": [
+      "AgentCore 메모리 클라이언트",
+      "코드 인터프리터 샌드박스",
+      "서비스 레이어 구현"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 8
+  },
+  "133": {
+    "label": "기상청 날씨 파이프라인",
+    "description": "기상청 데이터와 트랜잭션을 조인하는 날씨 시나리오 N의 백엔드·프론트엔드 구현 계획",
+    "key_concepts": [
+      "weather_pipeline",
+      "기상청 API 연동",
+      "WeatherOverlay 컴포넌트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 8
+  },
+  "136": {
+    "label": "커스텀 도메인 연결 계획",
+    "description": "ACM 인증서 발급, Cognito 콜백 URL 설정, 커스텀 도메인 연결 및 검증 절차를 다루는 배포 계획 문서",
+    "key_concepts": [
+      "ACM 인증서 발급",
+      "Cognito 콜백 URL",
+      "커스텀 도메인 배포"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 8
+  },
+  "134": {
+    "label": "Lambda@Edge 인증 강화 계획",
+    "description": "RS256 JWT 및 JWKS 캐시 기반 Lambda@Edge 인증 함수 구현과 도메인 wiring 통합 테스트 계획",
+    "key_concepts": [
+      "Lambda@Edge 인증",
+      "RS256 JWT / JWKS",
+      "도메인 wiring 및 Cognito 통합"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 8
+  },
+  "135": {
+    "label": "운영 콘솔 UI 패널",
+    "description": "AI 운영 콘솔의 5개 패널(Ingest, Guardrail, Memory, Eval, Trace) 컴포넌트 구현 계획",
+    "key_concepts": [
+      "운영 콘솔 UI",
+      "TSX 패널 컴포넌트",
+      "Next.js 앱 라우팅"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 8
+  },
+  "137": {
+    "label": "API 백엔드 규정준수 엔진",
+    "description": "제조 온톨로지 앱의 API 백엔드 Phase 3에서 REACH/RoHS/AEC-Q 규정 준수 엔진 서비스 구현 및 통합 테스트",
+    "key_concepts": [
+      "규정준수 엔진",
+      "FastAPI 라우터 통합",
+      "REACH/RoHS/AEC-Q 검증"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 8
+  },
+  "138": {
+    "label": "CDK 인프라 프로젝트 초기화",
+    "description": "AWS CDK 프로젝트 부트스트랩을 위한 설정 파일 및 진입점 코드 구성 태스크",
+    "key_concepts": [
+      "CDK 부트스트랩",
+      "인프라 코드 초기화",
+      "TypeScript/JS 설정"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 8
+  },
+  "140": {
+    "label": "ECS 컨테이너 배포 자동화",
+    "description": "Docker 이미지 빌드 후 ECR 푸시 및 ECS 서비스 배포를 수행하는 CI/CD 파이프라인 태스크",
+    "key_concepts": [
+      "Docker 컨테이너 빌드",
+      "AWS ECS/ECR 배포",
+      "CDK 인프라 프로비저닝"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 8
+  },
+  "139": {
+    "label": "Cognito 프로비저닝 및 CloudFront 검증",
+    "description": "Cognito 사용자 풀 프로비저닝과 CloudFront 도메인 연동 및 콜백 URL 업데이트를 자동화하는 기반 구성 작업",
+    "key_concepts": [
+      "Cognito 사용자 프로비저닝",
+      "CloudFront 도메인 연동",
+      "콜백 URL 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 8
+  },
+  "141": {
+    "label": "VPC 임포트 아키텍처 결정",
+    "description": "리테일 VPC를 인프라 코드로 임포트하는 아키텍처 결정 기록(ADR) 문서",
+    "key_concepts": [
+      "ADR",
+      "VPC 임포트",
+      "인프라 의사결정"
+    ],
+    "top_files": [
+      "docs/decisions/0001-retail-vpc-import.md"
+    ],
+    "node_count": 8
+  },
+  "142": {
+    "label": "REACH SVHC 물질 데이터 관리",
+    "description": "ECHA REACH SVHC 후보 물질 목록 로드 및 규정 데이터 처리와 테스트를 담당하는 모듈",
+    "key_concepts": [
+      "REACH SVHC",
+      "유해물질 규정",
+      "ECHA 데이터 로드"
+    ],
+    "top_files": [
+      "data/public/reach_svhc.py",
+      "tests/data/test_reach_svhc.py"
+    ],
+    "node_count": 7
+  },
+  "151": {
+    "label": "EU CBAM 데이터 로더",
+    "description": "EU 탄소국경조정제도(CBAM) 관련 CN 코드 및 규정 데이터를 로드하고 테스트하는 모듈",
+    "key_concepts": [
+      "탄소국경조정제도(CBAM)",
+      "CN 코드",
+      "EU 환경규정 데이터"
+    ],
+    "top_files": [
+      "data/public/cbam.py",
+      "tests/data/test_cbam.py"
+    ],
+    "node_count": 7
+  },
+  "152": {
+    "label": "합성 상품 데이터 생성",
+    "description": "결정론적 방식으로 80개의 SKU 상품 데이터를 생성하고 검증하는 모듈",
+    "key_concepts": [
+      "SKU 생성기",
+      "합성 데이터",
+      "결정론적 테스트"
+    ],
+    "top_files": [
+      "data/synthetic/products.py",
+      "tests/data/test_products_gen.py"
+    ],
+    "node_count": 7
+  },
+  "143": {
+    "label": "BOM 합성 데이터 생성",
+    "description": "자재명세서(BOM)의 모듈/부품/원자재 계층 구조를 합성 데이터로 생성하고 검증하는 모듈",
+    "key_concepts": [
+      "BOM(자재명세서)",
+      "합성 데이터 생성",
+      "계층 구조 엣지 일관성"
+    ],
+    "top_files": [
+      "data/synthetic/boms.py",
+      "tests/data/test_boms_gen.py"
+    ],
+    "node_count": 7
+  },
+  "148": {
+    "label": "유사 사용자 확장 API",
+    "description": "임베딩 기반 유사도 계산 및 랭킹을 통해 유사 사용자를 탐색·스트리밍하는 Lookalike API 라우터",
+    "key_concepts": [
+      "유사 사용자 탐색",
+      "임베딩 유사도 랭킹",
+      "SSE 스트리밍"
+    ],
+    "top_files": [
+      "api/routers/lookalike.py"
+    ],
+    "node_count": 7
+  },
+  "147": {
+    "label": "결제 데이터 분석 API",
+    "description": "결제 관련 데이터를 쿼리·집계·요약하여 스트리밍 방식으로 분석 결과를 반환하는 라우터",
+    "key_concepts": [
+      "결제 데이터 분석",
+      "SSE 스트리밍 응답",
+      "Neptune 쿼리 집계"
+    ],
+    "top_files": [
+      "api/routers/payment.py"
+    ],
+    "node_count": 7
+  },
+  "146": {
+    "label": "Bedrock 가드레일 적용",
+    "description": "AWS Bedrock Guardrail을 통해 입력 텍스트 정제 및 출력 필터링을 수행하는 서비스 모듈",
+    "key_concepts": [
+      "Bedrock Guardrail",
+      "입력 스크러빙",
+      "위반 항목 필터링"
+    ],
+    "top_files": [
+      "api/services/guardrails.py"
+    ],
+    "node_count": 7
+  },
+  "145": {
+    "label": "메모리 서비스 테스트",
+    "description": "Bedrock 기반 메모리 저장·조회 및 가드레일·리랭크 기능의 단위 테스트 모음",
+    "key_concepts": [
+      "사실 저장/조회",
+      "Bedrock 가드레일",
+      "리랭킹"
+    ],
+    "top_files": [
+      "tests/api/services/test_bedrock_services.py",
+      "api/services/memory.py"
+    ],
+    "node_count": 7
+  },
+  "144": {
+    "label": "OpenSearch 하이브리드 검색",
+    "description": "BM25(Nori)와 KNN(Cohere) 검색 결과를 RRF 방식으로 융합하는 하이브리드 검색 서비스",
+    "key_concepts": [
+      "하이브리드 검색",
+      "RRF 융합",
+      "BM25 + KNN"
+    ],
+    "top_files": [
+      "api/services/opensearch.py"
+    ],
+    "node_count": 7
+  },
+  "149": {
+    "label": "인사이트 차트 파이프라인",
+    "description": "Neptune 집계 데이터를 matplotlib으로 시각화하고 Claude Sonnet으로 요약하는 인사이트 생성 파이프라인",
+    "key_concepts": [
+      "matplotlib 차트 렌더링",
+      "Code Interpreter fallback",
+      "연료 등급 트렌드 집계"
+    ],
+    "top_files": [
+      "api/services/insights_pipeline.py"
+    ],
+    "node_count": 7
+  },
+  "150": {
+    "label": "운영 리소스 현황 페이지",
+    "description": "ECS 서비스 등 운영 리소스의 상태(정상/경고)를 조회하고 표시하는 페이지 컴포넌트",
+    "key_concepts": [
+      "ECS 서비스 모니터링",
+      "리소스 상태 표시",
+      "운영 대시보드"
+    ],
+    "top_files": [
+      "web/app/ops/resources/page.tsx"
+    ],
+    "node_count": 7
+  },
+  "153": {
+    "label": "WOW 쿼리 평가 스크립트",
+    "description": "온톨로지 기반 GCC 시나리오 쿼리를 chat/search API로 실행하고 결과를 평가하는 스크립트",
+    "key_concepts": [
+      "WOW 쿼리 평가",
+      "SSE 기반 Chat API 호출",
+      "온톨로지 시나리오 테스트"
+    ],
+    "top_files": [
+      "scripts/eval_wow_queries.py"
+    ],
+    "node_count": 7
+  },
+  "154": {
+    "label": "제조업 온톨로지 시스템 아키텍처",
+    "description": "제조/하이테크 온톨로지 설계 문서의 시스템 다이어그램, 네트워크 토폴로지, 보안 그룹, ALB 리스너 규칙 등 인프라 아키텍처 섹션",
+    "key_concepts": [
+      "ALB 리스너 규칙",
+      "네트워크/엣지 토폴로지",
+      "보안 그룹 매트릭스"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 7
+  },
+  "156": {
+    "label": "데이터 스키마 설계 계획",
+    "description": "Pydantic v2 기반 데이터 스키마 클래스 정의 및 테스트 작성 계획 문서",
+    "key_concepts": [
+      "Pydantic v2 스키마",
+      "데이터 모델 설계",
+      "스키마 단위 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 7
+  },
+  "155": {
+    "label": "온톨로지 카탈로그 생성",
+    "description": "데이터 스키마 클래스를 YAML 온톨로지 파일로 변환하고 매핑 카탈로그를 구축하는 작업 계획",
+    "key_concepts": [
+      "온톨로지 YAML 변환",
+      "클래스 카탈로그",
+      "스키마 매핑"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 7
+  },
+  "158": {
+    "label": "Phase4 시나리오 구현 계획",
+    "description": "C~N 12개 신규 시나리오의 라우터, 서비스, 페이지, 컴포넌트, 평가 케이스 등 구현 구조 계획 문서",
+    "key_concepts": [
+      "시나리오 확장",
+      "라우터 및 웹 컴포넌트",
+      "페르소나 기반 평가"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 7
+  },
+  "159": {
+    "label": "한국 네트워크 지도 시각화",
+    "description": "한국 시도별 choropleth 지도와 GSC 데이터 및 경쟁사 정보를 결합한 네트워크 맵 구현",
+    "key_concepts": [
+      "Korea Choropleth",
+      "네트워크 맵 라우터",
+      "GSC 경쟁사 분석"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 7
+  },
+  "157": {
+    "label": "시나리오 검증 및 종료",
+    "description": "12개 시나리오 wow 평가 실행, CHANGELOG 업데이트, git 태그 등 Phase 4.6 검증 및 마무리 작업",
+    "key_concepts": [
+      "wow 평가 자동화",
+      "CHANGELOG 관리",
+      "git 태그 및 릴리스"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 7
+  },
+  "160": {
+    "label": "Bedrock AI 서비스 구현",
+    "description": "AWS Bedrock 기반 지식베이스, 가드레일, 메모리, 리랭커 서비스 구현 및 테스트 계획",
+    "key_concepts": [
+      "AWS Bedrock Knowledge Base",
+      "Guardrails/Memory 서비스",
+      "서비스 단위 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 7
+  },
+  "162": {
+    "label": "파운데이션 구현 계획",
+    "description": "GCC 프로젝트의 기반 구축을 위한 Phase 0 부트스트랩 및 CLAUDE.md 초기화 계획 문서",
+    "key_concepts": [
+      "Phase 0 부트스트랩",
+      "CLAUDE.md 작성",
+      "retail 패턴 기반 초기화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "161": {
+    "label": "평가 인프라 초기 설정",
+    "description": "retail 프로젝트의 평가 스크립트, 히스토리 디렉토리, ADR 템플릿 등 평가 인프라를 구축하는 태스크",
+    "key_concepts": [
+      "harness-eval 디렉토리 구조",
+      "평가 스크립트 자동화",
+      "ADR 템플릿 오버레이"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "163": {
+    "label": ".claude 하니스 초기 설정",
+    "description": "기존 프로젝트의 .claude 디렉터리를 복사·수정하여 새 프로젝트용 Claude 에이전트 환경을 구성하는 태스크",
+    "key_concepts": [
+      ".claude 오버레이",
+      "설정 파일 마이그레이션",
+      "hooks 실행 권한 설정"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "164": {
+    "label": "프로젝트 기반 설정 파일 구성",
+    "description": "보안, 환경변수, 변경이력, 편집기 설정 등 프로젝트 필수 기반 파일을 생성 및 초기화하는 태스크",
+    "key_concepts": [
+      "환경변수 템플릿(.env.example)",
+      "보안 및 무시 파일(.gitignore/SECURITY",
+      "프로젝트 메타 설정(CHANGELOG/editorcon"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "166": {
+    "label": "Retail VPC 임포트 작업",
+    "description": "AWS retail VPC 정보를 수집하고 ADR 0001 문서를 작성하는 기반 인프라 설정 태스크",
+    "key_concepts": [
+      "AWS VPC 임포트",
+      "ADR 문서화",
+      "CloudFormation 익스포트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "165": {
+    "label": "CDK 네트워크 인프라 구성",
+    "description": "AWS CDK를 이용한 VPC 및 보안 그룹 등 GCC 네트워크 스택 초기 설정 작업 계획",
+    "key_concepts": [
+      "AWS CDK",
+      "VPC/보안그룹",
+      "인프라 코드화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 7
+  },
+  "167": {
+    "label": "페르소나 레지스트리 설계 결정",
+    "description": "5개 부서 페르소나의 단일 진실 공급원으로 PERSONA_REGISTRY를 채택한 아키텍처 결정 기록",
+    "key_concepts": [
+      "PERSONA_REGISTRY",
+      "SSOT(단일 진실 공급원)",
+      "ADR(아키텍처 결정 기록)"
+    ],
+    "top_files": [
+      "docs/decisions/0007-persona-registry-as-ssot.md"
+    ],
+    "node_count": 7
+  },
+  "174": {
+    "label": "컴포넌트 표준 및 물질 할당",
+    "description": "카테고리별 컴포넌트에 표준 규격과 물질 정보를 자동으로 부여하는 데이터 보강 모듈",
+    "key_concepts": [
+      "컴포넌트 보강",
+      "표준 규격 할당",
+      "물질 정보 매핑"
+    ],
+    "top_files": [
+      "data/synthetic/enrich_components.py",
+      "tests/data/test_enrich_components.py"
+    ],
+    "node_count": 6
+  },
+  "175": {
+    "label": "제조사 데이터 생성",
+    "description": "합성 제조사 데이터를 생성하고 검증하는 모듈 및 테스트 코드",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "제조사 정보",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/synthetic/manufacturers.py",
+      "tests/data/test_manufacturers_gen.py"
+    ],
+    "node_count": 6
+  },
+  "171": {
+    "label": "네트워크 맵 API 라우터",
+    "description": "지하철/교통 네트워크 지도 데이터를 조회하고 주변 역 정보를 제공하는 API 라우터",
+    "key_concepts": [
+      "네트워크 맵 조회",
+      "주변 역 탐색",
+      "지도 데이터 요약"
+    ],
+    "top_files": [
+      "api/routers/network_map.py"
+    ],
+    "node_count": 6
+  },
+  "169": {
+    "label": "이상치 탐지 API 라우터",
+    "description": "HTTP 및 SSE 스트리밍 방식으로 데이터 이상치를 탐지하고 결과를 반환하는 API 엔드포인트",
+    "key_concepts": [
+      "이상치 탐지",
+      "SSE 스트리밍",
+      "데이터 요약"
+    ],
+    "top_files": [
+      "api/routers/outlier.py"
+    ],
+    "node_count": 6
+  },
+  "170": {
+    "label": "여정 API 라우터",
+    "description": "Neptune 쿼리 및 타임라인 병합을 통해 여정 데이터를 SSE 스트리밍으로 제공하는 API 라우터",
+    "key_concepts": [
+      "SSE 스트리밍",
+      "Neptune 쿼리",
+      "타임라인 병합"
+    ],
+    "top_files": [
+      "api/routers/journey.py"
+    ],
+    "node_count": 6
+  },
+  "168": {
+    "label": "인사이트 요약 서비스",
+    "description": "Claude Sonnet 모델을 활용해 시나리오 페이지의 5섹션 마크다운 인사이트를 동기/스트리밍 방식으로 생성하는 헬퍼 서비스",
+    "key_concepts": [
+      "5섹션 마크다운 생성",
+      "SSE 스트리밍 요약",
+      "Claude Sonnet 연동"
+    ],
+    "top_files": [
+      "api/services/insight_summary.py"
+    ],
+    "node_count": 6
+  },
+  "172": {
+    "label": "객체 검색 및 서브그래프 테스트",
+    "description": "객체 검색 API와 1-hop 서브그래프 라우트의 동작을 검증하는 테스트 모음",
+    "key_concepts": [
+      "객체 검색 API",
+      "서브그래프 라우트",
+      "API 라우터 테스트"
+    ],
+    "top_files": [
+      "tests/api/routers/test_objects_extra.py"
+    ],
+    "node_count": 6
+  },
+  "173": {
+    "label": "온톨로지 API 라우터 테스트",
+    "description": "온톨로지 메타 라우트의 스키마, 표준, 검증 엔드포인트를 검증하는 테스트 모음",
+    "key_concepts": [
+      "온톨로지 메타 라우트",
+      "엔드포인트 검증",
+      "클래스 스키마 테스트"
+    ],
+    "top_files": [
+      "tests/api/routers/test_ontology.py"
+    ],
+    "node_count": 6
+  },
+  "177": {
+    "label": "온톨로지 데모 플로우 설계",
+    "description": "제조/하이테크 온톨로지 시연을 위한 60분 데모 시나리오, 페르소나 매트릭스 및 WOW 모멘트 구성",
+    "key_concepts": [
+      "데모 시나리오 설계",
+      "페르소나 매트릭스",
+      "60분 타임라인"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 6
+  },
+  "176": {
+    "label": "제조 컴포넌트 카탈로그",
+    "description": "제조 하이테크 온톨로지 설계에서 Edge/Auth, Compute, Data, AI, 보안 등 신규 컴포넌트를 정의하는 카탈로그",
+    "key_concepts": [
+      "컴포넌트 카탈로그",
+      "제조 인프라 구성요소",
+      "AWS AI 및 옵저버빌리티"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 6
+  },
+  "178": {
+    "label": "객체 API 라우터 구현",
+    "description": "타입 레지스트리와 페이지네이션을 포함한 객체 API 라우터 및 코호트/넵튠 서비스 구현 계획",
+    "key_concepts": [
+      "타입 레지스트리",
+      "API 라우터",
+      "코호트 서비스"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan2-data.md"
+    ],
+    "node_count": 6
+  },
+  "179": {
+    "label": "페르소나 레지스트리 설계",
+    "description": "5개 부서 페르소나를 단일 진실 공급원(SSOT)으로 관리하는 PERSONA_REGISTRY 구현 및 ADR 문서화",
+    "key_concepts": [
+      "PERSONA_REGISTRY",
+      "ADR 0007",
+      "FastAPI 페르소나 서비스"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 6
+  },
+  "180": {
+    "label": "챗 UI 컴포넌트 설계",
+    "description": "페르소나 전환, 채팅 스레드, 툴콜 패널 등 챗 UI를 구성하는 TSX 컴포넌트 구현 계획",
+    "key_concepts": [
+      "ChatThread",
+      "PersonaSwitch",
+      "ToolCallPanel"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 6
+  },
+  "181": {
+    "label": "KMeans 클러스터링 파이프라인",
+    "description": "KMeans 군집화, LLM 라벨링, API 라우터 및 프론트엔드 페이지를 포함한 클러스터 파이프라인 구현 시나리오",
+    "key_concepts": [
+      "KMeans 군집화",
+      "LLM 라벨링",
+      "클러스터 파이프라인 API"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 6
+  },
+  "182": {
+    "label": "외부 시그널 융합 시나리오",
+    "description": "현대카드, 에어브릿지, 설문, 날씨 등 외부 데이터를 융합하는 시그널 API 및 UI 구현 계획",
+    "key_concepts": [
+      "외부 시그널 융합",
+      "멀티소스 데이터 통합",
+      "시그널 대시보드"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 6
+  },
+  "183": {
+    "label": "가이드 투어 UI 설계",
+    "description": "페르소나별 시나리오 추천 흐름을 포함한 GuidedTour 컴포넌트 및 홈 페이지 통합 구현 계획",
+    "key_concepts": [
+      "GuidedTour 컴포넌트",
+      "페르소나 시나리오",
+      "ADR 0008"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan5-polish.md"
+    ],
+    "node_count": 6
+  },
+  "187": {
+    "label": "API 라우터 구현 및 테스트",
+    "description": "시맨틱 검색과 SSE 기반 대화형 에이전트 라우터 구현 및 단위 테스트 코드 정의",
+    "key_concepts": [
+      "시맨틱 검색 라우터",
+      "SSE 대화형 에이전트",
+      "라우터 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 6
+  },
+  "184": {
+    "label": "SCM 가격·물류·공급사 라우터",
+    "description": "가격/가용성, 글로벌 SCM 레인 시각화, 협력사 RFM 점수 산출을 위한 API 라우터 구현 및 테스트",
+    "key_concepts": [
+      "가격·리드타임 조회 API",
+      "SCM 글로벌 레인 시각화",
+      "협력사 RFM 점수"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 6
+  },
+  "185": {
+    "label": "제조 API 라우터 구현",
+    "description": "8D 문제해결, ESG/CBAM, PdM/IoT 시나리오를 위한 FastAPI 라우터 및 테스트 코드 구현",
+    "key_concepts": [
+      "8D 라우터",
+      "ESG/CBAM API",
+      "PdM/IoT 임계값"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 6
+  },
+  "186": {
+    "label": "API 컨테이너 배포 자동화",
+    "description": "Docker 빌드, ECR 푸시, ECS 서비스 업데이트를 통한 API 컨테이너 배포 파이프라인 구성",
+    "key_concepts": [
+      "Docker/ECR 이미지 빌드 및 푸시",
+      "ECS 서비스 배포",
+      "AWS CDK 인프라 관리"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 6
+  },
+  "195": {
+    "label": "제조 온톨로지 스키마 검증",
+    "description": "22개 제조 온톨로지 클래스에 대한 Pydantic 스키마 정의 및 pytest 기반 검증 계획",
+    "key_concepts": [
+      "Pydantic 스키마",
+      "제조 온톨로지",
+      "pytest 검증"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "193": {
+    "label": "JEDEC 표준 모듈 구현",
+    "description": "반도체 패키징 및 신뢰성 관련 JEDEC 표준 데이터 모듈 구현 및 테스트 작업",
+    "key_concepts": [
+      "JEDEC 표준",
+      "온톨로지 제조 기반",
+      "파이썬 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "194": {
+    "label": "IPC 표준 모듈 구현",
+    "description": "제조 온톨로지 기반의 IPC 표준 데이터 모듈 구현 및 테스트 코드 작성 태스크",
+    "key_concepts": [
+      "IPC 표준",
+      "온톨로지 제조 기반",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "192": {
+    "label": "한국 규제 표준 어댑터",
+    "description": "JEDEC↔KS, REACH↔K-REACH, CBAM↔K-ETS 등 국제-한국 규제 표준 간 온톨로지 변환 어댑터 구현 및 테스트",
+    "key_concepts": [
+      "규제 표준 어댑터",
+      "한국 규격 변환",
+      "온톨로지 매핑"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "196": {
+    "label": "제조 온톨로지 데이터 생성",
+    "description": "고객, 공장, 레인 합성 데이터 생성기 및 테스트 코드를 정의하는 제조 기반 온톨로지 태스크",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "제조 온톨로지",
+      "고객/공장/레인 모델링"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "197": {
+    "label": "운영 데이터 합성 생성기",
+    "description": "제조 온톨로지 기반의 텔레메트리·유지보수·ESG 합성 데이터 생성 및 테스트 코드 구현",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "텔레메트리/ESG",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "189": {
+    "label": "제조 네트워크 스택 구성",
+    "description": "AWS CDK로 제조 환경의 VPC 및 보안 그룹을 구성하는 NetworkStack 태스크 구현",
+    "key_concepts": [
+      "AWS CDK NetworkStack",
+      "제조 VPC/SG 설정",
+      "인프라 코드 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "188": {
+    "label": "엣지 인증 인프라 구성",
+    "description": "CloudFront, Cognito, Lambda@Edge, ACM을 활용한 엣지 스택 인증 인프라를 CDK로 구성 및 테스트",
+    "key_concepts": [
+      "Lambda@Edge 인증 리다이렉트",
+      "CloudFront + Cognito 통합",
+      "AWS CDK 엣지 스택"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "190": {
+    "label": "CDK 인프라 배포 태스크",
+    "description": "AWS CDK를 이용한 온톨로지 제조 기반 인프라의 synth, bootstrap, dev 환경 배포 절차",
+    "key_concepts": [
+      "AWS CDK 배포",
+      "CloudFormation 스택",
+      "개발환경 인프라 프로비저닝"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "191": {
+    "label": "리테일 데모 회귀 검증",
+    "description": "제조 온톨로지 통합 후 리테일 데모의 CloudFront, API 보안그룹, 그래프 쿼리 등 엔드투엔드 회귀 검사 수행",
+    "key_concepts": [
+      "회귀 테스트",
+      "CloudFront 도메인 검증",
+      "openCypher 쿼리"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "198": {
+    "label": "MFG 디렉토리 초기화",
+    "description": "제조 온톨로지 디렉토리 구조를 복사하고 스테이징 환경에서 기존 자산을 보존·정리하는 기반 작업",
+    "key_concepts": [
+      "디렉토리 구조 복사",
+      "스테이징 환경",
+      "기존 자산 보존"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "200": {
+    "label": "프로젝트 식별자 일괄 치환",
+    "description": "mfg에서 gcc로 프로젝트 식별자를 전체 코드베이스에 걸쳐 일괄 변경하는 기반 작업",
+    "key_concepts": [
+      "식별자 치환",
+      "bash 스크립트 자동화",
+      "코드베이스 리네이밍"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "199": {
+    "label": "README 문서 초기화",
+    "description": "기존 온톨로지 README를 복사·치환하여 새 프로젝트용 한·영 README를 생성하는 작업",
+    "key_concepts": [
+      "README 작성",
+      "텍스트 치환(sed)",
+      "문서 초기화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "201": {
+    "label": "Git 초기화 및 첫 커밋",
+    "description": "프로젝트 기반 구축을 위한 Git 저장소 초기화, 파일 스테이징, 첫 커밋 수행 절차",
+    "key_concepts": [
+      "Git 초기화",
+      "첫 커밋",
+      "버전 관리 기반 설정"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "202": {
+    "label": "CDN 엣지 스택 배포 설계",
+    "description": "CloudFront, Lambda@Edge, Cognito를 결합한 엣지 스택 구성 및 도메인 분리 배포 아키텍처 결정 기록",
+    "key_concepts": [
+      "edge-stack.ts",
+      "ADR 0002 도메인 분리 배포",
+      "AWS CDK 인프라"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 6
+  },
+  "203": {
+    "label": "도메인 지연 배포 결정",
+    "description": "도메인 지연 배포 전략에 대한 아키텍처 결정 기록(ADR)으로 맥락, 결정, 결과 및 대안을 문서화",
+    "key_concepts": [
+      "아키텍처 결정 기록(ADR)",
+      "도메인 지연 배포",
+      "대안 검토"
+    ],
+    "top_files": [
+      "docs/decisions/0002-domain-deferred-deployment.md"
+    ],
+    "node_count": 6
+  },
+  "204": {
+    "label": "코호트 데이터 깊이 태깅 ADR",
+    "description": "고객 데이터 깊이 기반 코호트 태깅 아키텍처 결정 기록(ADR 0004) 문서",
+    "key_concepts": [
+      "ADR",
+      "코호트 태깅",
+      "Customer.data_depth"
+    ],
+    "top_files": [
+      "docs/decisions/0004-cohort-data-depth-tagging.md"
+    ],
+    "node_count": 6
+  },
+  "205": {
+    "label": "KMA API 캐시 전략 결정",
+    "description": "기상청 API 호출에 대한 캐싱 전략을 기록한 아키텍처 결정 문서(ADR)",
+    "key_concepts": [
+      "KMA API 캐싱",
+      "아키텍처 결정 기록",
+      "캐시 전략"
+    ],
+    "top_files": [
+      "docs/decisions/0005-kma-api-cache-strategy.md"
+    ],
+    "node_count": 6
+  },
+  "206": {
+    "label": "도구 명세 설계 결정",
+    "description": "TOOL_SPECS 10가지 도구의 설계 방식에 대한 아키텍처 결정 기록(ADR)",
+    "key_concepts": [
+      "ADR",
+      "TOOL_SPECS 설계",
+      "아키텍처 결정"
+    ],
+    "top_files": [
+      "docs/decisions/0006-tool-specs-design.md"
+    ],
+    "node_count": 6
+  },
+  "207": {
+    "label": "약관 동의 데이터 처리",
+    "description": "약관 및 고객 약관 동의 정보를 로드하고 스키마로 정의하는 클러스터",
+    "key_concepts": [
+      "약관(Term)",
+      "약관동의(TermAgreement)",
+      "데이터 로드"
+    ],
+    "top_files": [
+      "data/real/term_agreement.py",
+      "data/schemas.py"
+    ],
+    "node_count": 5
+  },
+  "214": {
+    "label": "JEDEC 표준 데이터 로딩",
+    "description": "JEDEC 반도체 신뢰성/패키징 표준 데이터를 로드하고 검증하는 모듈 및 테스트",
+    "key_concepts": [
+      "JEDEC 표준",
+      "데이터 로딩",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/public/jedec.py",
+      "tests/data/test_jedec.py"
+    ],
+    "node_count": 5
+  },
+  "208": {
+    "label": "캠페인 마스터 데이터 로딩",
+    "description": "NFD 경로 정규화를 통해 캠페인 메타 데이터 파일을 로드하고 enrichment를 수행하는 모듈",
+    "key_concepts": [
+      "캠페인 마스터",
+      "NFD 경로 정규화",
+      "메타 데이터 enrichment"
+    ],
+    "top_files": [
+      "data/real/_common.py",
+      "data/real/campaign_master.py"
+    ],
+    "node_count": 5
+  },
+  "213": {
+    "label": "규정 준수 엔진 검증",
+    "description": "부품의 RoHS 등 환경 규정 준수 여부를 검사하는 엔진과 관련 단위 테스트 모음",
+    "key_concepts": [
+      "규정 준수 검사",
+      "RoHS 위반 감지",
+      "부품 유해물질 검증"
+    ],
+    "top_files": [
+      "api/services/compliance_engine.py",
+      "tests/api/services/test_compliance_engine.py"
+    ],
+    "node_count": 5
+  },
+  "209": {
+    "label": "코드 인터프리터 서비스",
+    "description": "AgentCore Firecracker microVM 샌드박스에서 Python 코드를 실행하는 클라이언트 서비스",
+    "key_concepts": [
+      "Firecracker microVM",
+      "Python 코드 실행",
+      "AgentCore 샌드박스"
+    ],
+    "top_files": [
+      "api/services/code_interpreter.py"
+    ],
+    "node_count": 5
+  },
+  "210": {
+    "label": "유사 고객 확장 도구",
+    "description": "시드 고객의 임베딩 유사도를 기반으로 유사 고객을 탐색·확장하는 룩어라이크 도구",
+    "key_concepts": [
+      "임베딩 유사도",
+      "룩어라이크 확장",
+      "고객 프로파일 enrichment"
+    ],
+    "top_files": [
+      "api/services/tools/lookalike_expand.py"
+    ],
+    "node_count": 5
+  },
+  "211": {
+    "label": "PDF 내보내기 기능",
+    "description": "인사이트 리포트를 PDF 형식으로 내보내는 기능을 구현하며, 섹션 구성 및 내보내기 옵션을 관리한다.",
+    "key_concepts": [
+      "PDF 내보내기",
+      "PdfSection",
+      "PdfExportOptions"
+    ],
+    "top_files": [
+      "web/lib/pdf-export.ts",
+      "web/components/InsightReport.tsx"
+    ],
+    "node_count": 5
+  },
+  "212": {
+    "label": "가격·레인·RFM API 테스트",
+    "description": "가격 조회, 레인 목록/재경로 설정, RFM 분석 API 엔드포인트에 대한 단위 테스트 모음",
+    "key_concepts": [
+      "가격 API 테스트",
+      "레인 라우팅",
+      "RFM 분석"
+    ],
+    "top_files": [
+      "tests/api/routers/test_price_lane_rfm.py"
+    ],
+    "node_count": 5
+  },
+  "215": {
+    "label": "거래 데이터 단위 테스트",
+    "description": "거래 데이터셋의 고객 수, 행 수, 연료 등급 매핑, 금액 양수 여부 등을 검증하는 단위 테스트 모음",
+    "key_concepts": [
+      "거래 데이터 검증",
+      "단위 테스트",
+      "데이터 품질 확인"
+    ],
+    "top_files": [
+      "tests/data/test_transaction.py"
+    ],
+    "node_count": 5
+  },
+  "216": {
+    "label": "유가정보 API 테스트",
+    "description": "Opinet 유가 정보 API의 가격 조회 및 주유소 데이터 검증을 위한 테스트 모음",
+    "key_concepts": [
+      "Opinet API",
+      "유가 데이터 검증",
+      "주유소 브랜드 조회"
+    ],
+    "top_files": [
+      "tests/data/test_opinet.py"
+    ],
+    "node_count": 5
+  },
+  "218": {
+    "label": "제조 시스템 관측가능성",
+    "description": "제조 하이테크 온톨로지 설계에서 커스텀 메트릭, CloudWatch 대시보드, 알람, 툴 호출 추적을 포함한 관측가능성 사양 정의",
+    "key_concepts": [
+      "Custom Metrics",
+      "CloudWatch Dashboard",
+      "Tool-Call Trace"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 5
+  },
+  "217": {
+    "label": "온톨로지 설계 참조 문서",
+    "description": "제조·하이테크 온톨로지 설계 명세의 참조 섹션으로 표준·규제, AWS, 시각화, 공공 데이터 출처를 정리",
+    "key_concepts": [
+      "온톨로지 참조 표준",
+      "AWS 인프라",
+      "공공 도메인 데이터 출처"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 5
+  },
+  "219": {
+    "label": "검색 API 라우터 구현",
+    "description": "POST /api/search 및 스트리밍 엔드포인트 구현과 관련 테스트 코드를 포함한 검색 API 라우터 개발 계획",
+    "key_concepts": [
+      "검색 API 라우터",
+      "스트리밍 엔드포인트",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan3-scenarios-a-b.md"
+    ],
+    "node_count": 5
+  },
+  "220": {
+    "label": "페르소나 적합성 추천",
+    "description": "페르소나 매칭 시나리오 구현을 위한 API 라우터, 프론트엔드 페이지, 평가 스크립트 계획",
+    "key_concepts": [
+      "페르소나 매칭",
+      "추천 시스템",
+      "시나리오 구현 계획"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 5
+  },
+  "221": {
+    "label": "룩어라이크 시나리오 구현",
+    "description": "룩어라이크 확장 도구를 활용한 API 라우터 및 프론트엔드 페이지 구현 시나리오 계획",
+    "key_concepts": [
+      "룩어라이크 expand",
+      "API 라우터",
+      "프론트엔드 페이지"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan4-scenarios-c-to-n.md"
+    ],
+    "node_count": 5
+  },
+  "223": {
+    "label": "Cognito JWT 인증 미들웨어",
+    "description": "AWS Cognito 기반 JWT 토큰 검증 미들웨어 구현 및 테스트 코드 정의",
+    "key_concepts": [
+      "JWT 검증",
+      "Cognito 인증",
+      "API 미들웨어"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 5
+  },
+  "222": {
+    "label": "하이브리드 검색 서비스",
+    "description": "Nori BM25, KNN, RRF, Reranker를 결합한 OpenSearch 기반 하이브리드 검색 서비스 구현 및 테스트",
+    "key_concepts": [
+      "OpenSearch 하이브리드 검색",
+      "임베딩 서비스",
+      "RRF 재순위화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 5
+  },
+  "226": {
+    "label": "공통 UI 컴포넌트 구현",
+    "description": "PersonaSwitch, GuidedTour, KpiStrip 등 공통 웹 UI 컴포넌트를 정의하고 구현하는 태스크",
+    "key_concepts": [
+      "공통 컴포넌트",
+      "TSX UI 구현",
+      "KPI 대시보드"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 5
+  },
+  "225": {
+    "label": "제조 시각화 컴포넌트",
+    "description": "CytoscapeView, BomTree, SCMMap 세 가지 제조 온톨로지 시각화 TSX 컴포넌트 구현 태스크",
+    "key_concepts": [
+      "CytoscapeView 그래프 시각화",
+      "BOM 트리 구조",
+      "SCM 공급망 맵"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 5
+  },
+  "224": {
+    "label": "CloudFront 도메인 연결 설정",
+    "description": "ALB를 오리진으로 하는 CloudFront 배포에 커스텀 도메인과 ACM 인증서를 연결하는 인프라 구성 작업",
+    "key_concepts": [
+      "CloudFront 오리진 설정",
+      "Route53 DNS 연결",
+      "ACM 인증서 발급"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 5
+  },
+  "232": {
+    "label": "공급업체 합성 데이터 생성",
+    "description": "제조 온톨로지 기반 1·2차 공급업체 합성 데이터 생성 및 테스트 태스크 정의",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "공급업체 온톨로지",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "233": {
+    "label": "통합 검증 스위트 구성",
+    "description": "제조 온톨로지 기반 데이터셋 전체 검증을 위한 테스트 코드 및 빌드 자동화 설정",
+    "key_concepts": [
+      "통합 테스트 스위트",
+      "Makefile 빌드 자동화",
+      "데이터 검증 파이프라인"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "227": {
+    "label": "CDK 인프라 스택 구성",
+    "description": "온톨로지 제조 기반의 CDK 인프라 Phase 2에서 6개 스택을 연결하는 앱 진입점 구성 및 배포 작업",
+    "key_concepts": [
+      "AWS CDK",
+      "인프라 스택 배포",
+      "TypeScript 앱 엔트리포인트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "228": {
+    "label": "데이터 스택 CDK 구성",
+    "description": "Neptune, Aurora, OpenSearch, S3, KMS를 포함한 데이터 인프라 스택의 CDK 코드 및 테스트 정의",
+    "key_concepts": [
+      "AWS CDK DataStack",
+      "클라우드 데이터 인프라",
+      "인프라 테스트 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "231": {
+    "label": "AI 인프라 스택 구성",
+    "description": "AWS CDK 기반 AIStack 구현으로 Bedrock KB, Guardrails, AgentCore Memory를 통합 배포하는 인프라 코드 클러스터",
+    "key_concepts": [
+      "AWS CDK AIStack",
+      "Bedrock Knowledge Base",
+      "AgentCore Memory"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "230": {
+    "label": "CDK 컴퓨트 스택 구성",
+    "description": "ECS Fargate, ALB, ECR을 포함한 ComputeStack을 AWS CDK TypeScript로 정의하고 테스트하는 인프라 모듈",
+    "key_concepts": [
+      "ECS Fargate",
+      "AWS CDK ComputeStack",
+      "인프라 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "229": {
+    "label": "옵저버빌리티 스택 구성",
+    "description": "AWS CDK 기반 CloudWatch 대시보드 및 알람을 포함한 옵저버빌리티 인프라 스택 정의 및 테스트",
+    "key_concepts": [
+      "CloudWatch 대시보드",
+      "AWS CDK 인프라",
+      "옵저버빌리티 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "234": {
+    "label": "엣지 스택 도메인 배포 계획",
+    "description": "CloudFront 커스텀 도메인 연결을 위한 엣지 스택 재배포 및 Route53, Cognito 설정 절차 문서",
+    "key_concepts": [
+      "CloudFront 도메인 배포",
+      "Cognito 콜백 URL 설정",
+      "Route53 A 레코드"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "235": {
+    "label": "CI 워크플로우 오버레이 설정",
+    "description": "retail 저장소의 GitHub Actions CI 워크플로우를 gcc 온톨로지용으로 복제 및 수정하는 작업",
+    "key_concepts": [
+      "CI 워크플로우",
+      "GitHub Actions",
+      "온톨로지 마이그레이션"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "236": {
+    "label": "데이터 스택 인프라 구성",
+    "description": "Neptune, OpenSearch Serverless, S3 기반 데이터 스택 CDK 구성 및 Bulk Loader IAM ADR 작성",
+    "key_concepts": [
+      "AWS CDK 데이터 스택",
+      "Neptune Bulk Loader IAM",
+      "ADR 아키텍처 결정 기록"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "237": {
+    "label": "CDK 스냅샷 테스트 구성",
+    "description": "AWS CDK 인프라 스택에 대한 Jest 스냅샷 테스트 작성 및 실행 절차를 정의하는 계획 문서",
+    "key_concepts": [
+      "Jest 스냅샷 테스트",
+      "AWS CDK",
+      "인프라 테스트 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 5
+  },
+  "238": {
+    "label": "Neptune 벌크로더 IAM 설계결정",
+    "description": "Neptune Bulk Loader의 IAM 권한 준비에 관한 아키텍처 결정 기록(ADR)을 문서화한 클러스터",
+    "key_concepts": [
+      "ADR(아키텍처 결정 기록)",
+      "Neptune Bulk Loader",
+      "IAM 권한 설정"
+    ],
+    "top_files": [
+      "docs/decisions/0003-bulk-loader-iam-prep.md"
+    ],
+    "node_count": 5
+  },
+  "239": {
+    "label": "가이드 투어 설계 결정",
+    "description": "가이드 투어 기능의 설계 방향과 결정 사항 및 그 결과를 기록한 아키텍처 결정 문서",
+    "key_concepts": [
+      "ADR(아키텍처 결정 기록)",
+      "가이드 투어 설계",
+      "결정 결과 및 영향"
+    ],
+    "top_files": [
+      "docs/decisions/0008-guided-tour-design.md"
+    ],
+    "node_count": 5
+  },
+  "242": {
+    "label": "캠페인 SMS 합성 데이터",
+    "description": "캠페인 SMS 메시지 스키마 정의 및 DW_CP_SM_CAMP_MSG 기반 합성 데이터 생성",
+    "key_concepts": [
+      "CampaignSms 스키마",
+      "SMS 합성 데이터 생성",
+      "DW_CP_SM_CAMP_MSG"
+    ],
+    "top_files": [
+      "data/schemas.py",
+      "data/synthetic/campaign_sms.py"
+    ],
+    "node_count": 4
+  },
+  "240": {
+    "label": "IPC 표준 데이터 로딩",
+    "description": "IPC 표준 데이터를 로드하고 검증하는 모듈 및 테스트 코드",
+    "key_concepts": [
+      "IPC 표준",
+      "데이터 로딩",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/public/ipc.py",
+      "tests/data/test_ipc.py"
+    ],
+    "node_count": 4
+  },
+  "241": {
+    "label": "AEC-Q 표준 데이터 로딩",
+    "description": "AEC-Q 품질 표준 데이터를 로드하고 검증하는 모듈 및 테스트 코드",
+    "key_concepts": [
+      "AEC-Q 표준",
+      "데이터 로딩",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/public/aec_q.py",
+      "tests/data/test_aec_q.py"
+    ],
+    "node_count": 4
+  },
+  "256": {
+    "label": "ISO/IATF 표준 데이터 로딩",
+    "description": "ISO/IATF 표준 데이터를 로드하는 모듈과 해당 기능의 단위 테스트를 포함하는 클러스터",
+    "key_concepts": [
+      "ISO/IATF 표준",
+      "데이터 로딩",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "data/public/iso_iatf.py",
+      "tests/data/test_iso_iatf.py"
+    ],
+    "node_count": 4
+  },
+  "243": {
+    "label": "FastAPI 앱 진입점",
+    "description": "FastAPI 애플리케이션의 메인 진입점으로 라우터 등록, 인증 미들웨어, CORS 설정을 담당",
+    "key_concepts": [
+      "FastAPI 라우터 등록",
+      "인증 미들웨어",
+      "CORS 설정"
+    ],
+    "top_files": [
+      "api/main.py"
+    ],
+    "node_count": 4
+  },
+  "244": {
+    "label": "페르소나 목록 API",
+    "description": "5개 부서 페르소나 레지스트리를 조회하여 전체 목록을 반환하는 GET API 엔드포인트",
+    "key_concepts": [
+      "페르소나 레지스트리",
+      "REST API 라우터",
+      "프론트엔드 SSOT"
+    ],
+    "top_files": [
+      "api/routers/personas.py"
+    ],
+    "node_count": 4
+  },
+  "247": {
+    "label": "고객 여정 파이프라인",
+    "description": "단일 고객의 앱·거래·약관·쿠폰 이벤트를 시간순으로 통합하는 시계열 파이프라인",
+    "key_concepts": [
+      "고객 여정 통합",
+      "시계열 이벤트 병합",
+      "하이브리드 그래프 탐색"
+    ],
+    "top_files": [
+      "api/services/journey_pipeline.py"
+    ],
+    "node_count": 4
+  },
+  "245": {
+    "label": "지식베이스 조회 도구",
+    "description": "AWS Bedrock 지식베이스에서 정보를 검색하는 에이전트 도구 서비스",
+    "key_concepts": [
+      "Bedrock Knowledge Base",
+      "RAG 검색",
+      "에이전트 도구"
+    ],
+    "top_files": [
+      "api/services/tools/kb_lookup.py"
+    ],
+    "node_count": 4
+  },
+  "246": {
+    "label": "주변 주유소 탐색 도구",
+    "description": "Haversine 공식 기반 k-NN으로 가장 가까운 주유소 노드를 탐색하는 도구",
+    "key_concepts": [
+      "Haversine 거리 계산",
+      "k-NN 탐색",
+      "GasStation 노드"
+    ],
+    "top_files": [
+      "api/services/tools/nearest_stations.py"
+    ],
+    "node_count": 4
+  },
+  "249": {
+    "label": "데이터 소스 배지 컴포넌트",
+    "description": "데이터 소스 유형별 색상과 라벨을 정의하여 배지 UI를 렌더링하는 컴포넌트",
+    "key_concepts": [
+      "DataSourceBadge",
+      "소스 색상 매핑",
+      "소스 라벨 매핑"
+    ],
+    "top_files": [
+      "web/components/DataSourceBadge.tsx"
+    ],
+    "node_count": 4
+  },
+  "248": {
+    "label": "스트림 패널 컴포넌트",
+    "description": "실시간 스트림 이벤트를 표시하는 React 패널 컴포넌트 및 관련 타입/상수 정의",
+    "key_concepts": [
+      "스트림 패널 UI",
+      "이벤트 처리",
+      "톤 상수"
+    ],
+    "top_files": [
+      "web/components/StreamPanel.tsx"
+    ],
+    "node_count": 4
+  },
+  "250": {
+    "label": "트레이스 패널 컴포넌트",
+    "description": "트레이스 데이터를 단일 fetch로 불러와 화면에 표시하는 React 패널 컴포넌트",
+    "key_concepts": [
+      "TracePanel",
+      "fetchOnce",
+      "상태관리(useState)"
+    ],
+    "top_files": [
+      "web/components/TracePanel.tsx"
+    ],
+    "node_count": 4
+  },
+  "251": {
+    "label": "테스트 인증 우회 설정",
+    "description": "pytest 테스트 전용 공유 픽스처로 CognitoBearerAuth 미들웨어를 자동 우회 처리",
+    "key_concepts": [
+      "pytest fixtures",
+      "CognitoBearerAuth 우회",
+      "테스트 미들웨어 패치"
+    ],
+    "top_files": [
+      "tests/conftest.py"
+    ],
+    "node_count": 4
+  },
+  "252": {
+    "label": "검색 API 라우터 테스트",
+    "description": "검색 API의 POST 결과 반환 및 스트림 응답 단계 검증을 위한 라우터 테스트 모음",
+    "key_concepts": [
+      "API 검색 엔드포인트",
+      "스트림 응답 테스트",
+      "라우터 단위 테스트"
+    ],
+    "top_files": [
+      "tests/api/test_search.py"
+    ],
+    "node_count": 4
+  },
+  "253": {
+    "label": "채팅 API SSE 통합 테스트",
+    "description": "멀티턴 채팅 API의 SSE 스트리밍 응답을 검증하는 통합 테스트 모듈",
+    "key_concepts": [
+      "SSE 스트리밍",
+      "멀티턴 채팅",
+      "API 통합 테스트"
+    ],
+    "top_files": [
+      "tests/api/test_chat.py"
+    ],
+    "node_count": 4
+  },
+  "254": {
+    "label": "8D/ESG/PDM API 라우터 테스트",
+    "description": "8D, ESG, PDM 세 가지 API 엔드포인트의 라우터 동작을 검증하는 테스트 모듈",
+    "key_concepts": [
+      "8D 보고서",
+      "ESG 지표",
+      "PDM 프로세스"
+    ],
+    "top_files": [
+      "tests/api/routers/test_eight_d_esg_pdm.py"
+    ],
+    "node_count": 4
+  },
+  "255": {
+    "label": "인증 라우터 테스트",
+    "description": "Cognito 로그인 리다이렉트, 콜백 코드 교환, 로그아웃 쿠키 처리를 검증하는 인증 API 테스트",
+    "key_concepts": [
+      "Cognito 인증",
+      "쿠키 관리",
+      "OAuth 콜백"
+    ],
+    "top_files": [
+      "tests/api/routers/test_auth.py"
+    ],
+    "node_count": 4
+  },
+  "257": {
+    "label": "쿠폰 팩트 데이터 테스트",
+    "description": "쿠폰 사실 테이블의 로드 결과, 고유 고객 수, 쿠폰 행 수 일치 여부를 검증하는 단위 테스트 모음",
+    "key_concepts": [
+      "쿠폰 팩트 테이블",
+      "데이터 유효성 검증",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "tests/data/test_coupon_fact.py"
+    ],
+    "node_count": 4
+  },
+  "258": {
+    "label": "약관 동의 데이터 테스트",
+    "description": "고객 약관 동의 데이터의 반환값, 고유 고객 수, 날짜 처리 등을 검증하는 테스트 모음",
+    "key_concepts": [
+      "약관 동의",
+      "고유 고객 검증",
+      "날짜 null 변환"
+    ],
+    "top_files": [
+      "tests/data/test_term_agreement.py"
+    ],
+    "node_count": 4
+  },
+  "259": {
+    "label": "외부 실데이터 통합 테스트",
+    "description": "실제 외부 데이터를 활용한 소비지수, 고객, 설문 매핑 등의 통합 테스트 모음",
+    "key_concepts": [
+      "외부 실데이터 검증",
+      "소비지수 테스트",
+      "설문 부분 매핑"
+    ],
+    "top_files": [
+      "tests/data/test_external_real.py"
+    ],
+    "node_count": 4
+  },
+  "260": {
+    "label": "OpenSearch RRF 융합 TDD",
+    "description": "BM25와 KNN 검색 결과를 RRF 방식으로 융합하는 OpenSearch 서비스의 테스트 코드",
+    "key_concepts": [
+      "RRF 융합",
+      "BM25/KNN 검색",
+      "TDD"
+    ],
+    "top_files": [
+      "tests/services/test_opensearch.py"
+    ],
+    "node_count": 4
+  },
+  "261": {
+    "label": "에이전트 도구 스펙 검증 테스트",
+    "description": "에이전트 도구 목록의 고유 이름 및 JSON 스키마 형태를 자동 검증하는 테스트 모듈",
+    "key_concepts": [
+      "TOOL_SPECS 유효성 검사",
+      "도구 이름 고유성",
+      "JSON 스키마 검증"
+    ],
+    "top_files": [
+      "tests/services/test_agent_tools.py"
+    ],
+    "node_count": 4
+  },
+  "262": {
+    "label": "에이전트 도구 디스패치 테스트",
+    "description": "알 수 없는 도구 폴백 처리 및 트레이스 버퍼 로깅을 검증하는 디스패치 단위 테스트",
+    "key_concepts": [
+      "도구 디스패치",
+      "트레이스 버퍼",
+      "알 수 없는 도구 폴백"
+    ],
+    "top_files": [
+      "tests/services/test_agent_tools_dispatch.py"
+    ],
+    "node_count": 4
+  },
+  "263": {
+    "label": "시나리오 보일러플레이트 생성",
+    "description": "12개 시나리오의 라우터·페이지 stub 파일을 일괄 자동 생성하는 스크립트",
+    "key_concepts": [
+      "코드 자동 생성",
+      "시나리오 stub",
+      "PascalCase 변환"
+    ],
+    "top_files": [
+      "scripts/gen_scenario_boilerplate.py"
+    ],
+    "node_count": 4
+  },
+  "264": {
+    "label": "보안 및 거버넌스 설계",
+    "description": "제조·하이테크 온톨로지 시스템의 IAM 역할, 크로스리전 정책, 공유 자원 격리 등 보안 거버넌스 사양 정의",
+    "key_concepts": [
+      "IAM 역할 관리",
+      "크로스리전 보안",
+      "공유 자원 격리"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 4
+  },
+  "271": {
+    "label": "온톨로지 제조 앱 구현 계획",
+    "description": "온톨로지 기반 제조 애플리케이션의 구현 계획, 자체 검토 및 실행 인계 문서",
+    "key_concepts": [
+      "온톨로지 제조",
+      "구현 계획",
+      "실행 인계"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "265": {
+    "label": "Neptune 서비스 구현",
+    "description": "openCypher 클라이언트를 활용한 AWS Neptune 서비스 레이어 및 테스트 코드 구현",
+    "key_concepts": [
+      "AWS Neptune",
+      "openCypher",
+      "서비스 레이어 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "267": {
+    "label": "에이전트 도구 오케스트레이터",
+    "description": "AgentCore의 tool-use 오케스트레이터 구현 및 관련 서비스 테스트 코드를 정의하는 클러스터",
+    "key_concepts": [
+      "AgentCore",
+      "tool-use 오케스트레이션",
+      "에이전트 서비스 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "268": {
+    "label": "8D 보고서 작성 서비스",
+    "description": "Claude AI 기반으로 8단계 강제 템플릿을 적용한 8D 문제해결 보고서 자동 작성 서비스 구현",
+    "key_concepts": [
+      "8D 방법론",
+      "Claude AI 서비스",
+      "자동화 보고서 생성"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "270": {
+    "label": "탄소 계산 서비스 구현",
+    "description": "Scope 1·2·3 및 CBAM 기반 탄소 배출량 계산 서비스의 API 구현 및 테스트 코드 정의",
+    "key_concepts": [
+      "탄소 배출량 계산",
+      "CBAM 규정 준수",
+      "Python API 서비스 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "266": {
+    "label": "무역 경로 재설정 서비스",
+    "description": "IRA/USMCA/CBAM 규정 기반 물류 레인 라우터 서비스 구현 및 테스트 코드 정의",
+    "key_concepts": [
+      "레인 라우터",
+      "무역 규정 준수",
+      "API 서비스 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "269": {
+    "label": "공급업체 RFM 스코어 서비스",
+    "description": "공급업체 대상 RFM(Recency·Frequency·Monetary) 점수 산출 서비스 구현 및 테스트",
+    "key_concepts": [
+      "RFM 스코어링",
+      "공급업체 평가",
+      "API 서비스 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "272": {
+    "label": "API 클라이언트 라이브러리 구현",
+    "description": "제조 온톨로지 앱을 위한 TypeScript API 클라이언트 라이브러리 및 타입 정의 구현 태스크",
+    "key_concepts": [
+      "TypeScript 타입 정의",
+      "API 클라이언트",
+      "Persona 역할 모델"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "273": {
+    "label": "웹 서비스 배포 자동화",
+    "description": "Docker 빌드 후 ECR 푸시 및 ECS 서비스 업데이트를 통한 웹 애플리케이션 배포 파이프라인",
+    "key_concepts": [
+      "Docker/ECR 이미지 빌드 및 푸시",
+      "ECS 서비스 배포",
+      "AWS CloudFormation 스택 관리"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 4
+  },
+  "275": {
+    "label": "AEC-Q 표준 모듈 구현",
+    "description": "차량용 전자부품 AEC-Q 품질 표준을 온톨로지 기반으로 모델링하고 테스트하는 모듈",
+    "key_concepts": [
+      "AEC-Q 표준",
+      "제조 온톨로지",
+      "품질 인증 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "277": {
+    "label": "자동차 품질 표준 온톨로지",
+    "description": "IATF 16949, ISO 26262, ISO 9001/14001 등 자동차 품질·안전 표준을 온톨로지로 모델링하고 테스트하는 모듈",
+    "key_concepts": [
+      "IATF 16949",
+      "ISO 26262",
+      "품질 표준 온톨로지"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "279": {
+    "label": "CBAM 모듈 구현 계획",
+    "description": "EU 탄소국경조정제도(CBAM) 및 CN 코드 처리를 위한 Python 모듈 및 테스트 코드 구현 태스크",
+    "key_concepts": [
+      "EU CBAM 규정",
+      "CN 코드",
+      "Python 테스트 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "276": {
+    "label": "미국 무역규정 모듈",
+    "description": "IRA 및 USMCA 기반 미국 무역 규정 데이터 처리 및 테스트 모듈 구현",
+    "key_concepts": [
+      "IRA/USMCA 규정",
+      "무역 데이터 파이썬 모듈",
+      "pytest 단위 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "278": {
+    "label": "지리 데이터 공개 로더",
+    "description": "7개국 공개 GeoJSON 데이터를 로드하고 테스트하는 지리 데이터 파이프라인 구현 태스크",
+    "key_concepts": [
+      "GeoJSON 로더",
+      "지리 데이터 파이프라인",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "283": {
+    "label": "온톨로지 TTL 스키마 정의",
+    "description": "제조 도메인 온톨로지의 TTL 스키마(22개 클래스+관계) 정의 및 pytest 기반 검증 태스크",
+    "key_concepts": [
+      "OWL 온톨로지 스키마",
+      "Turtle(TTL) 직렬화",
+      "pytest 스키마 검증"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "282": {
+    "label": "제품 데이터 생성기",
+    "description": "80개 SKU × 5개 라인의 합성 제품 데이터를 생성하고 테스트하는 파이썬 코드 및 계획 문서",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "SKU 제품 목록",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "281": {
+    "label": "BOM 데이터 생성 태스크",
+    "description": "제조 온톨로지 기반 BOM 합성 데이터 생성 및 테스트 자동화 태스크 정의",
+    "key_concepts": [
+      "BOM 생성기",
+      "합성 데이터",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "288": {
+    "label": "컴포넌트 표준 데이터 보강",
+    "description": "제조 온톨로지 기반 컴포넌트 표준 및 물질 정보를 보강하는 파이썬 스크립트와 테스트 코드 정의",
+    "key_concepts": [
+      "컴포넌트 표준 보강",
+      "온톨로지 제조 기반",
+      "pytest 테스트 자동화"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "287": {
+    "label": "품질 사고 데이터 생성",
+    "description": "제조 품질 사고, 8D 보고서, 근본 원인 분석 데이터를 합성 생성하고 테스트하는 모듈",
+    "key_concepts": [
+      "품질 사고(Quality Incident)",
+      "8D 방법론",
+      "근본 원인 분석(RCA)"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "284": {
+    "label": "제조사 데이터 생성기",
+    "description": "4개 사업부 제조사 온톨로지용 합성 데이터 생성 및 테스트 코드 구현 태스크",
+    "key_concepts": [
+      "합성 데이터 생성",
+      "제조사 온톨로지",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "286": {
+    "label": "온톨로지 스키마 업로드",
+    "description": "Neptune 그래프DB에 온톨로지 스키마를 업로드하는 태스크 구현 및 테스트 코드",
+    "key_concepts": [
+      "온톨로지 업로드",
+      "Amazon Neptune",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "280": {
+    "label": "그래프 데이터 로더 구현",
+    "description": "openCypher 배치 방식으로 속성 그래프를 로드하는 Python 모듈 및 테스트 코드 구현 태스크",
+    "key_concepts": [
+      "Property Graph",
+      "openCypher 배치 로딩",
+      "pytest 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "285": {
+    "label": "OpenSearch 인덱스 및 KB 로더",
+    "description": "OpenSearch 인덱스 생성과 지식베이스 시드 데이터 로딩 및 검색 기능 구현",
+    "key_concepts": [
+      "OpenSearch 인덱싱",
+      "지식베이스 시드 로더",
+      "AWS 인증 검색"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "274": {
+    "label": "CDK 네트워크 스택 검증",
+    "description": "CDK synth 드라이런으로 NetworkStack을 합성하고 VPC 출력값 및 스냅샷을 검증하는 태스크",
+    "key_concepts": [
+      "CDK synth",
+      "NetworkStack",
+      "스냅샷 테스트"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "289": {
+    "label": "ECS Fargate 컴퓨트 스택 구성",
+    "description": "AWS CDK로 ECS Fargate ARM64 및 ALB 기반 컴퓨트 스택을 정의하고 배포하는 인프라 코드",
+    "key_concepts": [
+      "ECS Fargate ARM64",
+      "AWS CDK TypeScript",
+      "ALB 컴퓨트 스택"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-08-plan1-foundation.md"
+    ],
+    "node_count": 4
+  },
+  "290": {
+    "label": "인증 미들웨어 테스트",
+    "description": "Bearer 토큰 누락 거부 및 인증 면제 경로 허용 등 인증 미들웨어 동작을 검증하는 테스트 모음",
+    "key_concepts": [
+      "Bearer 토큰 인증",
+      "미들웨어 테스트",
+      "인증 면제 경로"
+    ],
+    "top_files": [
+      "tests/api/test_middleware_auth.py"
+    ],
+    "node_count": 3
+  },
+  "291": {
+    "label": "API 라우트 등록 테스트",
+    "description": "시나리오별 라우터 prefix가 정상 등록되었는지 검증하는 API 라우트 테스트 모듈",
+    "key_concepts": [
+      "라우트 등록 검증",
+      "시나리오 라우터",
+      "A/B 테스트 엔드포인트"
+    ],
+    "top_files": [
+      "tests/api/test_routes_registered.py"
+    ],
+    "node_count": 3
+  },
+  "292": {
+    "label": "Neptune 서비스 테스트",
+    "description": "AWS Neptune 서비스의 Cypher 쿼리 실행 및 서브그래프 조회 기능을 검증하는 단위 테스트 모음",
+    "key_concepts": [
+      "AWS Neptune",
+      "Cypher 쿼리",
+      "서브그래프 조회"
+    ],
+    "top_files": [
+      "tests/api/services/test_neptune_service.py"
+    ],
+    "node_count": 3
+  },
+  "293": {
+    "label": "에이전트 서비스 테스트",
+    "description": "에이전트 서비스의 단일 턴 및 도구 호출 디스패치 기능을 검증하는 단위 테스트 모듈",
+    "key_concepts": [
+      "에이전트 서비스",
+      "단일 턴 처리",
+      "도구 호출 디스패치"
+    ],
+    "top_files": [
+      "tests/api/services/test_agent_service.py"
+    ],
+    "node_count": 3
+  },
+  "294": {
+    "label": "온톨로지 스키마 TTL 테스트",
+    "description": "Turtle 형식의 온톨로지 스키마 파일 파싱 및 BOM 관계 포함 여부를 검증하는 테스트 모듈",
+    "key_concepts": [
+      "Turtle(TTL) 파싱",
+      "온톨로지 스키마 검증",
+      "BOM 관계 테스트"
+    ],
+    "top_files": [
+      "tests/ontology/test_schema_ttl.py"
+    ],
+    "node_count": 3
+  },
+  "297": {
+    "label": "제조 하이테크 온톨로지 설계",
+    "description": "제조 및 하이테크 도메인 온톨로지 설계 명세의 목표, 비목표, 성공 기준을 정의하는 클러스터",
+    "key_concepts": [
+      "온톨로지 설계",
+      "제조 도메인",
+      "성공 기준"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 3
+  },
+  "295": {
+    "label": "클라우드 비용 추정 및 최적화",
+    "description": "AWS ap-northeast-2 기준 월별 비용 산정, 최적화 옵션 및 예산 알람 설정을 다루는 사양",
+    "key_concepts": [
+      "비용 추정",
+      "비용 최적화",
+      "예산 알람"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 3
+  },
+  "296": {
+    "label": "온톨로지 빌드 단계 계획",
+    "description": "제조·하이테크 온톨로지 설계의 빌드 페이즈, 병렬화 전략 및 크리티컬 패스를 정의하는 스펙 섹션",
+    "key_concepts": [
+      "빌드 페이즈",
+      "병렬화 전략",
+      "크리티컬 패스"
+    ],
+    "top_files": [
+      "docs/superpowers/specs/2026-05-05-ontology-mfg-hitech-design.md"
+    ],
+    "node_count": 3
+  },
+  "298": {
+    "label": "온톨로지 배포 자동화",
+    "description": "제조 애플리케이션 온톨로지 플랜2 배포 완료 및 플랜3 인계를 위한 자동화 스크립트 실행 단계",
+    "key_concepts": [
+      "플랜 자기검토 및 인계",
+      "API 엔드포인트 검증",
+      "배포 완료 타임스탬프 기록"
+    ],
+    "top_files": [
+      "docs/superpowers/plans/2026-05-05-ontology-mfg-application.md"
+    ],
+    "node_count": 3
+  },
+  "299": {
+    "label": "합성 페르소나 데이터",
+    "description": "합성 데이터 생성을 위한 페르소나 목록을 정의하고 반환하는 모듈",
+    "key_concepts": [
+      "페르소나 정의",
+      "합성 데이터",
+      "데이터 생성"
+    ],
+    "top_files": [
+      "data/synthetic/persona.py"
+    ],
+    "node_count": 2
+  },
+  "300": {
+    "label": "Bedrock 도구 서비스 초기화",
+    "description": "Bedrock Converse 루프를 위한 도구 모듈 초기화 및 10개 도구 서비스 노출",
+    "key_concepts": [
+      "Bedrock Converse",
+      "도구 모듈 초기화",
+      "API 서비스 도구"
+    ],
+    "top_files": [
+      "api/services/tools/__init__.py"
+    ],
+    "node_count": 2
+  },
+  "301": {
+    "label": "Tailwind CSS 설정",
+    "description": "웹 프로젝트의 Tailwind CSS 구성 파일 및 설정 객체를 정의하는 클러스터",
+    "key_concepts": [
+      "Tailwind CSS",
+      "스타일 설정",
+      "CSS 구성"
+    ],
+    "top_files": [
+      "web/tailwind.config.ts"
+    ],
+    "node_count": 2
+  },
+  "302": {
+    "label": "웹 헬스체크 API",
+    "description": "웹 애플리케이션의 상태를 확인하는 헬스체크 엔드포인트를 제공하는 API 라우트",
+    "key_concepts": [
+      "헬스체크",
+      "API 라우트",
+      "서버 상태 모니터링"
+    ],
+    "top_files": [
+      "web/app/api/health-web/route.ts"
+    ],
+    "node_count": 2
+  },
+  "303": {
+    "label": "스모크 테스트 모듈",
+    "description": "메인 모듈의 기본 임포트 및 핵심 기능이 정상 동작하는지 검증하는 스모크 테스트",
+    "key_concepts": [
+      "스모크 테스트",
+      "임포트 검증",
+      "기본 동작 확인"
+    ],
+    "top_files": [
+      "tests/test_smoke.py"
+    ],
+    "node_count": 2
+  },
+  "304": {
+    "label": "헬스체크 API 테스트",
+    "description": "API 서버의 /healthz 엔드포인트가 200 OK를 반환하는지 검증하는 테스트",
+    "key_concepts": [
+      "헬스체크",
+      "HTTP 상태코드 200",
+      "API 엔드포인트 테스트"
+    ],
+    "top_files": [
+      "tests/api/test_healthz.py"
+    ],
+    "node_count": 2
+  },
+  "305": {
+    "label": "검색 API 라우터 테스트",
+    "description": "검색 엔드포인트의 API 라우터 기능을 검증하는 테스트 모듈",
+    "key_concepts": [
+      "검색 엔드포인트",
+      "API 라우터 테스트",
+      "HTTP 요청 검증"
+    ],
+    "top_files": [
+      "tests/api/routers/test_search.py"
+    ],
+    "node_count": 2
+  },
+  "306": {
+    "label": "채팅 API 라우터 테스트",
+    "description": "채팅 API 라우터의 SSE 스트림 기능을 검증하는 테스트 모듈",
+    "key_concepts": [
+      "채팅 API 테스트",
+      "SSE 스트림",
+      "라우터 검증"
+    ],
+    "top_files": [
+      "tests/api/routers/test_chat.py"
+    ],
+    "node_count": 2
+  },
+  "307": {
+    "label": "인사이트 API 라우터 테스트",
+    "description": "인사이트 API 라우터 엔드포인트에 대한 단위 테스트를 정의하는 모듈",
+    "key_concepts": [
+      "API 라우터 테스트",
+      "인사이트 엔드포인트",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "tests/api/routers/test_insights.py"
+    ],
+    "node_count": 2
+  },
+  "308": {
+    "label": "스펙 매칭 API 테스트",
+    "description": "스펙 매칭 라우터 엔드포인트의 동작을 검증하는 API 테스트 모듈",
+    "key_concepts": [
+      "스펙 매칭",
+      "API 라우터 테스트",
+      "엔드포인트 검증"
+    ],
+    "top_files": [
+      "tests/api/routers/test_spec_match.py"
+    ],
+    "node_count": 2
+  },
+  "309": {
+    "label": "컴플라이언스 API 라우터 테스트",
+    "description": "컴플라이언스 조회 API 엔드포인트의 라우터 동작을 검증하는 테스트 모듈",
+    "key_concepts": [
+      "컴플라이언스 조회",
+      "API 라우터 테스트",
+      "ID 기반 조회"
+    ],
+    "top_files": [
+      "tests/api/routers/test_compliance.py"
+    ],
+    "node_count": 2
+  },
+  "310": {
+    "label": "대체 API 라우터 테스트",
+    "description": "substitute API 라우터 엔드포인트에 대한 단위 테스트를 정의하는 모듈",
+    "key_concepts": [
+      "API 라우터 테스트",
+      "substitute 엔드포인트",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "tests/api/routers/test_substitute.py"
+    ],
+    "node_count": 2
+  },
+  "311": {
+    "label": "캠페인 마스터 테스트",
+    "description": "캠페인 마스터 데이터의 유효성을 검증하는 테스트 모듈",
+    "key_concepts": [
+      "캠페인 마스터",
+      "데이터 테스트",
+      "유효성 검증"
+    ],
+    "top_files": [
+      "tests/data/test_campaign_master.py"
+    ],
+    "node_count": 2
+  },
+  "312": {
+    "label": "데이터 로드 테스트",
+    "description": "데이터 로딩 모듈의 임포트 및 기능을 검증하는 테스트 파일",
+    "key_concepts": [
+      "데이터 로딩",
+      "모듈 임포트 테스트",
+      "단위 테스트"
+    ],
+    "top_files": [
+      "tests/data/test_load.py"
+    ],
+    "node_count": 2
+  },
+  "313": {
+    "label": "클래스 카탈로그 생성",
+    "description": "data/schemas.py의 클래스 정의를 온톨로지 YAML 파일로 자동 변환·내보내는 스크립트",
+    "key_concepts": [
+      "클래스 카탈로그",
+      "스키마 변환",
+      "온톨로지 YAML export"
+    ],
+    "top_files": [
+      "scripts/gen_class_catalog.py"
+    ],
+    "node_count": 2
+  },
+  "314": {
+    "label": "데이터 패키지 초기화",
+    "description": "data 패키지의 초기화 파일로 모듈 임포트 및 패키지 구조를 정의한다",
+    "key_concepts": [
+      "패키지 초기화",
+      "모듈 임포트",
+      "Python 패키지"
+    ],
+    "top_files": [
+      "data/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "315": {
+    "label": "공개 데이터 패키지 초기화",
+    "description": "data/public 디렉토리를 Python 패키지로 선언하는 초기화 모듈",
+    "key_concepts": [
+      "패키지 초기화",
+      "공개 데이터",
+      "Python 모듈"
+    ],
+    "top_files": [
+      "data/public/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "316": {
+    "label": "합성 데이터 패키지 초기화",
+    "description": "합성 데이터 모듈의 패키지 초기화 파일로 해당 디렉토리를 Python 패키지로 선언",
+    "key_concepts": [
+      "패키지 초기화",
+      "합성 데이터",
+      "Python 모듈 구조"
+    ],
+    "top_files": [
+      "data/synthetic/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "317": {
+    "label": "실제 데이터 패키지 초기화",
+    "description": "real 데이터 디렉토리를 Python 패키지로 선언하는 초기화 모듈",
+    "key_concepts": [
+      "패키지 초기화",
+      "실제 데이터",
+      "__init__.py"
+    ],
+    "top_files": [
+      "data/real/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "318": {
+    "label": "외부 데이터 패키지 초기화",
+    "description": "외부 데이터 모듈을 Python 패키지로 인식시키는 초기화 파일",
+    "key_concepts": [
+      "패키지 초기화",
+      "외부 데이터",
+      "__init__.py"
+    ],
+    "top_files": [
+      "data/external/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "319": {
+    "label": "데이터 로더 초기화",
+    "description": "데이터 로딩 모듈의 패키지 초기화 및 공개 인터페이스를 정의하는 파일",
+    "key_concepts": [
+      "패키지 초기화",
+      "데이터 로더",
+      "모듈 인터페이스"
+    ],
+    "top_files": [
+      "data/loader/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "320": {
+    "label": "온톨로지 패키지 초기화",
+    "description": "온톨로지 모듈 패키지를 초기화하고 외부 접근 가능한 인터페이스를 정의하는 파일",
+    "key_concepts": [
+      "패키지 초기화",
+      "온톨로지",
+      "모듈 인터페이스"
+    ],
+    "top_files": [
+      "ontology/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "321": {
+    "label": "온톨로지 어댑터 초기화",
+    "description": "온톨로지 어댑터 모듈의 패키지 초기화 파일로 어댑터 컴포넌트를 노출한다",
+    "key_concepts": [
+      "온톨로지 어댑터",
+      "패키지 초기화",
+      "모듈 노출"
+    ],
+    "top_files": [
+      "ontology/adapters/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "322": {
+    "label": "Jest 테스트 설정",
+    "description": "CDK 인프라 프로젝트의 Jest 테스트 프레임워크 구성 파일",
+    "key_concepts": [
+      "Jest 설정",
+      "CDK 인프라",
+      "테스트 구성"
+    ],
+    "top_files": [
+      "infra-cdk/jest.config.js"
+    ],
+    "node_count": 1
+  },
+  "323": {
+    "label": "API 패키지 초기화",
+    "description": "API 모듈의 패키지 초기화 파일로 모듈 노출 및 패키지 구조를 정의한다.",
+    "key_concepts": [
+      "패키지 초기화",
+      "모듈 노출",
+      "API 구조"
+    ],
+    "top_files": [
+      "api/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "324": {
+    "label": "API 라우터 초기화",
+    "description": "API 라우터 패키지의 초기화 파일로 라우터 모듈을 패키지로 구성한다.",
+    "key_concepts": [
+      "API 라우터",
+      "패키지 초기화",
+      "모듈 구성"
+    ],
+    "top_files": [
+      "api/routers/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "325": {
+    "label": "API 서비스 초기화",
+    "description": "API 서비스 패키지의 초기화 모듈로 서비스 컴포넌트를 등록 및 노출한다.",
+    "key_concepts": [
+      "패키지 초기화",
+      "서비스 레이어",
+      "모듈 노출"
+    ],
+    "top_files": [
+      "api/services/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "326": {
+    "label": "Next.js 설정 파일",
+    "description": "Next.js 애플리케이션의 빌드 및 런타임 환경을 구성하는 설정 파일",
+    "key_concepts": [
+      "Next.js 설정",
+      "빌드 구성",
+      "웹 애플리케이션 환경"
+    ],
+    "top_files": [
+      "web/next.config.js"
+    ],
+    "node_count": 1
+  },
+  "327": {
+    "label": "PostCSS 설정",
+    "description": "PostCSS 플러그인 및 변환 파이프라인을 구성하는 설정 파일",
+    "key_concepts": [
+      "PostCSS",
+      "CSS 변환",
+      "플러그인 설정"
+    ],
+    "top_files": [
+      "web/postcss.config.js"
+    ],
+    "node_count": 1
+  },
+  "328": {
+    "label": "Next.js 환경 타입 선언",
+    "description": "Next.js 프로젝트의 TypeScript 환경 타입 정의를 제공하는 자동 생성 선언 파일",
+    "key_concepts": [
+      "TypeScript 타입 선언",
+      "Next.js 환경 설정",
+      "자동 생성 파일"
+    ],
+    "top_files": [
+      "web/next-env.d.ts"
+    ],
+    "node_count": 1
+  },
+  "329": {
+    "label": "KPI 스트립 컴포넌트",
+    "description": "핵심 성과 지표(KPI)를 가로 띠 형태로 시각화하는 React 컴포넌트",
+    "key_concepts": [
+      "KPI 시각화",
+      "React 컴포넌트",
+      "대시보드 UI"
+    ],
+    "top_files": [
+      "web/components/KpiStrip.tsx"
+    ],
+    "node_count": 1
+  },
+  "330": {
+    "label": "테스트 패키지 초기화",
+    "description": "테스트 디렉토리를 Python 패키지로 인식시키는 초기화 모듈",
+    "key_concepts": [
+      "패키지 초기화",
+      "테스트 모듈",
+      "__init__.py"
+    ],
+    "top_files": [
+      "tests/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "331": {
+    "label": "API 테스트 초기화",
+    "description": "API 테스트 패키지를 초기화하는 모듈로, 테스트 디렉토리를 Python 패키지로 인식시킴",
+    "key_concepts": [
+      "패키지 초기화",
+      "API 테스트",
+      "__init__.py"
+    ],
+    "top_files": [
+      "tests/api/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "332": {
+    "label": "API 라우터 테스트 초기화",
+    "description": "API 라우터 테스트 패키지를 초기화하는 모듈",
+    "key_concepts": [
+      "테스트 패키지",
+      "API 라우터",
+      "초기화 파일"
+    ],
+    "top_files": [
+      "tests/api/routers/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "333": {
+    "label": "API 서비스 테스트 초기화",
+    "description": "API 서비스 테스트 패키지를 초기화하는 빈 init 파일",
+    "key_concepts": [
+      "테스트 패키지",
+      "API 서비스",
+      "패키지 초기화"
+    ],
+    "top_files": [
+      "tests/api/services/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "334": {
+    "label": "테스트 데이터 초기화",
+    "description": "테스트용 데이터 패키지를 초기화하는 모듈",
+    "key_concepts": [
+      "테스트 데이터",
+      "패키지 초기화",
+      "__init__.py"
+    ],
+    "top_files": [
+      "tests/data/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "335": {
+    "label": "온톨로지 테스트 패키지",
+    "description": "온톨로지 관련 테스트 모듈을 패키지로 초기화하는 구성 파일",
+    "key_concepts": [
+      "테스트 패키지 초기화",
+      "온톨로지 테스트",
+      "Python 패키지 구조"
+    ],
+    "top_files": [
+      "tests/ontology/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "336": {
+    "label": "인프라 테스트 초기화",
+    "description": "인프라 관련 테스트 패키지를 초기화하는 모듈",
+    "key_concepts": [
+      "테스트 인프라",
+      "패키지 초기화",
+      "Python __init__"
+    ],
+    "top_files": [
+      "tests/infra/__init__.py"
+    ],
+    "node_count": 1
+  },
+  "337": {
+    "label": "서비스 테스트 초기화",
+    "description": "서비스 계층 테스트 패키지를 초기화하는 빈 init 파일",
+    "key_concepts": [
+      "테스트 패키지",
+      "서비스 계층",
+      "Python 패키지 초기화"
+    ],
+    "top_files": [
+      "tests/services/__init__.py"
+    ],
+    "node_count": 1
+  }
+}

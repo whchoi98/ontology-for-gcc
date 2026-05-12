@@ -41,28 +41,43 @@ def run(input: dict, *, persona_id: str, session_id: str, cust_id):
         }
 
     if pattern == 'fuel_grade_transition':
-        # Property-based: per-customer chronological grade list.
-        q = """MATCH (t:FuelTransaction)
-               OPTIONAL MATCH (c:Customer {cust_id: t.cust_id})
-               WHERE c.data_depth IN $depths
-               WITH t.cust_id AS cust_id, t.fuel_grade AS grade, t.ts AS ts
+        # Customer-first 전체 cohort coverage: cohort 전체 (deep-history 33 +
+        # coupon-only 484 + sales-only 17 = 최대 534명)에 대해 transaction 매칭.
+        # cust_id index seek는 빠르므로 Neptune r7g.2xlarge에서 1-3초.
+        # 이전엔 전체 FuelTransaction(수십만) 스캔 → 30초+ timeout이 문제.
+        cohort_q = """MATCH (c:Customer) WHERE c.data_depth IN $depths
+                      RETURN count(c) AS n"""
+        cohort_res = open_cypher(cohort_q, parameters={'depths': cohort_filter})
+        cohort_size = (cohort_res.get('results') or [{}])[0].get('n', 0)
+
+        q = """MATCH (c:Customer) WHERE c.data_depth IN $depths
+               WITH collect(c.cust_id) AS ids
+               UNWIND ids AS cid
+               MATCH (t:FuelTransaction {cust_id: cid})
+               WITH cid AS cust_id, t.fuel_grade AS grade, t.ts AS ts
                ORDER BY cust_id, ts
                WITH cust_id, collect(grade) AS grades
                WHERE size(grades) > 4
                  AND grades[-1] <> grades[-5]
                  AND grades[-1] IN ['premium','regular']
                  AND grades[-5] = 'diesel'
-               RETURN cust_id, grades[-5] AS prev, grades[-1] AS now
-               LIMIT 50"""
+               RETURN cust_id, grades[-5] AS prev, grades[-1] AS now"""
         try:
             res = open_cypher(q, parameters={'depths': cohort_filter})
             matches = res.get('results', [])
-        except Exception:
+        except Exception as e:
             matches = []
+            error_note = f'쿼리 실패 — {type(e).__name__}'
+        else:
+            error_note = None
         return {
             'pattern': 'fuel_grade_transition',
-            'matches': matches,
+            'cohort_size': cohort_size,           # 전체 후보군 (정확성 metric)
+            'matches_count': len(matches),
+            'matches': matches[:50],              # 표시는 50개 cap, 실제 검사는 전체
+            'coverage': '100%',                   # cohort 전체 검사 — sampling 없음
             'note': '디젤→휘발유 전환 — Celebration 캠페인 후보',
+            'error': error_note,
         }
 
     if pattern == 'app_signup_after_install':

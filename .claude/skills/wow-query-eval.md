@@ -11,14 +11,14 @@ Project-specific search quality gate. The harness has 30 demo-critical queries s
 
 Before running, verify:
 
-1. **CloudFront reachable**: `curl -sI https://gcc-ontology.whchoi.net/healthz` returns 200.
-2. **API healthy**: `curl -sI https://gcc-ontology.whchoi.net/api/healthz` returns 200.
+1. **CloudFront reachable**: `curl -sI https://gcc.whchoi.net/healthz` returns 200.
+2. **API healthy**: `curl -sI https://gcc.whchoi.net/api/healthz` returns 200.
 3. **Cognito demo user provisioned**: if `DEMO_PUBLIC_MODE` is unset, `/api/search` requires a session cookie. Either set the demo user's session cookie via `--cookie` (see `scripts/provision_cognito_users.sh`) or temporarily flip `DEMO_PUBLIC_MODE=true` for a one-off measurement.
 
 ## Run
 
 ```bash
-python3 scripts/eval_wow_queries.py --cf-domain gcc-ontology.whchoi.net
+python3 scripts/eval_wow_queries.py --cf-domain gcc.whchoi.net
 ```
 
 The script prints a per-query pass/fail row, an overall pass rate, and exits non-zero if pass rate < 85%.

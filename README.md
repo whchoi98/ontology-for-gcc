@@ -179,16 +179,22 @@ Steps 1–4 run in `.github/workflows/ci.yml` on every push/PR (concurrency canc
 See [docs/api-reference.md](docs/api-reference.md) for the full OpenAPI surface, including:
 
 - `POST /api/search` and `POST /api/search/stream` (Scenario A)
-- `POST /api/chat` (Scenario B, SSE)
-- `POST /api/insights` and `POST /api/insights/stream` (Scenario C)
-- `POST /api/persona-match` (Scenario D)
-- `POST /api/safety/check` (Scenario E)
-- `POST /api/substitute` (Scenario F)
-- `POST /api/price/compare` (Scenario G)
-- `GET  /api/logistics/{network,status,events,warehouse/...,inventory/...,nearest,shortest-path}` (Scenario H)
-- `GET  /api/objects/{type}` and `/api/objects/{type}/{id}`
-- `GET  /api/ontology/{schema,standards,validation}`
-- `GET  /api/ops/{ingest,guardrail,memory,eval,trace}`
+- `POST /api/chat` (Scenario B, SSE — Cally 챗봇)
+- `GET  /api/insights` and `GET /api/insights/stream` (Scenario C)
+- `GET  /api/persona-match/{cust_id}` and `POST /api/persona-match/batch` (Scenario D)
+- `GET  /api/cluster/summary` and `/api/cluster/{cluster_id}/members` (Scenario E)
+- `POST /api/lookalike/expand` (Scenario F)
+- `POST /api/campaign-roi/simulate` (Scenario G)
+- `GET  /api/network-map/region/{sido}` and `/api/network-map/station/{station_id}/competitors` (Scenario H)
+- `POST /api/compliance/check` (Scenario I)
+- `GET  /api/external-signal/{weather/correlate,news}` (Scenario J)
+- `GET  /api/outlier/scan?dimension={time,amount,grade}` (Scenario K)
+- `GET  /api/payment/{matrix,transition}` (Scenario L)
+- `GET  /api/journey/{cust_id}` (Scenario M)
+- `POST /api/weather/correlate` (Scenario N — 1275 days × 17 sido)
+- `GET  /api/objects/{type}` and `/api/objects/{type}/{id}` (25 클래스 객체 탐색)
+- `GET  /api/ontology/{classes,relations}` and `/api/personas`
+- `GET  /api/ops/{healthz,meta,resources}` (operations)
 
 ## Contributing
 
@@ -375,17 +381,23 @@ python3 scripts/eval_wow_queries.py
 
 전체 OpenAPI 표면은 [docs/api-reference.md](docs/api-reference.md)에 정리돼 있습니다. 포함되는 엔드포인트:
 
-- `POST /api/search` 및 `POST /api/search/stream` (시나리오 A)
-- `POST /api/chat` (시나리오 B, SSE)
-- `POST /api/insights` 및 `POST /api/insights/stream` (시나리오 C)
-- `POST /api/persona-match` (시나리오 D)
-- `POST /api/safety/check` (시나리오 E)
-- `POST /api/substitute` (시나리오 F)
-- `POST /api/price/compare` (시나리오 G)
-- `GET  /api/logistics/{network,status,events,warehouse/...,inventory/...,nearest,shortest-path}` (시나리오 H)
-- `GET  /api/objects/{type}` 및 `/api/objects/{type}/{id}`
-- `GET  /api/ontology/{schema,standards,validation}`
-- `GET  /api/ops/{ingest,guardrail,memory,eval,trace}`
+- `POST /api/search` 및 `POST /api/search/stream` (시나리오 A — 하이브리드 검색)
+- `POST /api/chat` (시나리오 B, SSE — Cally 챗봇 + 10 도구)
+- `GET  /api/insights` 및 `GET /api/insights/stream` (시나리오 C — 인사이트 카드)
+- `GET  /api/persona-match/{cust_id}` 및 `POST /api/persona-match/batch` (시나리오 D — 5 부서 매칭)
+- `GET  /api/cluster/summary` 및 `/api/cluster/{cluster_id}/members` (시나리오 E — KMeans 6)
+- `POST /api/lookalike/expand` (시나리오 F — 룩어라이크 top-K)
+- `POST /api/campaign-roi/simulate` (시나리오 G — Sonnet 4.6 ROI 리포트)
+- `GET  /api/network-map/region/{sido}` 및 `/api/network-map/station/{station_id}/competitors` (시나리오 H — 권역 경쟁)
+- `POST /api/compliance/check` (시나리오 I — 약관 동의 + KFDA 용어)
+- `GET  /api/external-signal/{weather/correlate,news}` (시나리오 J — 외부 신호)
+- `GET  /api/outlier/scan?dimension={time,amount,grade}` (시나리오 K — 이상 거래)
+- `GET  /api/payment/{matrix,transition}` (시나리오 L — 결제·멤버십)
+- `GET  /api/journey/{cust_id}` (시나리오 M — 고객 여정)
+- `POST /api/weather/correlate` (시나리오 N — 날씨 × 연료, KMA 1275일 × 17 시도)
+- `GET  /api/objects/{type}` 및 `/api/objects/{type}/{id}` (25 클래스 객체 탐색)
+- `GET  /api/ontology/{classes,relations}` 및 `/api/personas`
+- `GET  /api/ops/{healthz,meta,resources}` (운영)
 
 ## 기여 방법
 

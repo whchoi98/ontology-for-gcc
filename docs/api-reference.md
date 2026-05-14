@@ -1,7 +1,7 @@
 # API Reference — Ontology GCC
 
 > FastAPI 백엔드 (`api/main.py`)가 노출하는 모든 REST / SSE 엔드포인트.
-> Base URL — 로컬: `http://localhost:8000` · 데모: `https://gcc-ontology.whchoi.net`
+> Base URL — 로컬: `http://localhost:8000` · 데모: `https://gcc.whchoi.net` (legacy alias `gcc-ontology.whchoi.net` 도 동일 ECS 라우팅, ADR-0009)
 
 모든 엔드포인트는 다음 미들웨어를 통과합니다:
 - **Origin Auth** (`REQUIRE_ORIGIN_AUTH=true`): CloudFront → ALB 사이의 `X-Origin-Auth-Token` 헤더 검증.

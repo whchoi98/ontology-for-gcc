@@ -41,6 +41,19 @@ cd infra-cdk && npx jest
 bash tests/run-all.sh
 ```
 
+## Sibling 프로젝트 격리 (pytest.ini)
+
+같은 EC2/머신의 `../ontology-for-mfg`, `../ontology-for-retail` 가 동일 `tests/__init__.py` namespace package 를 공유하면 *동일 이름 모듈* (예: `test_neptune_service.py`) 끼리 sys.path 순서 충돌. ADR-0013 의 fix:
+
+```ini
+[pytest]
+testpaths = tests       # GCC tests/ 만 collect
+pythonpath = .          # importlib mode 아닌 default 모드에서 api/ 등 import 가능
+norecursedirs = .git node_modules .next __pycache__ cdk.out .venv build dist .pytest_cache .ruff_cache .harness-eval graphify-out raw_data
+```
+
+`tests/__init__.py` 는 *유지* — 제거 시 동일 basename 충돌 (`tests/api/test_chat.py` vs `tests/api/routers/test_chat.py`) 발생. `pythonpath=.` 가 sys.path 1순위로 GCC root 를 박아 sibling 보다 우선.
+
 ## CI 게이트
 
 `.github/workflows/ci.yml` 의 4 잡:

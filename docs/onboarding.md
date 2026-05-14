@@ -52,7 +52,7 @@ OPENSEARCH_INDEX=gcc-ontology
 
 # Auth / 도메인
 COGNITO_USER_POOL_ID=...
-PUBLIC_DOMAIN=gcc-ontology.whchoi.net
+PUBLIC_DOMAIN=gcc.whchoi.net
 REQUIRE_ORIGIN_AUTH=true   # 로컬 개발은 false 권장
 DEMO_PUBLIC_MODE=false      # 로컬은 true 가능, 운영은 false
 ```

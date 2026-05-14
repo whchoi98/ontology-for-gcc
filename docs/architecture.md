@@ -59,7 +59,7 @@
 #### Edge / Auth
 | Component | 역할 |
 |-----------|------|
-| CloudFront | 단일 도메인 (`gcc-ontology.whchoi.net`). |
+| CloudFront | 단일 도메인 (`gcc.whchoi.net`, legacy alias `gcc-ontology.whchoi.net` 도 CORS 허용 — ADR-0009). |
 | Lambda@Edge | Cognito 쿠키 인증 + `X-Origin-Auth-Token` 주입. |
 | ALB | HTTP origin. SG는 CloudFront prefix list 만 허용. |
 | Cognito User Pool | RS256 JWT. JWKS 캐시. |
@@ -201,7 +201,7 @@
 #### Edge / Auth
 | Component | Role |
 |-----------|------|
-| CloudFront | Single custom domain (`gcc-ontology.whchoi.net`). |
+| CloudFront | Single custom domain (`gcc.whchoi.net`, legacy alias `gcc-ontology.whchoi.net` retained in CORS — ADR-0009). |
 | Lambda@Edge | Cognito cookie auth + `X-Origin-Auth-Token` injection. |
 | ALB | HTTP origin. SG locked to the CloudFront prefix list. |
 | Cognito User Pool | RS256 JWT, cached JWKS. |

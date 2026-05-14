@@ -49,7 +49,7 @@ npx jest -u
 ## 도메인 추가 (수동, 1회)
 
 ```bash
-npx cdk deploy gcc-edge -c domain=gcc-ontology.whchoi.net
+npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net
 bash scripts/cognito-update-callbacks.sh
 ```
 

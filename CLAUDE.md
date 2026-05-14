@@ -4,21 +4,17 @@ Project memory for Claude Code. This file is auto-loaded into every session and 
 
 ## Project
 
-`ontology-gcc` is a 30–60 minute proof-of-concept demo for a GS Caltex (GSC) M&M본부 customer ontology that powers twelve wow scenarios on AWS Bedrock + AgentCore + Neptune. It is a multi-runtime monorepo: Python FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure, and a synthetic-data loader that doubles as a one-shot ECS task.
+`ontology-gcc` is a 30–60 minute proof-of-concept demo for a GS Caltex (GSC) M&M본부 customer ontology that powers **14 wow scenarios (A–N)** on AWS Bedrock + AgentCore + Neptune. It is a multi-runtime monorepo: Python FastAPI backend, Next.js 14 frontend, AWS CDK infrastructure, and a synthetic-data loader that doubles as a one-shot ECS task.
 
-Custom domain (manual post-deploy): `https://gcc-ontology.whchoi.net` (CloudFront + Lambda@Edge cookie auth → Cognito). Demo users: `admin@whchoi.net` / `demo@whchoi.net` (PW `!234Qwer`).
+Custom domain (manual post-deploy): `https://gcc.whchoi.net` (CloudFront + Lambda@Edge cookie auth → Cognito). Legacy alias `gcc-ontology.whchoi.net` 도 CORS 에서 허용 (ADR-0009). Demo users: `admin@whchoi.net` / `demo@whchoi.net` (PW `!234Qwer`).
 
-The five-department spine (마케팅 / 고객전략 / 데이터·AI / CRM·회원사업 / 리테일영업) drives every demo path. Scenarios A–L plus the knowledge-graph object explorer (22 classes) must remain coherent for the same persona context.
+The five-department spine (마케팅 / 고객전략 / 데이터·AI / CRM·회원사업 / 리테일영업) drives every demo path. **14 시나리오 A-N** plus the knowledge-graph object explorer (**25 classes**) must remain coherent for the same persona context.
 
-Network: VPC is **imported** from the existing `ontology-for-retail` deployment (`Vpc.fromVpcAttributes` 또는 `fromLookup`). All other resources (Neptune, OpenSearch, ECS, ALB, CloudFront, Cognito, S3) are GCC-exclusive.
+Network: VPC is **imported** from the existing `ontology-for-retail` deployment (`Vpc.fromVpcAttributes` 또는 `fromLookup`, ADR-0001). All other resources (Neptune, OpenSearch, ECS, ALB, CloudFront, Cognito, S3) are GCC-exclusive.
 
-> Note: see `/docs/superpowers/specs/2026-05-08-ontology-gcc-design.md` for the authoritative scope (14 시나리오 A–N, 25 클래스 — Plan 1 baseline below references the original 12-scenario draft).
+### Scenarios A–N
 
-### Scenarios A–L (current)
-
-A search · B chat · C insights · D persona-match · E cluster · F lookalike · G campaign-roi · H network-map · I compliance · J external-signal · K outlier · L payment.
-
-> M (customer journey) and N (weather × fuel) are spec'd for the authoritative 14-scenario release (see Note above) but not part of the Plan 1 baseline tree below.
+A search · B chat (Cally) · C insights · D persona-match · E cluster · F lookalike · G campaign-roi · H network-map · I compliance · J external-signal · K outlier · L payment · M journey · N weather×fuel.
 
 ### Personas (5 부서)
 
@@ -75,7 +71,7 @@ ontology-gcc/
 │   ├── aws_clients.py    boto3 client factories (cached)
 │   └── Dockerfile        Single image used as both API server and one-shot loader
 ├── web/                  Next.js 14 App Router frontend
-│   ├── app/              Routes for scenarios A-L + objects + ops + meta
+│   ├── app/              Routes for scenarios A-N + objects + ops + meta + cally + codegraph
 │   ├── components/       PersonaSwitch, GuidedTour, CytoscapeView, Sidebar
 │   └── lib/api-client.ts Typed REST + SSE client
 ├── infra-cdk/            AWS CDK v2 infrastructure (TypeScript)
@@ -88,7 +84,8 @@ ontology-gcc/
 │   └── output/           JSON/NDJSON outputs (also synced to S3)
 ├── ontology/mappings/    Standards CSV/JSON: opinet codes, KFDA terms, GSC internal
 ├── tests/                Pytest suite — smoke (router imports) + tests/api/ (httpx integration)
-├── docs/                 Architecture, ADRs (decisions/0001-0004), runbooks
+├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0013), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
+├── prompts/              Reusable LLM prompt 가이드 (sse-agent-design, cross-browser-popup-pattern)
 ├── scripts/              KB index init, Cognito provisioning, eval harness, git hooks
 ├── .claude/              Project harness — agents, skills, hooks, commands, settings
 │   ├── agents/           code-reviewer.md, security-auditor.md (model: sonnet, structured output)
@@ -104,20 +101,20 @@ ontology-gcc/
 
 ```bash
 # Build API image (ARM64) and push
-docker build --platform linux/arm64 -f api/Dockerfile -t <ecr>/gcc-ontology-dev-api:<tag> .
-docker push <ecr>/gcc-ontology-dev-api:<tag>
+docker build --platform linux/arm64 -f api/Dockerfile -t <ecr>/ontology-gcc-dev-api:<tag> .
+docker push <ecr>/ontology-gcc-dev-api:<tag>
 
 # Build web image
-docker build --platform linux/arm64 -f web/Dockerfile -t <ecr>/gcc-ontology-dev-web:<tag> .
+docker build --platform linux/arm64 -f web/Dockerfile -t <ecr>/ontology-gcc-dev-web:<tag> .
 
 # Deploy infrastructure
 cd infra-cdk && npx cdk deploy --all
 
 # Force ECS rollout (after image push)
-aws ecs update-service --cluster gcc-ontology-dev-cluster --service gcc-ontology-dev-api --force-new-deployment
+aws ecs update-service --cluster ontology-gcc-dev-cluster --service ontology-gcc-dev-api --force-new-deployment
 
 # Reload synthetic data via one-shot ECS task (uses the API image with overridden command)
-aws ecs run-task --cluster gcc-ontology-dev-cluster --task-definition gcc-ontology-dev-api \
+aws ecs run-task --cluster ontology-gcc-dev-cluster --task-definition ontology-gcc-dev-api \
   --overrides '{"containerOverrides":[{"name":"api","command":["python","-m","data.load","--neptune","--opensearch","--from-s3"]}]}'
 
 # Frontend type check
@@ -156,7 +153,7 @@ python -m compileall -q api data scripts   # AST validation (also a CI job)
 - ECS services use `:latest` plus a SHA-pinned tag. For deterministic rollouts, register a new task definition revision pinning the SHA-tagged image rather than relying on `:latest` cache invalidation.
 - Neptune is in private subnets — `dev` EC2 cannot reach it directly. Run loaders as one-shot ECS tasks in the same SG.
 - VPC is imported from `ontology-for-retail`'s network stack via `Vpc.fromVpcAttributes` (preferred when CFN export exists) or `Vpc.fromLookup` (tag-based fallback). GCC's network stack only creates SGs (gcc-app-sg, gcc-neptune-sg, gcc-os-sg). Retail teardown will break GCC connectivity; coordinate destroys.
-- Custom domain `gcc-ontology.whchoi.net` is **not** wired by CDK — first deploy uses CloudFront default URL. Add domain via `cdk deploy gcc-edge -c domain=gcc-ontology.whchoi.net` then run `scripts/cognito-update-callbacks.sh`.
+- Custom domain `gcc.whchoi.net` is **not** wired by CDK — first deploy uses CloudFront default URL. Add domain via `npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net` then run `scripts/cognito-update-callbacks.sh` (legacy alias `gcc-ontology.whchoi.net` 도 등록, ADR-0009).
 
 ### Security
 

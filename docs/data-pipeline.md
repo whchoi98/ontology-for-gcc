@@ -410,7 +410,7 @@ curl -X POST "$OPENSEARCH_ENDPOINT/$INDEX/_count" \
 ### 6.2 wow-query eval (CI 게이트)
 
 ```bash
-python scripts/eval_wow_queries.py --cf-domain gcc-ontology.whchoi.net
+python scripts/eval_wow_queries.py --cf-domain gcc.whchoi.net
 # Exits 1 if pass rate < 85%
 ```
 

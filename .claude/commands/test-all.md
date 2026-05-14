@@ -22,9 +22,9 @@ Execute the project's test surface in this order, stopping at first failure:
 
 4. **Smoke test** the critical paths via CloudFront:
    ```bash
-   curl -fsS https://gcc-ontology.whchoi.net/healthz
-   curl -fsS -X POST https://gcc-ontology.whchoi.net/api/search -H 'content-type: application/json' \
-     -d '{"q":"시카 진정 크림","top_k":5}' | jq '.hits | length'
+   curl -fsS https://gcc.whchoi.net/healthz
+   curl -fsS -X POST https://gcc.whchoi.net/api/search -H 'content-type: application/json' \
+     -d '{"query":"고급휘발유 충성","persona_id":"marketing"}' | jq '.results | length'
    ```
 
 Report each step's outcome. If anything fails, surface the exact error and propose a fix.

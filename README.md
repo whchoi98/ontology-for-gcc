@@ -87,7 +87,8 @@ aws ecs run-task \
   --task-definition ontology-gcc-dev-api \
   --launch-type FARGATE \
   --overrides file://loader-overrides.json
-# Loads ~250 products, 2,480 reviews, 40 personas, 4 channels, 219 FoodOn aliases
+# Loads ~50K customers (500 real + 49.5K synthetic lookalike), 139K fuel transactions,
+# 8.5K stations, 1,275 days × 17 sido weather observations, 5 부서 personas
 
 # Force a service rollout after image push
 aws ecs update-service \
@@ -138,7 +139,8 @@ ontology-gcc/
 │   ├── lib/              # network, data, compute, ai, edge, observability stacks
 │   └── test/             # Jest snapshot tests for all 6 stacks
 ├── data/                 # Synthetic data generator + Neptune/OpenSearch loader
-├── ontology/             # Mapping CSVs (INCI, FoodOn, GS1↔KFDA)
+├── ontology/             # Mapping CSVs (Opinet 유종/주유소 codes, KFDA 약관 terms,
+│                         #  GSC 내부 codes, KOSTAT 시도 GeoJSON, 5부서×14시나리오 priority)
 ├── tests/                # Pytest suite — smoke + tests/api/ (httpx integration)
 ├── docs/                 # Architecture, ADRs (decisions/0001-0004), runbooks
 ├── scripts/              # KB index, Cognito provisioning, evaluation
@@ -287,7 +289,8 @@ aws ecs run-task \
   --task-definition ontology-gcc-dev-api \
   --launch-type FARGATE \
   --overrides file://loader-overrides.json
-# 약 250개 상품, 2,480개 리뷰, 40명 페르소나, 4개 채널, 219개 FoodOn 한글 매핑 적재
+# 약 50K 고객 (실데이터 N=500 + 합성 룩어라이크 49.5K), 139K 주유 거래,
+# 8.5K 주유소, 1,275일 × 17 시도 KMA 기상, 5 부서 페르소나 적재
 
 # 이미지 푸시 후 서비스 강제 롤아웃
 aws ecs update-service \
@@ -337,7 +340,8 @@ ontology-gcc/
 ├── infra-cdk/            # AWS CDK v2 인프라 (TypeScript)
 │   └── lib/              # network, data, compute, ai, edge, observability 스택
 ├── data/                 # 합성 데이터 생성기 + Neptune/OpenSearch 로더
-├── ontology/             # 매핑 CSV (INCI, FoodOn, GS1↔KFDA)
+├── ontology/             # 매핑 CSV (Opinet 유종/주유소 표준, KFDA 약관 용어,
+│                         #  GSC 내부 코드, KOSTAT 시도 GeoJSON, 5부서×14시나리오 priority)
 ├── docs/                 # 아키텍처, ADR, 런북
 └── scripts/              # KB 인덱스, Cognito 사용자 프로비저닝, 평가
 ```

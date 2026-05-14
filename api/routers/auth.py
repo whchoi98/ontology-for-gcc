@@ -16,7 +16,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 COGNITO_DOMAIN = os.environ.get("COGNITO_DOMAIN", "ontology-gcc-dev.auth.us-east-1.amazoncognito.com")
 CLIENT_ID = os.environ.get("COGNITO_CLIENT_ID", "422o42g8odcmv21860cu2jta4")
-APP_BASE = os.environ.get("APP_BASE_URL", "https://gcc-ontology.whchoi.net")
+APP_BASE = os.environ.get("APP_BASE_URL", "https://gcc.whchoi.net")
 CALLBACK_URL = f"{APP_BASE}/api/auth/callback"
 LOGOUT_URL = f"{APP_BASE}/api/auth/logout"
 COOKIE_NAME = "gcc_id_token"
@@ -113,9 +113,14 @@ async def whoami(request: Request) -> JSONResponse:
         key = next((k for k in keys if k["kid"] == header.get("kid")), None)
         if not key:
             return JSONResponse({"authenticated": False, "reason": "unknown_kid"})
+        # audience 검증 활성 — 같은 user pool 의 *다른* app client 가 발급한
+        # 토큰을 받아들이지 않도록 CLIENT_ID 매칭 강제 (high-severity 보안 fix).
+        # verify_at_hash 만 비활성: ID token 에 at_hash 가 항상 있는 건 아님
+        # (authorization code flow vs implicit flow 차이).
         claims = jwt.decode(
             token, key, algorithms=["RS256"],
-            options={"verify_aud": False, "verify_at_hash": False},
+            audience=CLIENT_ID,
+            options={"verify_at_hash": False},
         )
         return JSONResponse({
             "authenticated": True,

@@ -13,7 +13,11 @@ app = FastAPI(title="ontology-gcc api", version="0.2.0")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://gcc-ontology.whchoi.net", "http://localhost:3000"],
+    allow_origins=[
+        "https://gcc.whchoi.net",
+        "https://gcc-ontology.whchoi.net",  # legacy alias (deprecated)
+        "http://localhost:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

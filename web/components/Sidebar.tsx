@@ -119,7 +119,7 @@ export function Sidebar() {
           </div>
           <div className="min-w-0">
             <div className="text-sm font-semibold text-ink-100 leading-tight truncate">Ontology GCC</div>
-            <div className="text-[10px] text-ink-400 leading-tight truncate font-mono">{process.env.NEXT_PUBLIC_APP_VERSION ?? 'v1.0.56'}</div>
+            <div className="text-[10px] text-ink-400 leading-tight truncate font-mono">{process.env.NEXT_PUBLIC_APP_VERSION ?? 'v1.0.63'}</div>
           </div>
         </div>
         <CompanyLogo />

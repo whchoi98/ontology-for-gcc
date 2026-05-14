@@ -4,6 +4,7 @@ so downstream router-level guards can authorize per persona.
 """
 from __future__ import annotations
 import logging
+import os
 import time
 from typing import Iterable
 import requests
@@ -22,6 +23,9 @@ class CognitoBearerAuth(BaseHTTPMiddleware):
         self.exempt = set(exempt_paths) | {"/healthz", "/docs", "/openapi.json", "/api/auth"}
         self._jwks_cache: dict | None = None
         self._jwks_fetched_at: float = 0.0
+        # CLIENT_ID 매칭으로 같은 user pool 의 다른 app client 토큰 거부.
+        # auth.py 와 같은 default 유지 (둘이 분리되면 audience mismatch 위험).
+        self.client_id = os.environ.get("COGNITO_CLIENT_ID", "422o42g8odcmv21860cu2jta4")
 
     async def dispatch(self, request: Request, call_next):
         if any(request.url.path.startswith(p) for p in self.exempt):
@@ -73,7 +77,10 @@ class CognitoBearerAuth(BaseHTTPMiddleware):
         key = next((k for k in keys if k["kid"] == kid), None)
         if not key:
             raise JWTError("kid not in JWKS")
+        # audience 검증 활성 — 같은 user pool 의 *다른* app client 토큰
+        # 거부. CLIENT_ID 가 빈 문자열이면 매칭 안 되므로 ENV 필수.
         return jwt.decode(
             token, key, algorithms=["RS256"],
-            options={"verify_aud": False, "verify_at_hash": False},
+            audience=self.client_id,
+            options={"verify_at_hash": False},
         )

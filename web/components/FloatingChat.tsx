@@ -75,6 +75,7 @@ type ChatMessage = {
 export default function FloatingChat() {
   const { active } = useActivePersona();
   const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);   // Chrome popup 우회 — iframe modal
   const [sessionId, setSessionId] = useState<string>('');
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -91,13 +92,18 @@ export default function FloatingChat() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }, [messages, streaming]);
 
-  // ESC to close
+  // ESC to close (drawer 또는 modal)
   useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpen(false); };
+    if (!open && !modalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        setModalOpen(false);
+      }
+    };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open]);
+  }, [open, modalOpen]);
 
   function send(text: string) {
     const t = text.trim();
@@ -148,19 +154,25 @@ export default function FloatingChat() {
   }
 
   function openCallyWindow() {
-    // 새 창으로 /cally 열기 — /cally는 LayoutShell에서 사이드바·top-bar
-    // 모두 숨김 처리되는 chat-only minimal popup 페이지.
-    // window.location.origin 절대 URL → 인증 쿠키 자동 전달.
+    // UA 분기: Chrome 은 Site Engagement Score 가 낮으면 features 충족해도
+    // popup→tab fallback. 따라서 Chrome 에서는 in-page iframe modal 로 우회.
+    // Firefox/Safari 는 features 명시만으로 popup window 보장.
     if (typeof window === 'undefined') return;
+    const ua = navigator.userAgent;
+    const isChrome = /Chrome/.test(ua) && !/Edg|OPR|Brave/.test(ua);
+    if (isChrome) {
+      setModalOpen(true);
+      return;
+    }
     const url = `${window.location.origin}/cally`;
-    const features = 'width=480,height=760,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
+    const features = 'popup=true,width=480,height=760,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no';
     const popup = window.open(url, '_blank', features);
     if (!popup || popup.closed) {
-      // popup blocked → 새 탭으로 강제 오픈
-      window.open(url, '_blank');
-    } else {
-      try { popup.focus(); } catch { /* ignore cross-origin focus error */ }
+      // popup 차단 fallback — modal 로 전환
+      setModalOpen(true);
+      return;
     }
+    try { popup.focus(); } catch { /* cross-origin focus */ }
   }
 
   return (
@@ -326,6 +338,44 @@ export default function FloatingChat() {
                 {streaming ? '…' : '전송'}
               </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Chrome 분기 — iframe-based in-page popup. Site Engagement Score
+          정책으로 window.open popup 이 새 탭 fallback 되는 Chrome 사용자에게
+          시각적으로 같은 별도 창 경험 제공. iframe 은 같은 origin /cally 라
+          Cognito 쿠키 + SSE 모두 자동 동작. */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in"
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="relative w-[480px] h-[760px] max-h-[90vh] bg-ink-900 border border-[#0067B1]/40 rounded-lg shadow-2xl shadow-blue-900/60 overflow-hidden flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between px-3 py-2 border-b border-[#0067B1]/30 bg-gradient-to-r from-[#003278]/30 to-[#0050A0]/15 shrink-0">
+              <div className="flex items-center gap-2">
+                <Bot className="w-4 h-4 text-[#7AB3E5]" strokeWidth={2.5} />
+                <span className="text-xs font-bold text-ink-50">
+                  Cally <span className="text-[9px] font-mono text-[#7AB3E5]">GS Caltex AI</span>
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setModalOpen(false)}
+                className="p-1 rounded hover:bg-ink-800 text-ink-400 hover:text-ink-200"
+                title="닫기 (ESC)"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <iframe
+              src="/cally"
+              title="Cally 챗봇"
+              className="flex-1 w-full border-0 bg-ink-950"
+            />
           </div>
         </div>
       )}

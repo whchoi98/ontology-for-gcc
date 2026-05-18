@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] — 2026-05-18
+
+### Security
+- **IAM task role scope-down** (ADR-0014): NeptuneFullAccess + `bedrock:*` + `aoss:*` 제거 → 명시 ARN (cluster ARN / inference-profile + foundation-model ARN 패턴 / collection ARN).
+- **DEMO_PUBLIC_MODE prod guard** (ADR-0015): `-c stage=prod` 시 환경변수 미생성 → fail-closed.
+- **Lambda@Edge DEMO bypass** (ADR-0017): `USER_POOL_ID` 빈 값 시 모든 request pass-through. 운영 모드는 `.env` 채우고 redeploy.
+- **CloudFront Prefix List SG ingress** (ADR-0019): `com.amazonaws.global.cloudfront.origin-facing` (pl-22a6434b) port 80 만 — 옛 구성에 누락된 prefix list 보강.
+
+### Infrastructure
+- **AOSS VPCE hardening — retail VPCE 재사용** (ADR-0016): AOSS 의 *VPC 당 1 VPCE 제한* 발견. retail PoC 의 `vpce-0d638a0ed56410be0` 에 gcc-os-sg 추가 + GCC network policy 의 collection 만 `AllowFromPublic: false` + `SourceVPCEs`. Dashboard 는 운영 디버깅용 `AllowFromPublic: true` 유지.
+- **Wildcard cert import** (ADR-0018): `*.whchoi.net` cert 를 `fromCertificateArn` 으로 import — DNS validation 우회. 도메인 alias 는 외부 active zone 의 stale CNAME 충돌 시 *분리 deploy* 패턴.
+- **Lambda@Edge synth-time string replace** (ADR-0017): `process.env.COGNITO_USER_POOL_ID` 를 source 에 string replace 후 fromAsset 으로 deploy (runtime env var 미지원 우회).
+- **ECR repo import**: `Repository.fromRepositoryName` 으로 import — RETAIN 으로 살아남은 repo 와 충돌 회피.
+- **cdk.json `requireApproval: "never"`**: `yes |` pipe 대체 — 표준 CDK 자동 승인 방식.
+- **새 인프라 식별자**: CloudFront `drgcjkihqi37f.cloudfront.net` (E2KI5SBELKE0PU), Cognito user pool `us-east-1_7QQGUrp3C`, AlbSg `sg-0aeeefd52ce6cedb0`, AppSg `sg-0954678996ae100d9`.
+
+### Documentation
+- 6 신규 ADR (0014-0019) — IAM scope-down / DEMO guard / AOSS Deferred / Lambda@Edge / Wildcard cert / Public ALB Prefix List.
+- Root CLAUDE.md, infra-cdk/CLAUDE.md, docs/architecture.md (KR/EN), docs/runbooks/02-add-custom-domain.md, README.md 갱신.
+
 ## [1.0.0] — 2026-05-09
 
 ### Added — first PoC release

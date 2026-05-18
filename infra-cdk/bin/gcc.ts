@@ -54,10 +54,9 @@ const ai = new AiStack(app, `${projectPrefix}-ai`, {
 
 const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   env, tags,
-  crossRegionReferences: true,
   vpc: network.vpc,
-  appSg: network.appSg,
   albSg: network.albSg,
+  appSg: network.appSg,
   neptuneEndpoint: data.neptuneEndpoint,
   openSearchEndpoint: data.openSearchEndpoint,
   rawDocsBucket: data.rawDocsBucket,
@@ -68,7 +67,7 @@ const compute = new ComputeStack(app, `${projectPrefix}-compute`, {
   agentCoreMemoryId: ai.memoryId,
 });
 
-const edge = new EdgeStack(app, `${projectPrefix}-edge`, {
+new EdgeStack(app, `${projectPrefix}-edge`, {
   env: { ...env, region: 'us-east-1' },
   tags,
   crossRegionReferences: true,

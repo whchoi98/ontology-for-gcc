@@ -57,6 +57,10 @@ function jwkToPem(jwk) {
 exports.handler = async (event) => {
   const req = event.Records[0].cf.request;
 
+  // DEMO mode: USER_POOL_ID 가 비어있으면 *모든 request 통과* (인증 비활성).
+  // 운영 시 .env 의 COGNITO_USER_POOL_ID 채우고 edge stack redeploy.
+  if (!USER_POOL_ID) return req;
+
   // Public paths bypass auth.
   if (req.uri.startsWith('/auth/') || req.uri === '/healthz') return req;
 

@@ -40,7 +40,7 @@ A search · B chat (Cally) · C insights · D persona-match · E cluster · F lo
 | Memory | AgentCore Memory (short-term session + long-term user namespaces) |
 | Sandbox | AgentCore Code Interpreter Firecracker microVM (matplotlib + NanumGothic) |
 | Maps | react-simple-maps + d3-geo + Korean sido GeoJSON (KOSTAT 행정구역코드) |
-| Auth | Cognito user pool + Lambda@Edge cookie auth at CloudFront |
+| Auth | Cognito user pool + Lambda@Edge cookie auth at CloudFront — synth-time `USER_POOL_ID` baked, empty pool 시 DEMO bypass (ADR-0017) |
 | Edge | CloudFront distribution → ALB (HTTP origin, SG-locked to CF prefix list) |
 | Compute | ECS Fargate ARM64, two-replica services (api + web) |
 | IaC | AWS CDK v2 (TypeScript) — six stacks: network, data, compute, ai, edge, observability |
@@ -84,7 +84,7 @@ ontology-gcc/
 │   └── output/           JSON/NDJSON outputs (also synced to S3)
 ├── ontology/mappings/    Standards CSV/JSON: opinet codes, KFDA terms, GSC internal
 ├── tests/                Pytest suite — smoke (router imports) + tests/api/ (httpx integration)
-├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0013), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
+├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0019), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
 ├── prompts/              Reusable LLM prompt 가이드 (sse-agent-design, cross-browser-popup-pattern)
 ├── scripts/              KB index init, Cognito provisioning, eval harness, git hooks
 ├── .claude/              Project harness — agents, skills, hooks, commands, settings
@@ -107,8 +107,11 @@ docker push <ecr>/ontology-gcc-dev-api:<tag>
 # Build web image
 docker build --platform linux/arm64 -f web/Dockerfile -t <ecr>/ontology-gcc-dev-web:<tag> .
 
-# Deploy infrastructure
-cd infra-cdk && npx cdk deploy --all
+# Deploy infrastructure. cdk.json 의 `requireApproval: "never"` 가 자동 승인.
+# Production: add `-c stage=prod` to omit DEMO_PUBLIC_MODE env var (ADR-0015).
+# 외부 active zone (다른 account) 의 gcc.whchoi.net CNAME 충돌 시 `-c domain=`
+# 옵션 *생략* — CloudFront default URL 만 만들고 사용자 수동 CNAME 처리 (ADR-0018).
+cd infra-cdk && npx cdk deploy --all -c domain=gcc.whchoi.net
 
 # Force ECS rollout (after image push)
 aws ecs update-service --cluster ontology-gcc-dev-cluster --service ontology-gcc-dev-api --force-new-deployment
@@ -157,8 +160,10 @@ python -m compileall -q api data scripts   # AST validation (also a CI job)
 
 ### Security
 
-- Origin auth: CloudFront forwards a Secrets-Manager-backed `X-Origin-Auth-Token` header. ALB security group restricts ingress to the AWS-managed `com.amazonaws.global.cloudfront.origin-facing` prefix list.
+- Origin auth: CloudFront forwards a Secrets-Manager-backed `X-Origin-Auth-Token` header. ALB security group restricts ingress to the AWS-managed `com.amazonaws.global.cloudfront.origin-facing` prefix list — *port 80 only* (SG rule service quota 로 443 추가 보류, ADR-0019).
 - Cognito: RS256 JWTs, JWKS cached with TTL, constant-time origin token comparison.
+- IAM scope: task role 은 NeptuneFullAccess / `bedrock:*` / `aoss:*` 없음 — Neptune-db actions on cluster ARN, Bedrock inference-profile + foundation-model ARN 패턴, AOSS collection ARN 만 (ADR-0014).
+- AOSS network policy: collection 은 `AllowFromPublic: false` + `SourceVPCEs: [vpce-0d638a0ed56410be0]` (retail VPCE 재사용 — VPC 당 1 VPCE 제한, ADR-0016). Dashboard 만 `AllowFromPublic: true` (운영 디버깅).
 - Bedrock Guardrails apply on chat input scrub and insights answer output.
 - See [SECURITY.md](SECURITY.md) for explicit demo trade-offs and production migration plan.
 

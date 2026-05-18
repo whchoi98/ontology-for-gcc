@@ -97,7 +97,7 @@ aws ecs update-service \
   --force-new-deployment
 
 # Visit the deployed CloudFront domain
-open https://<cloudfront-distribution>.cloudfront.net
+open https://drgcjkihqi37f.cloudfront.net
 ```
 
 ## Configuration
@@ -305,7 +305,7 @@ aws ecs update-service \
   --force-new-deployment
 
 # 배포된 CloudFront 도메인 접속
-open https://<cloudfront-distribution>.cloudfront.net
+open https://drgcjkihqi37f.cloudfront.net
 ```
 
 ## 환경 설정

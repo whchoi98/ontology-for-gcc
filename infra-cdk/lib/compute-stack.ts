@@ -11,8 +11,8 @@ import { Construct } from 'constructs';
 
 export interface ComputeStackProps extends cdk.StackProps {
   vpc: ec2.IVpc;
-  appSg: ec2.SecurityGroup;
   albSg: ec2.SecurityGroup;
+  appSg: ec2.SecurityGroup;
   neptuneEndpoint: string;
   openSearchEndpoint: string;
   rawDocsBucket: s3.IBucket;
@@ -25,11 +25,14 @@ export interface ComputeStackProps extends cdk.StackProps {
 
 export class ComputeStack extends cdk.Stack {
   public readonly alb: elbv2.ApplicationLoadBalancer;
+  public readonly originAuthSecretArn: string;
   public readonly apiServiceArn: string;
   public readonly webServiceArn: string;
 
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
+    // -c stage=prod 면 DEMO_PUBLIC_MODE 생략 (ADR-0016 — Kiro fix).
+    const stage = (this.node.tryGetContext('stage') ?? 'dev') as string;
 
     const cluster = new ecs.Cluster(this, 'Cluster', {
       vpc: props.vpc,
@@ -37,30 +40,67 @@ export class ComputeStack extends cdk.Stack {
       containerInsights: true,
     });
 
-    const apiRepo = new ecr.Repository(this, 'ApiRepo', {
-      repositoryName: 'ontology-gcc-dev-api',
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
-    });
-    const webRepo = new ecr.Repository(this, 'WebRepo', {
-      repositoryName: 'ontology-gcc-dev-web',
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
-    });
+    // ECR repos 는 옛 compute stack destroy 시 RETAIN 으로 살아남음.
+    // 새 stack 이 *동일 이름 create* 시 충돌 → fromRepositoryName 으로 import.
+    // 이미지 데이터 (latest + SHA tags) 모두 보존됨.
+    const apiRepo = ecr.Repository.fromRepositoryName(this, 'ApiRepo', 'ontology-gcc-dev-api');
+    const webRepo = ecr.Repository.fromRepositoryName(this, 'WebRepo', 'ontology-gcc-dev-web');
 
     const originAuthSecret = new secrets.Secret(this, 'OriginAuthSecret', {
       secretName: 'ontology-gcc-dev/origin-auth',
       generateSecretString: { passwordLength: 48, excludePunctuation: true },
     });
+    this.originAuthSecretArn = originAuthSecret.secretArn;
 
     const taskRole = new iam.Role(this, 'TaskRole', {
       assumedBy: new iam.ServicePrincipal('ecs-tasks.amazonaws.com'),
     });
-    taskRole.addManagedPolicy(iam.ManagedPolicy.fromAwsManagedPolicyName('NeptuneFullAccess'));
+
+    // ── IAM scope-down (ADR-0015 — Kiro high-severity fix) ──
+    // 이전: NeptuneFullAccess managed policy + bedrock/aoss '*' → container 침해 시
+    // account-wide blast radius. 사용 중인 model · collection · cluster 만 명시.
+    const region = cdk.Stack.of(this).region;
+    const account = cdk.Stack.of(this).account;
+
     taskRole.addToPolicy(new iam.PolicyStatement({
-      actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream',
-                'bedrock:Converse', 'bedrock:ConverseStream', 'bedrock:Retrieve',
-                'bedrock:ApplyGuardrail', 'aoss:APIAccessAll'],
-      resources: ['*'],
+      actions: [
+        'neptune-db:connect',
+        'neptune-db:ReadDataViaQuery',
+        'neptune-db:WriteDataViaQuery',
+        'neptune-db:DeleteDataViaQuery',
+        'neptune-db:GetEngineStatus',
+        'neptune-db:GetQueryStatus',
+      ],
+      resources: [`arn:aws:neptune-db:${region}:${account}:*/*`],
     }));
+
+    taskRole.addToPolicy(new iam.PolicyStatement({
+      actions: [
+        'bedrock:InvokeModel',
+        'bedrock:InvokeModelWithResponseStream',
+        'bedrock:Converse',
+        'bedrock:ConverseStream',
+        'bedrock:Retrieve',
+      ],
+      resources: [
+        `arn:aws:bedrock:${region}:${account}:inference-profile/global.*`,
+        `arn:aws:bedrock:*:${account}:inference-profile/global.*`,
+        `arn:aws:bedrock:*::foundation-model/anthropic.claude-*`,
+        `arn:aws:bedrock:*::foundation-model/cohere.embed-*`,
+        `arn:aws:bedrock:*::foundation-model/cohere.rerank-*`,
+      ],
+    }));
+
+    taskRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['bedrock:ApplyGuardrail'],
+      resources: [`arn:aws:bedrock:${region}:${account}:guardrail/*`],
+    }));
+
+    taskRole.addToPolicy(new iam.PolicyStatement({
+      actions: ['aoss:APIAccessAll'],
+      resources: [`arn:aws:aoss:${region}:${account}:collection/*`],
+    }));
+
     props.rawDocsBucket.grantReadWrite(taskRole);
     props.uploadsBucket.grantReadWrite(taskRole);
     props.syntheticDataBucket.grantReadWrite(taskRole);
@@ -95,10 +135,10 @@ export class ComputeStack extends cdk.Stack {
         RAW_DOCS_BUCKET: props.rawDocsBucket.bucketName,
         UPLOADS_BUCKET: props.uploadsBucket.bucketName,
         SYNTHETIC_DATA_BUCKET: props.syntheticDataBucket.bucketName,
-        ONTOLOGY_ENV: 'dev',
-        // Demo mode — bypass JWT in middleware so menu pages render without
-        // a Cognito session. CloudFront/Lambda@Edge still serves as the entry gate.
-        DEMO_PUBLIC_MODE: 'true',
+        ONTOLOGY_ENV: stage,
+        // DEMO_PUBLIC_MODE 가 production 으로 누수되면 모든 API 무인증 노출.
+        // stage=prod 일 때 *환경변수 자체 생성 안 함* → fail-closed. ADR-0016.
+        ...(stage === 'prod' ? {} : { DEMO_PUBLIC_MODE: 'true' }),
       },
       secrets: { ORIGIN_AUTH_TOKEN: ecs.Secret.fromSecretsManager(originAuthSecret) },
     });
@@ -142,6 +182,7 @@ export class ComputeStack extends cdk.Stack {
       assignPublicIp: false,
     });
 
+    // ── Public ALB (Prefix List SG 로 CloudFront 만 ingress) ──
     this.alb = new elbv2.ApplicationLoadBalancer(this, 'Alb', {
       vpc: props.vpc,
       internetFacing: true,

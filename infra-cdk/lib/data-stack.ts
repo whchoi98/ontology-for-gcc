@@ -100,11 +100,14 @@ export class DataStack extends cdk.Stack {
       }),
     });
 
+    // AOSS VPC endpoint hardening 은 *CFN create polling 의 race condition*
+    // (어떤 이름이든 AlreadyExists 응답) 때문에 *별도 단계*로 옮김 —
+    // 임시로 옛 AllowFromPublic=true 패턴 유지 (IAM 으로 접근 통제).
+    // 후속: aws opensearchserverless create-vpc-endpoint 로 수동 생성 +
+    // 수동 update network policy. ADR-0017 status: Deferred.
     const networkPolicy = new oss.CfnSecurityPolicy(this, 'OsNetworkPolicy', {
       name: 'gcc-os-network',
       type: 'network',
-      // Plan 1: AllowFromPublic=true; access control via IAM/aoss:APIAccessAll.
-      // Plan 5 polish: tighten with VPC endpoint + SourceVPCEs.
       policy: JSON.stringify([
         {
           Rules: [

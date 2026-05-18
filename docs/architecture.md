@@ -60,8 +60,8 @@
 | Component | 역할 |
 |-----------|------|
 | CloudFront | 단일 도메인 (`gcc.whchoi.net`, legacy alias `gcc-ontology.whchoi.net` 도 CORS 허용 — ADR-0009). |
-| Lambda@Edge | Cognito 쿠키 인증 + `X-Origin-Auth-Token` 주입. |
-| ALB | HTTP origin. SG는 CloudFront prefix list 만 허용. |
+| Lambda@Edge | Cognito 쿠키 인증 + `X-Origin-Auth-Token` 주입. `USER_POOL_ID` 가 synth-time 에 baked-in (env var 미지원 우회), 빈 값일 땐 DEMO bypass (ADR-0017). |
+| ALB | Public ALB. SG는 CloudFront managed prefix list `pl-22a6434b` 만 ingress — **port 80 only** (prefix list 60+ entry → SG rule service quota 로 443 추가 보류, ADR-0019). |
 | Cognito User Pool | RS256 JWT. JWKS 캐시. |
 
 #### Observability
@@ -126,13 +126,19 @@
 | `data-stack` | Neptune cluster, OpenSearch collection, S3 버킷. | network |
 | `compute-stack` | ECS cluster, Task Def (api+web), ALB, ECR. | network, data |
 | `ai-stack` | Bedrock Guardrail, KB, AgentCore Memory ARN. | data |
-| `edge-stack` | CloudFront, Lambda@Edge, ACM us-east-1, Cognito callback. | compute |
+| `edge-stack` | CloudFront, Lambda@Edge, ACM us-east-1 (wildcard `*.whchoi.net` import via `fromCertificateArn`, ADR-0018), Cognito callback. | compute |
 | `observability-stack` | Log groups, alarms, dashboards. | compute |
 
 ### 핵심 설계 결정
 
 1. **VPC 임포트 (재이용)** — retail PoC와 동일 VPC 공유. SG만 GCC 전용 신규. (ADR-0001)
-2. **Custom 도메인 deferred** — 1차 배포는 CloudFront 기본 URL. 도메인은 `-c domain=...` 로 별도 deploy. (ADR-0002)
+2. **Custom 도메인 deferred** — 1차 배포는 CloudFront 기본 URL. 도메인은 `-c domain=...` 로 별도 deploy. 외부 active zone의 stale CNAME 충돌 시 alias 분리 (ADR-0002 + ADR-0018).
+14. **IAM scope-down** — task role 에서 NeptuneFullAccess + `bedrock:*` + `aoss:*` 제거 → cluster ARN / inference-profile + foundation-model ARN 패턴 / collection ARN 만 명시 (ADR-0014).
+15. **DEMO_PUBLIC_MODE prod guard** — `-c stage=prod` 시 환경변수 미생성, fail-closed (ADR-0015).
+16. **AOSS VPCE hardening — retail VPCE 재사용** — AOSS 는 *VPC 당 VPCE 1개 제한* 으로 CDK 가 *어떤 이름* 도 ConflictException. retail PoC 의 기존 `vpce-0d638a0ed56410be0` 를 *재사용* + GCC network policy 의 `SourceVPCEs` 에 추가 (수동 setup) (ADR-0016).
+17. **Lambda@Edge synth-time replace + DEMO bypass** — env var 미지원 우회. 빈 USER_POOL_ID 시 DEMO bypass (ADR-0017).
+18. **Wildcard cert import** — `*.whchoi.net` 발급분을 fromCertificateArn 으로 import. DNS validation 우회 (ADR-0018).
+19. **Public ALB + Prefix List SG** — Private ALB 도입 시 export 충돌 cycle 발생 → Public ALB 복원 + prefix list ingress port 80 추가 (ADR-0019).
 3. **Bulk loader는 one-shot ECS** — Neptune이 private subnet이라 dev EC2에서 직접 접근 불가. API 이미지를 재사용해 `data.load` 모듈 호출. (ADR-0003)
 4. **Cohort tagging** — N=500 PII-마스킹 실데이터와 49.5K 합성 데이터 혼합. `data_source` 태그로 분리. (ADR-0004)
 5. **KMA 캐시 전략** — 일별 NDJSON S3 캐시 + Neptune `Weather` 노드. (ADR-0005)
@@ -202,8 +208,8 @@
 | Component | Role |
 |-----------|------|
 | CloudFront | Single custom domain (`gcc.whchoi.net`, legacy alias `gcc-ontology.whchoi.net` retained in CORS — ADR-0009). |
-| Lambda@Edge | Cognito cookie auth + `X-Origin-Auth-Token` injection. |
-| ALB | HTTP origin. SG locked to the CloudFront prefix list. |
+| Lambda@Edge | Cognito cookie auth + `X-Origin-Auth-Token` injection. `USER_POOL_ID` baked at synth time (Lambda@Edge does not support runtime env vars); empty pool ID → DEMO bypass (ADR-0017). |
+| ALB | Public ALB. SG ingress = CloudFront managed prefix list `pl-22a6434b` **port 80 only** (60+ entries in prefix list → adding 443 exceeds the SG rule service quota, ADR-0019). |
 | Cognito User Pool | RS256 JWT, cached JWKS. |
 
 #### Observability
@@ -268,13 +274,19 @@ Browser → CloudFront → Lambda@Edge(cookie→token) → ALB → ECS Web → E
 | `data-stack` | Neptune cluster, OpenSearch collection, S3 buckets. | network |
 | `compute-stack` | ECS cluster, Task Defs (api+web), ALB, ECR. | network, data |
 | `ai-stack` | Bedrock Guardrail, KB, AgentCore Memory ARN. | data |
-| `edge-stack` | CloudFront, Lambda@Edge, ACM us-east-1, Cognito callback. | compute |
+| `edge-stack` | CloudFront, Lambda@Edge, ACM us-east-1 (wildcard `*.whchoi.net` imported via `fromCertificateArn`, ADR-0018), Cognito callback. | compute |
 | `observability-stack` | Log groups, alarms, dashboards. | compute |
 
 ### Key Design Decisions
 
 1. **VPC reuse via import** — Same VPC as the retail PoC; only SGs are GCC-exclusive. (ADR-0001)
-2. **Custom domain deferred** — First deploy uses the CloudFront default URL; domain wired via `-c domain=...` separately. (ADR-0002)
+2. **Custom domain deferred** — First deploy uses the CloudFront default URL; domain wired via `-c domain=...` separately. Skip alias when external active zone has stale CNAME (ADR-0002 + ADR-0018).
+14. **IAM scope-down** — Task role drops NeptuneFullAccess + `bedrock:*` + `aoss:*` in favor of explicit cluster ARN / inference-profile + foundation-model ARN patterns / collection ARN (ADR-0014).
+15. **DEMO_PUBLIC_MODE prod guard** — `-c stage=prod` omits the env var entirely → fail-closed (ADR-0015).
+16. **AOSS VPCE hardening — reuse retail VPCE** — AOSS enforces *one VPCE per VPC*; CDK hit ConflictException regardless of name. Reuse retail PoC's existing `vpce-0d638a0ed56410be0` + add it to the GCC network policy's `SourceVPCEs` (manual setup) (ADR-0016).
+17. **Lambda@Edge synth-time replace + DEMO bypass** — Works around the lack of runtime env vars. Empty USER_POOL_ID → DEMO bypass (ADR-0017).
+18. **Wildcard cert import** — Reuse the existing `*.whchoi.net` cert via `fromCertificateArn` to skip DNS validation (ADR-0018).
+19. **Public ALB + Prefix List SG** — A Private ALB introduced CFN export cycles; revert to Public ALB + prefix list port-80 ingress (ADR-0019).
 3. **Bulk loader as one-shot ECS** — Neptune is in private subnets, so the dev EC2 cannot reach it; the API image is reused to invoke `data.load`. (ADR-0003)
 4. **Cohort tagging** — Mix of N=500 PII-masked real data and 49.5K synthetic; separated by a `data_source` tag. (ADR-0004)
 5. **KMA cache strategy** — Daily NDJSON on S3 + Neptune `Weather` nodes. (ADR-0005)

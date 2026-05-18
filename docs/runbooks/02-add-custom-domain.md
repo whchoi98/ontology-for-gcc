@@ -14,13 +14,20 @@
 
 ```bash
 cd infra-cdk
-npx cdk deploy ontology-gcc-dev-edge \
-  --context domainName=gcc-ontology.whchoi.net \
-  --require-approval never
+# cdk.json 의 requireApproval: "never" 가 자동 승인
+npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net
 ```
 
-ACM 인증서가 PENDING 상태로 생성됩니다. CloudFront output에 표시되는 DNS validation
-레코드(`_ABC...whchoi.net CNAME _XYZ...acm-validations.aws`)를 도메인에 추가하세요.
+**옵션 A (wildcard cert 보유 시)** — `*.whchoi.net` cert (us-east-1) 가 이미 ISSUED 면
+edge-stack.ts 가 `Certificate.fromCertificateArn` 으로 import → DNS validation 우회.
+
+**옵션 B (cert 신규 발급)** — ACM 인증서가 PENDING 상태로 생성. CloudFront output 의
+DNS validation 레코드(`_ABC...whchoi.net CNAME _XYZ...acm-validations.aws`)를 도메인에 추가.
+
+**외부 active zone (다른 account) 의 stale CNAME 충돌 시**: CloudFront 가 *hijacking
+방지 검사* 로 alias 등록 거부. 해결 — `-c domain=` 생략하고 default URL 만 deploy →
+사용자가 외부 zone CNAME 을 새 CF default URL 로 변경 → 그 다음 `-c domain=` 으로 재배포.
+(ADR-0018)
 
 ### 2) Cognito callback URL 안전 머지 (PUT)
 
@@ -72,9 +79,9 @@ echo "수동: 브라우저에서 admin@whchoi.net 로그인 후 /search 도달 �
 도메인 wiring을 제거하려면 (예: ACM DNS validation 실패, DNS provider 이슈 등):
 
 ```bash
-# 1) CDK context 없이 재배포 — domainName이 빠져 ACM/도메인이 detach
+# 1) CDK context 없이 재배포 — domain 옵션이 빠져 ACM alias 가 detach
 cd infra-cdk
-npx cdk deploy ontology-gcc-dev-edge --require-approval never
+npx cdk deploy ontology-gcc-dev-edge
 
 # 2) Cognito callback에서 도메인 URL 제거 (원본 보존)
 USER_POOL_ID=ap-northeast-2_XXXXX

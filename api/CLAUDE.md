@@ -34,6 +34,7 @@ api/
 - 모든 챗·인사이트 Converse 콜은 **Sonnet 4.6** (`BEDROCK_CHAT_MODEL_ID=global.anthropic.claude-sonnet-4-6`). Haiku Lite로 silent downgrade 금지.
 - 리랭커는 **Cohere rerank-v3** cross-region inference profile. 실패 시 RRF 순서로 graceful degrade.
 - Neptune은 private subnet — 로컬에서 직접 못 닿음. 통합 테스트는 `tests/conftest.py` 의 boto3/Neptune 클라이언트 mocking (import-site patch) 으로 처리.
+- **Task role IAM** (ADR-0014): NeptuneFullAccess / `bedrock:*` / `aoss:*` 없음 — `neptune-db:*` actions on cluster ARN, `bedrock:*` on inference-profile + foundation-model ARN 패턴, `aoss:APIAccessAll` on collection ARN. 새 model/cluster 추가 시 `infra-cdk/lib/compute-stack.ts` 의 IAM policy 도 갱신 필요.
 
 ## 테스트
 

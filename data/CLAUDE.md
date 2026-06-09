@@ -60,6 +60,6 @@ aws ecs run-task \
 
 1. `data/schemas.py` 에 Pydantic 모델 (+ `ALL_CLASSES`/`ALL_RELATIONS` 등록) → `python -m ontology.generate_schema_ttl` 로 `schema.ttl` 재생성.
 2. `data/synthetic/` 또는 `data/real/` 에 generator/adapter.
-3. `data/loader/cypher_bulk.py` (+ `bulk_neptune.py`) 의 노드 / 엣지 적재 단계에 추가.
+3. `data/loader/cypher_bulk.py` (+ `bulk_neptune.py`) 의 노드 / 엣지 적재 단계에 추가. **불변식 (ADR-0022): NODE_MAP pk_field == 그 노드를 가리키는 모든 EdgeSpec 의 match-field.** 자연키 없는 노드는 transform 으로 합성 pk를 만들고 엣지 match-field 도 동일 합성키로. `tests/data/test_cypher_bulk_alignment.py` 가 강제.
 4. `api/routers/objects.py` 의 `_TYPE_REGISTRY` + `api/routers/ontology.py` `_CLASSES`.
 5. `web/components/Sidebar.tsx` 객체 탐색 + `web/app/objects/[type]/page.tsx` `TYPE_META`.

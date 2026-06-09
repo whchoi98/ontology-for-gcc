@@ -117,14 +117,18 @@ _TYPE_REGISTRY: Dict[str, Dict[str, str]] = {
         ),
     },
     "coupon": {
-        "label": "Coupon", "id_prop": "coupon_id", "name_prop": "coupon_no",
+        # id_prop == Coupon MERGE pk (coupon_no) so detail anchor + neighbors
+        # resolve the full node the OF/ISSUES/REDEEMED_AS edges attach to (ADR-0022).
+        "label": "Coupon", "id_prop": "coupon_no", "name_prop": "coupon_no",
         "order_by": (
             "WITH n, coalesce(n.denomination_amt,0) AS d "
             "RETURN n, d AS rank_score ORDER BY d DESC"
         ),
     },
     "offer": {
-        "label": "Offer", "id_prop": "offer_id", "name_prop": "offer_nm",
+        # id_prop == Offer MERGE pk (offer_cd) — was offer_id (=campaign_cd), which
+        # collapsed offers and detached HAS_OFFER/ISSUES edges (ADR-0022).
+        "label": "Offer", "id_prop": "offer_cd", "name_prop": "offer_nm",
         "order_by": "RETURN n, 0 AS rank_score ORDER BY n.offer_cd",
     },
     "channel": {

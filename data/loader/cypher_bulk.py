@@ -25,9 +25,9 @@ NODE_MAP = [
     ('nodes/customer/',                'Customer',            'cust_id'),
     ('nodes/transaction/',             'FuelTransaction',     'tx_id'),
     ('nodes/campaign/',                'Campaign',            'campaign_cd'),
-    ('nodes/coupon/',                  'Coupon',              'coupon_id'),
+    ('nodes/coupon/',                  'Coupon',              'coupon_no'),   # natural key; edges match on coupon_no (ADR-0022)
     ('nodes/coupon_use/',              'CouponUse',           'use_id'),
-    ('nodes/offer/',                   'Offer',               'offer_id'),
+    ('nodes/offer/',                   'Offer',               'offer_cd'),    # natural key; edges match on offer_cd (ADR-0022)
     ('nodes/term/',                    'Term',                'term_cd'),    # schema field is term_cd, not term_id
     ('nodes/term_agreement/',          'TermAgreement',       'agreement_id'),
     ('nodes/fuel_price/',              'FuelPrice',           'price_id'),   # synthesized composite pk (see _ensure_pk)
@@ -400,11 +400,14 @@ EDGE_MAP: list[EdgeSpec] = [
 
     # GasStation → FuelPrice / FuelProduct
     EdgeSpec(edge_type='PRICED_AT', source_label='GasStation', source_match_field='opinet_no',
-             target_label='FuelPrice', target_match_field='station_opinet_no',
-             ndjson_prefix='nodes/fuel_price/', ndjson_source_field='station_opinet_no',
-             ndjson_target_field='station_opinet_no',
-             note='FuelPrice.station_opinet_no; FuelPrice has station_opinet_no as property '
-                  '(pk synthesized as opinet-dt-grade)'),
+             target_label='FuelPrice', target_match_field='price_id',
+             ndjson_prefix='nodes/fuel_price/',
+             transform=lambda obj: (
+                 {'s': obj['station_opinet_no'], 't': _synthesize_fuel_price_pk(obj)}
+                 if obj.get('station_opinet_no') and _synthesize_fuel_price_pk(obj) else None
+             ),
+             note='GasStation.opinet_no -> FuelPrice.price_id (synthesized opinet-dt-grade, ADR-0022). '
+                  'target_match_field MUST equal the FuelPrice MERGE pk or edges orphan.'),
     EdgeSpec(edge_type='SELLS', source_label='GasStation', source_match_field='opinet_no',
              target_label='FuelProduct', target_match_field='product_id', ndjson_prefix=None,
              note='SKIP: FuelProduct nodes not loaded'),
@@ -461,35 +464,40 @@ def _edge_cypher_type(edge_type: str) -> str:
     return edge_type
 
 
-def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
-    """UNWIND-batched MERGE of relationships.
+def _build_edge_query(spec: EdgeSpec) -> str:
+    """Cypher for one UNWIND-batched relationship load.
 
-    pairs is a list of {'s': source_match_value, 't': target_match_value}.
-    We MERGE both endpoints (using their pk_fields — guaranteed indexed via the
-    initial load's MERGE) and MERGE the relationship.
+    MATCH (not MERGE) both endpoints, then MERGE only the relationship.
 
-    Why MERGE-MERGE instead of MATCH-MATCH:
-    - Neptune t4g.medium OOMs on MATCH-MATCH UNWIND patterns even at batch=50
-      because the planner materializes label-scan intermediates.
-    - MERGE on a label+pk_field is index-resolved (the same pattern used in
-      the initial _flush_batch node load), so memory is bounded.
-    - All edge endpoints come from already-loaded NDJSON, so MERGE finds the
-      existing node 99% of the time. The 1% (FK pointing to a non-loaded
-      node) creates an orphan with just the pk property, which is acceptable
-      for an analytics graph (still resolvable via property).
+    Why MATCH-MATCH on the endpoints (ADR-0022 — Object Explorer 0-edge bug):
+    - MERGE-MERGE auto-CREATES an orphan stub (a node with just the match
+      property) whenever the match value has no existing node — e.g. a
+      synthetic FuelTransaction.store_cd with no real GasStation.site_cd, or a
+      coupon_no that was mis-keyed at node load. Those stubs absorbed the edges,
+      so the *full* node the detail endpoint fetches showed zero relationships.
+    - MATCH on a label + indexed pk_field is index-resolved and bounded (the
+      same access path the Plan-5 write-back services use at 50K-customer scale
+      without OOM — see api/services/persona_writeback.py). Unmatched pairs are
+      silently skipped (no orphan), which is correct for an analytics graph.
+    - Endpoint match-fields are kept aligned with the node MERGE pk (NODE_MAP),
+      enforced by tests/data/test_cypher_bulk_alignment.py.
 
     Drops RETURN to minimize response size.
     """
-    if not pairs:
-        return 0
     rel_type = _edge_cypher_type(spec.edge_type)
-    query = (
+    return (
         f"UNWIND $pairs AS p "
-        f"MERGE (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
-        f"MERGE (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
+        f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
+        f"MATCH (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
         f"MERGE (a)-[:{rel_type}]->(b)"
     )
-    _post_cypher(query, {'pairs': pairs})
+
+
+def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
+    """MATCH-MATCH-MERGE one batch of {'s','t'} pairs (see _build_edge_query)."""
+    if not pairs:
+        return 0
+    _post_cypher(_build_edge_query(spec), {'pairs': pairs})
     return len(pairs)
 
 

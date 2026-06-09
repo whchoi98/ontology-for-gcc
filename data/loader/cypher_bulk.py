@@ -465,36 +465,38 @@ def _edge_cypher_type(edge_type: str) -> str:
 
 
 def _build_edge_query(spec: EdgeSpec) -> str:
-    """Cypher for one UNWIND-batched relationship load.
+    """Cypher for one UNWIND-batched relationship load: MERGE both endpoints + the rel.
 
-    MATCH (not MERGE) both endpoints, then MERGE only the relationship.
-
-    Why MATCH-MATCH on the endpoints (ADR-0022 — Object Explorer 0-edge bug):
-    - MERGE-MERGE auto-CREATES an orphan stub (a node with just the match
-      property) whenever the match value has no existing node — e.g. a
-      synthetic FuelTransaction.store_cd with no real GasStation.site_cd, or a
-      coupon_no that was mis-keyed at node load. Those stubs absorbed the edges,
-      so the *full* node the detail endpoint fetches showed zero relationships.
-    - MATCH on a label + indexed pk_field is index-resolved and bounded (the
-      same access path the Plan-5 write-back services use at 50K-customer scale
-      without OOM — see api/services/persona_writeback.py). Unmatched pairs are
-      silently skipped (no orphan), which is correct for an analytics graph.
-    - Endpoint match-fields are kept aligned with the node MERGE pk (NODE_MAP),
-      enforced by tests/data/test_cypher_bulk_alignment.py.
+    MERGE-MERGE (NOT MATCH-MATCH) on the endpoints — deliberate, ADR-0022:
+    - The orphan-stub bug is fixed at the *key* level, not here: NODE_MAP pk is
+      aligned with every edge match-field (Offer.offer_cd, Coupon.coupon_no,
+      FuelPrice.price_id), enforced by tests/data/test_cypher_bulk_alignment.py.
+      With aligned keys MERGE resolves to the existing full node, so no stub.
+    - MATCH-MATCH was tried and reverted: on Neptune t4g.medium it OOMs
+      (MemoryLimitExceededException) for edges whose BOTH endpoints are large
+      labels (TO: CampaignSMS×Customer; REFUELED: Customer×FuelTransaction;
+      PRICED_AT: GasStation×FuelPrice). MERGE on a label+pk is index-resolved and
+      memory-bounded even for two large labels (it loaded REFUELED ~556K live).
+      persona_writeback's MATCH-MATCH survives only because one side (Persona=5)
+      is tiny — not a general pattern.
+    - Residual: an FK pointing at a genuinely-unloaded node (e.g. synthetic
+      store_cd with no real GasStation) still MERGE-creates a thin stub. That is
+      pre-existing and acceptable for an analytics graph; key alignment removes
+      the systemic case.
 
     Drops RETURN to minimize response size.
     """
     rel_type = _edge_cypher_type(spec.edge_type)
     return (
         f"UNWIND $pairs AS p "
-        f"MATCH (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
-        f"MATCH (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
+        f"MERGE (a:{spec.source_label} {{{spec.source_match_field}: p.s}}) "
+        f"MERGE (b:{spec.target_label} {{{spec.target_match_field}: p.t}}) "
         f"MERGE (a)-[:{rel_type}]->(b)"
     )
 
 
 def _flush_edge_batch(spec: EdgeSpec, pairs: list[dict]) -> int:
-    """MATCH-MATCH-MERGE one batch of {'s','t'} pairs (see _build_edge_query)."""
+    """MERGE-MERGE-MERGE one batch of {'s','t'} pairs (see _build_edge_query)."""
     if not pairs:
         return 0
     _post_cypher(_build_edge_query(spec), {'pairs': pairs})

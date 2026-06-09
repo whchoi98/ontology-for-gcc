@@ -75,15 +75,28 @@ def test_priced_at_transform_matches_synthesized_pk():
     assert pair["t"] == cb._synthesize_fuel_price_pk(row)  # 'A1-20260506-diesel'
 
 
-# ── Edge endpoints use MATCH (no orphan stubs), only the rel is MERGEd ───
-def test_edge_query_matches_endpoints_and_merges_only_relationship():
-    spec = _edge("REFUELED")
+# ── Edge query is well-formed; endpoints MERGE on the aligned match-fields ──
+# NB: endpoints use MERGE (not MATCH) on purpose — MATCH-MATCH OOMs Neptune
+# t4g.medium for two-large-label edges (ADR-0022). Orphan prevention comes from
+# key alignment (the tests above), not from MATCH.
+def test_edge_query_merges_endpoints_on_match_fields_and_the_relationship():
+    spec = _edge("REFUELED")  # Customer -REFUELED-> FuelTransaction
     q = cb._build_edge_query(spec)
-    # endpoints resolved against EXISTING full nodes, never auto-created
-    assert "MATCH (a:" in q and "MATCH (b:" in q
-    assert "MERGE (a)-[:" in q
-    # the old orphan-creating pattern must be gone
-    assert "MERGE (a:" not in q and "MERGE (b:" not in q
+    assert f"MERGE (a:{spec.source_label} {{{spec.source_match_field}: p.s}})" in q
+    assert f"MERGE (b:{spec.target_label} {{{spec.target_match_field}: p.t}})" in q
+    assert "MERGE (a)-[:REFUELED]->(b)" in q
+    assert q.startswith("UNWIND $pairs AS p ")
+
+
+# ── gas_station list must exclude orphan stubs (ADR-0022) ───────────────
+def test_gas_station_list_excludes_opinet_less_orphans():
+    # The AT edge MERGEs GasStation by site_cd; synthetic store_cds (S0xxx) have
+    # no real station, so MERGE creates opinet_no-less orphan stubs. They acquire
+    # high AT in-degree and would dominate the tx_count-ordered list, 404-ing on
+    # detail. The list query must filter them out.
+    from api.routers.objects import _TYPE_REGISTRY
+    order_by = _TYPE_REGISTRY["gas_station"]["order_by"]
+    assert "opinet_no IS NOT NULL" in order_by
 
 
 # ── Object Explorer detail must look up the SAME key the node is merged on ─

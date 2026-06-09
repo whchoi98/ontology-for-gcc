@@ -34,17 +34,20 @@
 - `api/routers/objects.py:_TYPE_REGISTRY`: offer/coupon `id_prop` 를 동일하게 `offer_cd`/`coupon_no` 로 정렬
   (detail anchor 가 새 pk 로 노드를 찾도록).
 - PRICED_AT EdgeSpec: transform 으로 `price_id`(=`opinet-dt-grade`) 를 target 으로 생성, `target_match_field='price_id'`.
-- `_flush_edge_batch`: 엔드포인트를 **MERGE → MATCH** 로 변경(`_build_edge_query`). orphan 스텁을 만들지 않고,
-  미존재 쌍은 조용히 skip. relationship 만 MERGE. (Plan-5 write-back 과 동일 패턴.)
-- 회귀 방지: `tests/data/test_cypher_bulk_alignment.py` 가 정렬 불변식을 강제.
+- 엣지 적재는 **MERGE-MERGE 유지**(`_build_edge_query` 로 추출만). orphan 박멸은 *키 정렬*로 달성 —
+  match-field 가 노드 pk 와 같으면 MERGE 가 기존 full 노드를 찾으므로 스텁이 안 생긴다. (MATCH-MATCH 는
+  아래 Alternatives 참조 — t4g.medium OOM 으로 기각.)
+- 회귀 방지: `tests/data/test_cypher_bulk_alignment.py` 가 정렬 불변식 + 쿼리 형태를 강제.
 - 재적재 절차는 [Runbook 06](../runbooks/06-object-explorer-edge-reload.md).
 
 ## Alternatives Considered
 
 - **Object Explorer detail 를 orphan/대체키로도 매칭하게 수정** — 데이터 모델의 키 불일치를 쿼리로 숨기는 증상치료.
   여러 노드(full+orphan) 중복 표시. 기각.
-- **MERGE-MERGE 유지 + 키만 정렬** — offer/coupon/fuel_price orphan 은 해결되나 synthetic store_cd 등
-  미존재-타겟 orphan 은 계속 생성. 부분 해결이라 기각.
+- **엣지 엔드포인트 MERGE → MATCH-MATCH** (orphan 원천 차단 의도) — 실제로 적용했다가 **기각/롤백**.
+  Neptune t4g.medium 에서 *양쪽 모두 큰 라벨* 엣지(TO: CampaignSMS×Customer, REFUELED: Customer×FuelTransaction,
+  PRICED_AT: GasStation×FuelPrice)가 `MemoryLimitExceededException` 으로 OOM. persona_writeback 의 MATCH-MATCH 가
+  버티는 건 한쪽(Persona=5)이 작기 때문이라 일반 패턴이 아님. orphan 은 키 정렬로 이미 해결되므로 MATCH 불필요.
 - **Do nothing** — 관계도가 데모의 핵심(온톨로지 시각화)인데 비어 있음. 기각.
 
 ## Consequences
@@ -65,7 +68,8 @@
 
 ### Neutral
 
-- MATCH-MATCH 는 노드 선적재를 전제(main() 노드 → --edges 순서). 멱등.
+- 엣지 적재는 노드 선적재를 전제(main() 노드 → --edges 순서). MERGE 라 멱등.
+- 미존재 FK 타겟(예: synthetic store_cd)은 얇은 스텁 노드를 남김 — 키 정렬로 systemic 케이스는 제거됨, 잔여는 허용.
 - `payment_method/fuel_product/channel` 은 정적 카탈로그라 관계 그래프 없음(설계상 정상).
 
 ## Implementation Notes

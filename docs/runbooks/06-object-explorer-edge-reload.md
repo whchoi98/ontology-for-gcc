@@ -45,8 +45,8 @@ run '["python","-c","import boto3; from data.loader.cypher_bulk import load_labe
 
 ## Step 2 — 누락 엣지군 적재
 
-코드 수정으로 엔드포인트가 MATCH-MATCH(=orphan 미생성, 노드 pk 정렬)이므로, 누락된
-엣지 타입만 필터로 적재한다. PRICED_AT 제외 버전을 먼저 돌려 빠르게 검증 후 PRICED_AT.
+코드 수정으로 노드 pk ↔ 엣지 match-field 가 정렬돼 MERGE 가 full 노드를 찾는다(orphan 미생성).
+누락된 엣지 타입만 필터로 적재한다. PRICED_AT 제외 버전을 먼저 돌려 빠르게 검증 후 PRICED_AT.
 
 ```bash
 # 2a. 마케팅·쿠폰·날씨·시간대 엣지 (가벼움)
@@ -89,4 +89,9 @@ fuel_price, weather_observation, time_slot` 가 `ok`. `app_event` 는 Step 3 후
   공백 (별도 개선: 요일 기반 weekend 버킷팅, ADR-0022 §Negative).
 - `coupon_no` 의 과학표기 손상(`7.01437E+11`)은 상류 CSV 문제로 정밀도 복구 불가 — 엣지
   표시는 정상화되나 distinct coupon 붕괴는 남음 (별도 데이터 품질 과제).
+- **AT orphan GasStation** (ADR-0022): AT 엣지는 GasStation 을 `site_cd` 로 MERGE 하는데 합성
+  store_cd(S0xxx)는 실 주유소가 없어 `opinet_no` 없는 orphan 스텁을 만든다. 전량 AT 적재 시 이
+  스텁들이 tx_count 상위를 점령해 gas_station 리스트를 가린다. **대응: 노드 삭제가 아니라
+  `objects.py` gas_station 리스트 쿼리의 `WHERE n.opinet_no IS NOT NULL` 필터로 숨김** (비파괴).
+  Region 도 `IN` 엣지가 `sido_nm` 로 MERGE 해 소수 orphan(region_cd null) 생성 — 현재 무해.
 ```

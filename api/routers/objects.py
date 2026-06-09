@@ -155,7 +155,11 @@ _TYPE_REGISTRY: Dict[str, Dict[str, str]] = {
     },
     "gas_station": {
         "label": "GasStation", "id_prop": "opinet_no", "name_prop": "name",
+        # WHERE opinet_no IS NOT NULL excludes orphan stubs created by the AT
+        # edge MERGE on site_cd (synthetic store_cds have no real station). Those
+        # stubs otherwise top the tx_count order and 404 on detail (ADR-0022).
         "order_by": (
+            "WHERE n.opinet_no IS NOT NULL "
             "OPTIONAL MATCH (n)<-[:AT]-(t:FuelTransaction) "
             "WITH n, count(t) AS tx_count "
             "RETURN n, tx_count AS rank_score "

@@ -80,11 +80,16 @@ ontology-gcc/
 │   └── test/             Jest snapshot tests for all 6 stacks (Template.fromStack)
 ├── data/                 Synthetic data generator + Neptune/OpenSearch loader
 │   ├── load.py           CLI: --neptune --opensearch --from-s3
-│   ├── public/           Standards adapters: opinet.py, kfda_term.py
+│   ├── schemas.py        25-class Pydantic SSoT (ALL_CLASSES + ALL_RELATIONS)
+│   ├── real/             Live adapters: opinet_price/opinet_station/transaction/coupon_fact/…
+│   ├── synthetic/        Synthetic generators (customer/persona/cluster/segment/…)
+│   ├── external/         KMA weather ETL
+│   ├── loader/           Live Neptune/OpenSearch loaders (cypher_bulk/bulk_neptune/opensearch_index)
 │   └── output/           JSON/NDJSON outputs (also synced to S3)
-├── ontology/mappings/    Standards CSV/JSON: opinet codes, KFDA terms, GSC internal
+├── ontology/             classes/*.yaml (25), relations/edges.yaml (31), standards/opinet_codes.yaml,
+│                         mappings/raw_to_ontology.csv, schema.ttl (generated from data/schemas.py)
 ├── tests/                Pytest suite — smoke (router imports) + tests/api/ (httpx integration)
-├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0019), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
+├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0020), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
 ├── prompts/              Reusable LLM prompt 가이드 (sse-agent-design, cross-browser-popup-pattern)
 ├── scripts/              KB index init, Cognito provisioning, eval harness, git hooks
 ├── .claude/              Project harness — agents, skills, hooks, commands, settings

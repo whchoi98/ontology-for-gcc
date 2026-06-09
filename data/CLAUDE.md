@@ -13,14 +13,11 @@
 ```
 data/
 ├── load.py                CLI 진입점 (--neptune --opensearch --from-s3 --kma)
-├── load_graph.py          Neptune MERGE 배치 (500 단위 UNWIND)
-├── load_search.py         OpenSearch bulk index + KNN field
-├── schemas.py             Pydantic 노드/엣지 스키마 (25 클래스)
+├── schemas.py             Pydantic 노드/엣지 스키마 SSoT (25 클래스 + 31 관계)
 ├── synthetic/             합성 generator (cohort/persona/cluster/...)
-├── real/                  N=500 PII-마스킹 실데이터 어댑터
+├── real/                  N=500 PII-마스킹 실데이터 어댑터 (opinet_codes.yaml 소비)
 ├── external/              KMA 등 외부 API 어댑터
-├── public/                opinet, KFDA 등 표준 매핑
-├── loader/                재사용 가능한 batch / retry / progress 헬퍼
+├── loader/                live Neptune/OpenSearch 로더 — cypher_bulk·bulk_neptune·opensearch_index
 └── output/                생성된 JSON/NDJSON (S3 sync 대상)
 ```
 
@@ -61,8 +58,8 @@ aws ecs run-task \
 
 ## 새 클래스 추가 (Auto-Sync Rules 발췌)
 
-1. `data/schemas.py` 에 Pydantic 모델.
+1. `data/schemas.py` 에 Pydantic 모델 (+ `ALL_CLASSES`/`ALL_RELATIONS` 등록) → `python -m ontology.generate_schema_ttl` 로 `schema.ttl` 재생성.
 2. `data/synthetic/` 또는 `data/real/` 에 generator/adapter.
-3. `data/load_graph.py` 의 노드 / 엣지 적재 단계에 추가.
+3. `data/loader/cypher_bulk.py` (+ `bulk_neptune.py`) 의 노드 / 엣지 적재 단계에 추가.
 4. `api/routers/objects.py` 의 `_TYPE_REGISTRY` + `api/routers/ontology.py` `_CLASSES`.
 5. `web/components/Sidebar.tsx` 객체 탐색 + `web/app/objects/[type]/page.tsx` `TYPE_META`.

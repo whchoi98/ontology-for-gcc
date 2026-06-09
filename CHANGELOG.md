@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] — 2026-05-18
+## [Unreleased] — 2026-06-09
+
+### Changed
+- **schema.ttl SSoT 생성 전환** (ADR-0020): retail/mfg 제조 22클래스 → GCC 25클래스 + 31관계 + 146 datatype property. `ontology/schema.ttl` 은 이제 `data/schemas.py`(SSoT)에서 `ontology/generate_schema_ttl.py` 로 결정적 생성 — 손편집 금지, `--check` 게이트 + `test_schema_is_fresh` 로 드리프트 차단. `tests/ontology/test_schema_ttl.py` SSoT-pinned 강화, `api/routers/ops.py` 데모 stub GCC 도메인 재작성, CI `compileall` 이 `ontology/` 포함.
+- **schema.ttl pivot** (ADR-0020): `ontology/schema.ttl` is now generated from `data/schemas.py` (25 classes / 31 relations / 146 datatype props) rather than hand-authored; drift is blocked by a freshness test and the generator's `--check` gate.
+
+### Removed
+- **pre-pivot 제조 잔재 18 파일** (ADR-0021): `data/public/`(mfg 표준 로더, 깨진 import) · `data/synthetic/{telemetry,maintenance,customers}.py` · `ontology/adapters/` · `data/load_graph.py` 및 전용 테스트 제거. 라이브 경로 미사용·import 깨짐 확인 후 삭제.
+- **pre-pivot manufacturing leftovers** (ADR-0021): removed 18 dead/broken files (mfg standard loaders, mfg synthetic generators, legacy graph loader) plus their tests.
 
 ### Security
 - **IAM task role scope-down** (ADR-0014): NeptuneFullAccess + `bedrock:*` + `aoss:*` 제거 → 명시 ARN (cluster ARN / inference-profile + foundation-model ARN 패턴 / collection ARN).
@@ -23,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Documentation
 - 6 신규 ADR (0014-0019) — IAM scope-down / DEMO guard / AOSS Deferred / Lambda@Edge / Wildcard cert / Public ALB Prefix List.
+- 2 신규 ADR (0020-0021) — schema.ttl SSoT 생성 / 제조 잔재 제거.
+- `ontology/CLAUDE.md` 전면 재작성 (실제 레이아웃·persona SSoT·schema.ttl 생성기), root/`data/CLAUDE.md` 드리프트 정정.
 - Root CLAUDE.md, infra-cdk/CLAUDE.md, docs/architecture.md (KR/EN), docs/runbooks/02-add-custom-domain.md, README.md 갱신.
 
 ## [1.0.0] — 2026-05-09

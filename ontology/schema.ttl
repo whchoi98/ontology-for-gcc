@@ -1,78 +1,245 @@
 @prefix owl:  <http://www.w3.org/2002/07/owl#> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
 @prefix gcc:  <https://amzn.tech/gcc/ontology#> .
 
-# ==== Classes (22) ====
+# GENERATED FILE — DO NOT EDIT BY HAND.
+# Source of truth: data/schemas.py (ALL_CLASSES + ALL_RELATIONS).
+# Regenerate: python -m ontology.generate_schema_ttl   (see ADR-0020)
 
-# BOM 계층 (4)
-gcc:Product       a owl:Class ; rdfs:label "Product" .
-gcc:Module        a owl:Class ; rdfs:label "Module" .
-gcc:Component     a owl:Class ; rdfs:label "Component" .
-gcc:RawMaterial   a owl:Class ; rdfs:label "RawMaterial" .
+<https://amzn.tech/gcc/ontology> a owl:Ontology ;
+    rdfs:label "GS Caltex M&M Customer Ontology" ;
+    rdfs:comment "GSC M&M본부 고객 온톨로지 — 25 클래스 / 31 관계. data/schemas.py 에서 생성." .
 
-# Supply 양면 (5)
-gcc:Manufacturer    a owl:Class ; rdfs:label "Manufacturer" .
-gcc:Supplier        a owl:Class ; rdfs:label "Supplier" .
-gcc:SubSupplier     a owl:Class ; rdfs:label "SubSupplier" .
-gcc:CustomerAccount a owl:Class ; rdfs:label "CustomerAccount" .
-gcc:Plant           a owl:Class ; rdfs:label "Plant" .
+# ==== Classes (25) ====
 
-# Geo / 운송 (2)
-gcc:Region    a owl:Class ; rdfs:label "Region" .
-gcc:TradeLane a owl:Class ; rdfs:label "TradeLane" .
+gcc:Customer a owl:Class ; rdfs:label "Customer" .
+  gcc:Customer_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:Customer_age_val a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:integer ; rdfs:label "age_val" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_age_section_cd a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "age_section_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_gender_cd a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "gender_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_sido_nm a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "sido_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_sgg_nm a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "sgg_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_work_sgg a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "work_sgg" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_occupation_cd a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "occupation_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_vip_yn a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "vip_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_primary_site_cd a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "primary_site_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_member_grade a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "member_grade" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_kixx_join_dt a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "kixx_join_dt" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_bns_card_join_dt a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "bns_card_join_dt" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_mail_recv_yn a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "mail_recv_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_plcc_yn a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "plcc_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:Customer_data_depth a owl:DatatypeProperty ; rdfs:domain gcc:Customer ; rdfs:range xsd:string ; rdfs:label "data_depth" ; rdfs:comment "required, card 1; one of: deep-history, coupon-only, sales-only, lookalike-syn" .
 
-# 표준 / 규제 (4)
-gcc:Standard      a owl:Class ; rdfs:label "Standard" .
-gcc:Certification a owl:Class ; rdfs:label "Certification" .
-gcc:Regulation    a owl:Class ; rdfs:label "Regulation" .
-gcc:Substance     a owl:Class ; rdfs:label "Substance" .
+gcc:Persona a owl:Class ; rdfs:label "Persona" .
+  gcc:Persona_persona_id a owl:DatatypeProperty ; rdfs:domain gcc:Persona ; rdfs:range xsd:string ; rdfs:label "persona_id" ; rdfs:comment "required, card 1" .
+  gcc:Persona_name_kr a owl:DatatypeProperty ; rdfs:domain gcc:Persona ; rdfs:range xsd:string ; rdfs:label "name_kr" ; rdfs:comment "required, card 1" .
+  gcc:Persona_kpi_focus a owl:DatatypeProperty ; rdfs:domain gcc:Persona ; rdfs:range xsd:string ; rdfs:label "kpi_focus" ; rdfs:comment "required, card 0..*" .
 
-# 품질 (3)
-gcc:QualityIncident a owl:Class ; rdfs:label "QualityIncident" .
-gcc:EightDReport    a owl:Class ; rdfs:label "EightDReport" .
-gcc:RootCause       a owl:Class ; rdfs:label "RootCause" .
+gcc:Cluster a owl:Class ; rdfs:label "Cluster" .
+  gcc:Cluster_cluster_id a owl:DatatypeProperty ; rdfs:domain gcc:Cluster ; rdfs:range xsd:string ; rdfs:label "cluster_id" ; rdfs:comment "required, card 1" .
+  gcc:Cluster_label a owl:DatatypeProperty ; rdfs:domain gcc:Cluster ; rdfs:range xsd:string ; rdfs:label "label" ; rdfs:comment "required, card 1" .
+  gcc:Cluster_centroid a owl:DatatypeProperty ; rdfs:domain gcc:Cluster ; rdfs:range rdfs:Literal ; rdfs:label "centroid" ; rdfs:comment "required, card 1" .
 
-# 운영 / ESG (4)
-gcc:Telemetry        a owl:Class ; rdfs:label "Telemetry" .
-gcc:MaintenanceEvent a owl:Class ; rdfs:label "MaintenanceEvent" .
-gcc:ESGIndicator     a owl:Class ; rdfs:label "ESGIndicator" .
-gcc:CarbonScope      a owl:Class ; rdfs:label "CarbonScope" .
+gcc:Segment a owl:Class ; rdfs:label "Segment" .
+  gcc:Segment_segment_id a owl:DatatypeProperty ; rdfs:domain gcc:Segment ; rdfs:range xsd:string ; rdfs:label "segment_id" ; rdfs:comment "required, card 1" .
+  gcc:Segment_label a owl:DatatypeProperty ; rdfs:domain gcc:Segment ; rdfs:range xsd:string ; rdfs:label "label" ; rdfs:comment "required, card 1" .
+  gcc:Segment_seed_cust_ids a owl:DatatypeProperty ; rdfs:domain gcc:Segment ; rdfs:range xsd:string ; rdfs:label "seed_cust_ids" ; rdfs:comment "required, card 0..*" .
+  gcc:Segment_similarity_threshold a owl:DatatypeProperty ; rdfs:domain gcc:Segment ; rdfs:range xsd:decimal ; rdfs:label "similarity_threshold" ; rdfs:comment "optional, card 0..1" .
 
-# ==== Object Properties (relations, 18+) ====
+gcc:Member a owl:Class ; rdfs:label "Member" .
+  gcc:Member_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:Member ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:Member_grade a owl:DatatypeProperty ; rdfs:domain gcc:Member ; rdfs:range xsd:string ; rdfs:label "grade" ; rdfs:comment "required, card 1" .
+  gcc:Member_points a owl:DatatypeProperty ; rdfs:domain gcc:Member ; rdfs:range xsd:integer ; rdfs:label "points" ; rdfs:comment "optional, card 0..1" .
 
-# BOM
-gcc:hasModule    a owl:ObjectProperty ; rdfs:domain gcc:Product ;   rdfs:range gcc:Module .
-gcc:consistsOf   a owl:ObjectProperty ; rdfs:domain gcc:Module ;    rdfs:range gcc:Component .
-gcc:madeOf       a owl:ObjectProperty ; rdfs:domain gcc:Component ; rdfs:range gcc:RawMaterial .
+gcc:FuelTransaction a owl:Class ; rdfs:label "FuelTransaction" .
+  gcc:FuelTransaction_tx_id a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "tx_id" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_ts a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "ts" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_store_cd a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "store_cd" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_fuel_grade a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "fuel_grade" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_qty_l a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:decimal ; rdfs:label "qty_l" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_unit_price a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:integer ; rdfs:label "unit_price" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_amount a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:integer ; rdfs:label "amount" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_payment_type a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:string ; rdfs:label "payment_type" ; rdfs:comment "required, card 1" .
+  gcc:FuelTransaction_earned_general_point a owl:DatatypeProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range xsd:integer ; rdfs:label "earned_general_point" ; rdfs:comment "optional, card 0..1" .
 
-# Supply
-gcc:manufacturedBy a owl:ObjectProperty ; rdfs:domain gcc:Product ;      rdfs:range gcc:Manufacturer .
-gcc:operates       a owl:ObjectProperty ; rdfs:domain gcc:Manufacturer ; rdfs:range gcc:Plant .
-gcc:locatedIn      a owl:ObjectProperty ; rdfs:domain gcc:Plant ;        rdfs:range gcc:Region .
-gcc:suppliedBy     a owl:ObjectProperty ; rdfs:domain gcc:Component ;    rdfs:range gcc:Supplier .
-gcc:subSupplies    a owl:ObjectProperty ; rdfs:domain gcc:Supplier ;     rdfs:range gcc:SubSupplier .
-gcc:soldTo         a owl:ObjectProperty ; rdfs:domain gcc:Product ;      rdfs:range gcc:CustomerAccount .
+gcc:AppEvent a owl:Class ; rdfs:label "AppEvent" .
+  gcc:AppEvent_event_id a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "event_id" ; rdfs:comment "required, card 1" .
+  gcc:AppEvent_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "optional, card 0..1" .
+  gcc:AppEvent_ts a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "ts" ; rdfs:comment "required, card 1" .
+  gcc:AppEvent_event_action a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "event_action" ; rdfs:comment "required, card 1" .
+  gcc:AppEvent_event_label a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "event_label" ; rdfs:comment "optional, card 0..1" .
+  gcc:AppEvent_platform a owl:DatatypeProperty ; rdfs:domain gcc:AppEvent ; rdfs:range xsd:string ; rdfs:label "platform" ; rdfs:comment "optional, card 0..1" .
 
-# Lane
-gcc:connects     a owl:ObjectProperty ; rdfs:domain gcc:TradeLane ; rdfs:range gcc:Region .
-gcc:shipsVia     a owl:ObjectProperty ; rdfs:domain gcc:Plant ;     rdfs:range gcc:TradeLane .
-gcc:subjectTo    a owl:ObjectProperty ; rdfs:domain gcc:TradeLane ; rdfs:range gcc:Regulation .
+gcc:SurveyResponse a owl:Class ; rdfs:label "SurveyResponse" .
+  gcc:SurveyResponse_response_id a owl:DatatypeProperty ; rdfs:domain gcc:SurveyResponse ; rdfs:range xsd:string ; rdfs:label "response_id" ; rdfs:comment "required, card 1" .
+  gcc:SurveyResponse_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:SurveyResponse ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "optional, card 0..1" .
+  gcc:SurveyResponse_ts a owl:DatatypeProperty ; rdfs:domain gcc:SurveyResponse ; rdfs:range xsd:string ; rdfs:label "ts" ; rdfs:comment "required, card 1" .
+  gcc:SurveyResponse_inconvenience_factors a owl:DatatypeProperty ; rdfs:domain gcc:SurveyResponse ; rdfs:range xsd:string ; rdfs:label "inconvenience_factors" ; rdfs:comment "required, card 0..*" .
+  gcc:SurveyResponse_free_text a owl:DatatypeProperty ; rdfs:domain gcc:SurveyResponse ; rdfs:range xsd:string ; rdfs:label "free_text" ; rdfs:comment "optional, card 0..1" .
 
-# Compliance
-gcc:conformsTo       a owl:ObjectProperty ; rdfs:domain gcc:Component ; rdfs:range gcc:Standard .
-gcc:certifiedBy      a owl:ObjectProperty ; rdfs:domain gcc:Component ; rdfs:range gcc:Certification .
-gcc:containsSubstance a owl:ObjectProperty ; rdfs:domain gcc:Component ; rdfs:range gcc:Substance .
-gcc:regulatedBy      a owl:ObjectProperty ; rdfs:domain gcc:Substance ; rdfs:range gcc:Regulation .
+gcc:CouponUse a owl:Class ; rdfs:label "CouponUse" .
+  gcc:CouponUse_use_id a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:string ; rdfs:label "use_id" ; rdfs:comment "required, card 1" .
+  gcc:CouponUse_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:CouponUse_coupon_no a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:string ; rdfs:label "coupon_no" ; rdfs:comment "required, card 1" .
+  gcc:CouponUse_tx_id a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:string ; rdfs:label "tx_id" ; rdfs:comment "optional, card 0..1" .
+  gcc:CouponUse_use_amt a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:integer ; rdfs:label "use_amt" ; rdfs:comment "required, card 1" .
+  gcc:CouponUse_deal_dt a owl:DatatypeProperty ; rdfs:domain gcc:CouponUse ; rdfs:range xsd:string ; rdfs:label "deal_dt" ; rdfs:comment "required, card 1" .
 
-# Quality
-gcc:about        a owl:ObjectProperty ; rdfs:domain gcc:QualityIncident ; rdfs:range gcc:Component .
-gcc:addresses    a owl:ObjectProperty ; rdfs:domain gcc:EightDReport ;    rdfs:range gcc:QualityIncident .
-gcc:identifies   a owl:ObjectProperty ; rdfs:domain gcc:EightDReport ;    rdfs:range gcc:RootCause .
-gcc:linkedTo     a owl:ObjectProperty ; rdfs:domain gcc:RootCause ;       rdfs:range gcc:Supplier .
+gcc:PaymentMethod a owl:Class ; rdfs:label "PaymentMethod" .
+  gcc:PaymentMethod_method_id a owl:DatatypeProperty ; rdfs:domain gcc:PaymentMethod ; rdfs:range xsd:string ; rdfs:label "method_id" ; rdfs:comment "required, card 1" .
+  gcc:PaymentMethod_label_kr a owl:DatatypeProperty ; rdfs:domain gcc:PaymentMethod ; rdfs:range xsd:string ; rdfs:label "label_kr" ; rdfs:comment "required, card 1" .
 
-# Ops / ESG
-gcc:from        a owl:ObjectProperty ; rdfs:domain gcc:Telemetry ;        rdfs:range gcc:Plant .
-gcc:on          a owl:ObjectProperty ; rdfs:domain gcc:MaintenanceEvent ; rdfs:range gcc:Component .
-gcc:measuredAt  a owl:ObjectProperty ; rdfs:domain gcc:ESGIndicator ;     rdfs:range gcc:Plant .
-gcc:emits       a owl:ObjectProperty ; rdfs:domain gcc:Plant ;            rdfs:range gcc:CarbonScope .
+gcc:Campaign a owl:Class ; rdfs:label "Campaign" .
+  gcc:Campaign_campaign_cd a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "campaign_cd" ; rdfs:comment "required, card 1" .
+  gcc:Campaign_name_kr a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "name_kr" ; rdfs:comment "required, card 1" .
+  gcc:Campaign_purpose_nm a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "purpose_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Campaign_lcls_nm a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "lcls_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Campaign_scls_nm a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "scls_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Campaign_start_dt a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "start_dt" ; rdfs:comment "required, card 1" .
+  gcc:Campaign_end_dt a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "end_dt" ; rdfs:comment "required, card 1" .
+  gcc:Campaign_target_persona_id a owl:DatatypeProperty ; rdfs:domain gcc:Campaign ; rdfs:range xsd:string ; rdfs:label "target_persona_id" ; rdfs:comment "optional, card 0..1" .
+
+gcc:Coupon a owl:Class ; rdfs:label "Coupon" .
+  gcc:Coupon_coupon_no a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:string ; rdfs:label "coupon_no" ; rdfs:comment "required, card 1" .
+  gcc:Coupon_campaign_cd a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:string ; rdfs:label "campaign_cd" ; rdfs:comment "required, card 1" .
+  gcc:Coupon_offer_cd a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:string ; rdfs:label "offer_cd" ; rdfs:comment "required, card 1" .
+  gcc:Coupon_denomination_amt a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:integer ; rdfs:label "denomination_amt" ; rdfs:comment "required, card 1" .
+  gcc:Coupon_valid_start_dt a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:string ; rdfs:label "valid_start_dt" ; rdfs:comment "required, card 1" .
+  gcc:Coupon_valid_end_dt a owl:DatatypeProperty ; rdfs:domain gcc:Coupon ; rdfs:range xsd:string ; rdfs:label "valid_end_dt" ; rdfs:comment "required, card 1" .
+
+gcc:Offer a owl:Class ; rdfs:label "Offer" .
+  gcc:Offer_offer_cd a owl:DatatypeProperty ; rdfs:domain gcc:Offer ; rdfs:range xsd:string ; rdfs:label "offer_cd" ; rdfs:comment "required, card 1" .
+  gcc:Offer_campaign_cd a owl:DatatypeProperty ; rdfs:domain gcc:Offer ; rdfs:range xsd:string ; rdfs:label "campaign_cd" ; rdfs:comment "required, card 1" .
+  gcc:Offer_offer_nm a owl:DatatypeProperty ; rdfs:domain gcc:Offer ; rdfs:range xsd:string ; rdfs:label "offer_nm" ; rdfs:comment "required, card 1" .
+
+gcc:Channel a owl:Class ; rdfs:label "Channel" .
+  gcc:Channel_channel_id a owl:DatatypeProperty ; rdfs:domain gcc:Channel ; rdfs:range xsd:string ; rdfs:label "channel_id" ; rdfs:comment "required, card 1" .
+  gcc:Channel_label_kr a owl:DatatypeProperty ; rdfs:domain gcc:Channel ; rdfs:range xsd:string ; rdfs:label "label_kr" ; rdfs:comment "required, card 1" .
+
+gcc:CampaignSms a owl:Class ; rdfs:label "CampaignSms" .
+  gcc:CampaignSms_sms_id a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "sms_id" ; rdfs:comment "required, card 1" .
+  gcc:CampaignSms_campaign_cd a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "campaign_cd" ; rdfs:comment "required, card 1" .
+  gcc:CampaignSms_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:CampaignSms_sent_dt a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "sent_dt" ; rdfs:comment "required, card 1" .
+  gcc:CampaignSms_delivered_yn a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "delivered_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:CampaignSms_open_yn a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "open_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:CampaignSms_clicked_yn a owl:DatatypeProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range xsd:string ; rdfs:label "clicked_yn" ; rdfs:comment "optional, card 0..1" .
+
+gcc:CampaignAggregation a owl:Class ; rdfs:label "CampaignAggregation" .
+  gcc:CampaignAggregation_campaign_cd a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:string ; rdfs:label "campaign_cd" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_offer_cd a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:string ; rdfs:label "offer_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:CampaignAggregation_target_count a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:integer ; rdfs:label "target_count" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_delivered_count a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:integer ; rdfs:label "delivered_count" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_converted_count a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:integer ; rdfs:label "converted_count" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_revenue_amt a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:integer ; rdfs:label "revenue_amt" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_cost_amt a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:integer ; rdfs:label "cost_amt" ; rdfs:comment "required, card 1" .
+  gcc:CampaignAggregation_roi_pct a owl:DatatypeProperty ; rdfs:domain gcc:CampaignAggregation ; rdfs:range xsd:decimal ; rdfs:label "roi_pct" ; rdfs:comment "required, card 1" .
+
+gcc:FuelProduct a owl:Class ; rdfs:label "FuelProduct" .
+  gcc:FuelProduct_product_id a owl:DatatypeProperty ; rdfs:domain gcc:FuelProduct ; rdfs:range xsd:string ; rdfs:label "product_id" ; rdfs:comment "required, card 1" .
+  gcc:FuelProduct_grade a owl:DatatypeProperty ; rdfs:domain gcc:FuelProduct ; rdfs:range xsd:string ; rdfs:label "grade" ; rdfs:comment "required, card 1" .
+  gcc:FuelProduct_octane_ron a owl:DatatypeProperty ; rdfs:domain gcc:FuelProduct ; rdfs:range xsd:integer ; rdfs:label "octane_ron" ; rdfs:comment "optional, card 0..1" .
+  gcc:FuelProduct_label_kr a owl:DatatypeProperty ; rdfs:domain gcc:FuelProduct ; rdfs:range xsd:string ; rdfs:label "label_kr" ; rdfs:comment "required, card 1" .
+
+gcc:GasStation a owl:Class ; rdfs:label "GasStation" .
+  gcc:GasStation_opinet_no a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "opinet_no" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_site_cd a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "site_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:GasStation_name a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "name" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_addr a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "addr" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_sido_nm a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "sido_nm" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_sgg_nm a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "sgg_nm" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_self_yn a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "self_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:GasStation_cvs_yn a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "cvs_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:GasStation_crwa_yn a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "crwa_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:GasStation_lat a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:decimal ; rdfs:label "lat" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_lon a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:decimal ; rdfs:label "lon" ; rdfs:comment "required, card 1" .
+  gcc:GasStation_brand_cd a owl:DatatypeProperty ; rdfs:domain gcc:GasStation ; rdfs:range xsd:string ; rdfs:label "brand_cd" ; rdfs:comment "required, card 1" .
+
+gcc:FuelPrice a owl:Class ; rdfs:label "FuelPrice" .
+  gcc:FuelPrice_station_opinet_no a owl:DatatypeProperty ; rdfs:domain gcc:FuelPrice ; rdfs:range xsd:string ; rdfs:label "station_opinet_no" ; rdfs:comment "required, card 1" .
+  gcc:FuelPrice_fuel_grade a owl:DatatypeProperty ; rdfs:domain gcc:FuelPrice ; rdfs:range xsd:string ; rdfs:label "fuel_grade" ; rdfs:comment "required, card 1" .
+  gcc:FuelPrice_dt a owl:DatatypeProperty ; rdfs:domain gcc:FuelPrice ; rdfs:range xsd:string ; rdfs:label "dt" ; rdfs:comment "required, card 1" .
+  gcc:FuelPrice_amount a owl:DatatypeProperty ; rdfs:domain gcc:FuelPrice ; rdfs:range xsd:integer ; rdfs:label "amount" ; rdfs:comment "required, card 1" .
+  gcc:FuelPrice_source a owl:DatatypeProperty ; rdfs:domain gcc:FuelPrice ; rdfs:range xsd:string ; rdfs:label "source" ; rdfs:comment "required, card 1; one of: real, synthetic" .
+
+gcc:Region a owl:Class ; rdfs:label "Region" .
+  gcc:Region_region_cd a owl:DatatypeProperty ; rdfs:domain gcc:Region ; rdfs:range xsd:string ; rdfs:label "region_cd" ; rdfs:comment "required, card 1" .
+  gcc:Region_sido_nm a owl:DatatypeProperty ; rdfs:domain gcc:Region ; rdfs:range xsd:string ; rdfs:label "sido_nm" ; rdfs:comment "required, card 1" .
+  gcc:Region_sgg_nm a owl:DatatypeProperty ; rdfs:domain gcc:Region ; rdfs:range xsd:string ; rdfs:label "sgg_nm" ; rdfs:comment "optional, card 0..1" .
+  gcc:Region_level a owl:DatatypeProperty ; rdfs:domain gcc:Region ; rdfs:range xsd:string ; rdfs:label "level" ; rdfs:comment "optional, card 0..1" .
+
+gcc:Term a owl:Class ; rdfs:label "Term" .
+  gcc:Term_term_cd a owl:DatatypeProperty ; rdfs:domain gcc:Term ; rdfs:range xsd:string ; rdfs:label "term_cd" ; rdfs:comment "required, card 1" .
+  gcc:Term_name_kr a owl:DatatypeProperty ; rdfs:domain gcc:Term ; rdfs:range xsd:string ; rdfs:label "name_kr" ; rdfs:comment "required, card 1" .
+  gcc:Term_required_yn a owl:DatatypeProperty ; rdfs:domain gcc:Term ; rdfs:range xsd:string ; rdfs:label "required_yn" ; rdfs:comment "optional, card 0..1" .
+  gcc:Term_marketing_eligible_yn a owl:DatatypeProperty ; rdfs:domain gcc:Term ; rdfs:range xsd:string ; rdfs:label "marketing_eligible_yn" ; rdfs:comment "optional, card 0..1" .
+
+gcc:TermAgreement a owl:Class ; rdfs:label "TermAgreement" .
+  gcc:TermAgreement_agreement_id a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "agreement_id" ; rdfs:comment "required, card 1" .
+  gcc:TermAgreement_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:TermAgreement_term_cd a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "term_cd" ; rdfs:comment "required, card 1" .
+  gcc:TermAgreement_approval_dt a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "approval_dt" ; rdfs:comment "required, card 1" .
+  gcc:TermAgreement_approval_channel_cd a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "approval_channel_cd" ; rdfs:comment "optional, card 0..1" .
+  gcc:TermAgreement_approved_yn a owl:DatatypeProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range xsd:string ; rdfs:label "approved_yn" ; rdfs:comment "optional, card 0..1" .
+
+gcc:ConsumptionIndex a owl:Class ; rdfs:label "ConsumptionIndex" .
+  gcc:ConsumptionIndex_cust_id a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:string ; rdfs:label "cust_id" ; rdfs:comment "required, card 1" .
+  gcc:ConsumptionIndex_bonus_card_months a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:integer ; rdfs:label "bonus_card_months" ; rdfs:comment "optional, card 0..1" .
+  gcc:ConsumptionIndex_energy_plus_app_months a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:integer ; rdfs:label "energy_plus_app_months" ; rdfs:comment "optional, card 0..1" .
+  gcc:ConsumptionIndex_car_need_idx a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:decimal ; rdfs:label "car_need_idx" ; rdfs:comment "optional, card 0..1" .
+  gcc:ConsumptionIndex_gas_station_pref_idx a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:decimal ; rdfs:label "gas_station_pref_idx" ; rdfs:comment "optional, card 0..1" .
+  gcc:ConsumptionIndex_car_finance_pref_idx a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range xsd:decimal ; rdfs:label "car_finance_pref_idx" ; rdfs:comment "optional, card 0..1" .
+  gcc:ConsumptionIndex_extras a owl:DatatypeProperty ; rdfs:domain gcc:ConsumptionIndex ; rdfs:range rdfs:Literal ; rdfs:label "extras" ; rdfs:comment "optional, card 0..1" .
+
+gcc:WeatherObservation a owl:Class ; rdfs:label "WeatherObservation" .
+  gcc:WeatherObservation_sido_nm a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:string ; rdfs:label "sido_nm" ; rdfs:comment "required, card 1" .
+  gcc:WeatherObservation_dt a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:string ; rdfs:label "dt" ; rdfs:comment "required, card 1" .
+  gcc:WeatherObservation_hour a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:integer ; rdfs:label "hour" ; rdfs:comment "required, card 1" .
+  gcc:WeatherObservation_temp_c a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:decimal ; rdfs:label "temp_c" ; rdfs:comment "optional, card 0..1" .
+  gcc:WeatherObservation_rain_mm a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:decimal ; rdfs:label "rain_mm" ; rdfs:comment "optional, card 0..1" .
+  gcc:WeatherObservation_wind_mps a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:decimal ; rdfs:label "wind_mps" ; rdfs:comment "optional, card 0..1" .
+  gcc:WeatherObservation_pm10_ugm3 a owl:DatatypeProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range xsd:integer ; rdfs:label "pm10_ugm3" ; rdfs:comment "optional, card 0..1" .
+
+gcc:TimeSlot a owl:Class ; rdfs:label "TimeSlot" .
+  gcc:TimeSlot_slot_id a owl:DatatypeProperty ; rdfs:domain gcc:TimeSlot ; rdfs:range xsd:string ; rdfs:label "slot_id" ; rdfs:comment "required, card 1" .
+  gcc:TimeSlot_label_kr a owl:DatatypeProperty ; rdfs:domain gcc:TimeSlot ; rdfs:range xsd:string ; rdfs:label "label_kr" ; rdfs:comment "required, card 1" .
+  gcc:TimeSlot_hour_start a owl:DatatypeProperty ; rdfs:domain gcc:TimeSlot ; rdfs:range xsd:integer ; rdfs:label "hour_start" ; rdfs:comment "required, card 1" .
+  gcc:TimeSlot_hour_end a owl:DatatypeProperty ; rdfs:domain gcc:TimeSlot ; rdfs:range xsd:integer ; rdfs:label "hour_end" ; rdfs:comment "required, card 1" .
+  gcc:TimeSlot_weekend_yn a owl:DatatypeProperty ; rdfs:domain gcc:TimeSlot ; rdfs:range xsd:string ; rdfs:label "weekend_yn" ; rdfs:comment "required, card 1" .
+
+# ==== Object Properties / relations (31) ====
+
+gcc:Customer_HAS_PERSONA_Persona a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:Persona ; rdfs:label "HAS_PERSONA" .
+gcc:Customer_BELONGS_TO_Cluster a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:Cluster ; rdfs:label "BELONGS_TO" .
+gcc:Customer_IN_SEGMENT_Segment a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:Segment ; rdfs:label "IN_SEGMENT" .
+gcc:Customer_IS_MEMBER_Member a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:Member ; rdfs:label "IS_MEMBER" .
+gcc:Customer_AGREED_TO_TermAgreement a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:TermAgreement ; rdfs:label "AGREED_TO" .
+gcc:TermAgreement_FOR_Term a owl:ObjectProperty ; rdfs:domain gcc:TermAgreement ; rdfs:range gcc:Term ; rdfs:label "FOR" .
+gcc:Customer_HAS_INDEX_ConsumptionIndex a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:ConsumptionIndex ; rdfs:label "HAS_INDEX" .
+gcc:Customer_USED_APP_AppEvent a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:AppEvent ; rdfs:label "USED_APP" .
+gcc:Customer_ANSWERED_SurveyResponse a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:SurveyResponse ; rdfs:label "ANSWERED" .
+gcc:Customer_REFUELED_FuelTransaction a owl:ObjectProperty ; rdfs:domain gcc:Customer ; rdfs:range gcc:FuelTransaction ; rdfs:label "REFUELED" .
+gcc:FuelTransaction_AT_GasStation a owl:ObjectProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range gcc:GasStation ; rdfs:label "AT" .
+gcc:GasStation_IN_Region a owl:ObjectProperty ; rdfs:domain gcc:GasStation ; rdfs:range gcc:Region ; rdfs:label "IN" .
+gcc:FuelTransaction_OF_FuelProduct a owl:ObjectProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range gcc:FuelProduct ; rdfs:label "OF" .
+gcc:FuelTransaction_VIA_PaymentMethod a owl:ObjectProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range gcc:PaymentMethod ; rdfs:label "VIA" .
+gcc:FuelTransaction_AT_TIME_TimeSlot a owl:ObjectProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range gcc:TimeSlot ; rdfs:label "AT_TIME" .
+gcc:FuelTransaction_USED_CouponUse a owl:ObjectProperty ; rdfs:domain gcc:FuelTransaction ; rdfs:range gcc:CouponUse ; rdfs:label "USED" .
+gcc:CouponUse_OF_Coupon a owl:ObjectProperty ; rdfs:domain gcc:CouponUse ; rdfs:range gcc:Coupon ; rdfs:label "OF" .
+gcc:Campaign_HAS_OFFER_Offer a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:Offer ; rdfs:label "HAS_OFFER" .
+gcc:Offer_ISSUES_Coupon a owl:ObjectProperty ; rdfs:domain gcc:Offer ; rdfs:range gcc:Coupon ; rdfs:label "ISSUES" .
+gcc:Campaign_TARGETS_PERSONA_Persona a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:Persona ; rdfs:label "TARGETS_PERSONA" .
+gcc:Campaign_TARGETS_CLUSTER_Cluster a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:Cluster ; rdfs:label "TARGETS_CLUSTER" .
+gcc:Campaign_TARGETS_SEGMENT_Segment a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:Segment ; rdfs:label "TARGETS_SEGMENT" .
+gcc:Campaign_SENT_VIA_Channel a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:Channel ; rdfs:label "SENT_VIA" .
+gcc:Coupon_REDEEMED_AS_CouponUse a owl:ObjectProperty ; rdfs:domain gcc:Coupon ; rdfs:range gcc:CouponUse ; rdfs:label "REDEEMED_AS" .
+gcc:GasStation_PRICED_AT_FuelPrice a owl:ObjectProperty ; rdfs:domain gcc:GasStation ; rdfs:range gcc:FuelPrice ; rdfs:label "PRICED_AT" .
+gcc:GasStation_SELLS_FuelProduct a owl:ObjectProperty ; rdfs:domain gcc:GasStation ; rdfs:range gcc:FuelProduct ; rdfs:label "SELLS" .
+gcc:Campaign_SENT_SMS_CampaignSms a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:CampaignSms ; rdfs:label "SENT_SMS" .
+gcc:CampaignSms_TO_Customer a owl:ObjectProperty ; rdfs:domain gcc:CampaignSms ; rdfs:range gcc:Customer ; rdfs:label "TO" .
+gcc:Campaign_AGGREGATED_AS_CampaignAggregation a owl:ObjectProperty ; rdfs:domain gcc:Campaign ; rdfs:range gcc:CampaignAggregation ; rdfs:label "AGGREGATED_AS" .
+gcc:Region_OBSERVED_WEATHER_WeatherObservation a owl:ObjectProperty ; rdfs:domain gcc:Region ; rdfs:range gcc:WeatherObservation ; rdfs:label "OBSERVED_WEATHER" .
+gcc:WeatherObservation_AT_TIME_TimeSlot a owl:ObjectProperty ; rdfs:domain gcc:WeatherObservation ; rdfs:range gcc:TimeSlot ; rdfs:label "AT_TIME" .

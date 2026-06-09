@@ -23,8 +23,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: compileall (api/, data/, scripts/)
-        run: python -m compileall -q api data scripts
+      - name: compileall (api/, data/, ontology/, scripts/)
+        run: python -m compileall -q api data ontology scripts
 
   # 2) TypeScript type-check — web/ (Next.js) and infra-cdk/ (CDK).
   #    Mirrors `.claude/commands/test-all.md` step 1 + ARM64 platform pin

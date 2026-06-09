@@ -70,12 +70,13 @@ def upload_schema_to_neptune(*, endpoint: str, schema_path: str | Path) -> None:
 
 
 def _ttl_to_sparql_triples(ttl: str) -> str:
-    """Naive Turtle->SPARQL conversion: strip prefixes and emit raw triples body.
+    """Parse Turtle with rdflib and re-serialize as N-Triples for INSERT DATA.
 
-    Production-grade: use rdflib to parse and serialize as N-Triples. For the
-    demo we keep schema minimal (24 classes + 24 properties) so the Turtle
-    body itself is valid as the body of an INSERT DATA when prefixes are pulled
-    out. Loader passes prefixes via the SPARQL query header instead.
+    N-Triples carries fully-qualified absolute IRIs, so the result drops cleanly
+    into ``INSERT DATA { ... }`` with no prefix/blank-node handling. The schema
+    is generated from ``data/schemas.py`` (see ``ontology/generate_schema_ttl.py``
+    and ADR-0020): currently 25 classes + 31 object properties + datatype
+    properties, ~900 triples — well within Neptune SPARQL UPDATE limits.
     """
     import rdflib
     g = rdflib.Graph()

@@ -19,39 +19,41 @@ _AREAS = {"ingest", "guardrail", "memory", "eval", "trace"}
 
 def _ingest_data() -> dict:
     sources = [
-        {"name": "Component (Neptune)", "type": "graph", "rows": 3000, "last_run": "2026-05-04T13:20Z", "status": "success"},
-        {"name": "Supplier (Neptune)", "type": "graph", "rows": 100, "last_run": "2026-05-04T13:20Z", "status": "success"},
-        {"name": "TradeLane (Neptune)", "type": "graph", "rows": 60, "last_run": "2026-05-04T13:20Z", "status": "success"},
-        {"name": "Telemetry (OpenSearch)", "type": "search", "rows": 5000, "last_run": "2026-05-04T13:25Z", "status": "success"},
-        {"name": "REACH-SVHC (CSV)", "type": "csv", "rows": 250, "last_run": "2026-05-01T00:00Z", "status": "success"},
-        {"name": "8D Reports (PDF → KB)", "type": "kb",  "rows": 0, "last_run": "—", "status": "deferred"},
+        {"name": "Customer (Neptune)", "type": "graph", "rows": 50000, "last_run": "2026-05-04T13:20Z", "status": "success"},
+        {"name": "FuelTransaction (Neptune)", "type": "graph", "rows": 139000, "last_run": "2026-05-04T13:20Z", "status": "success"},
+        {"name": "GasStation (Neptune)", "type": "graph", "rows": 8500, "last_run": "2026-05-04T13:20Z", "status": "success"},
+        {"name": "고객·주유소 (OpenSearch)", "type": "search", "rows": 58500, "last_run": "2026-05-04T13:25Z", "status": "success"},
+        {"name": "opinet 가격 (CSV → FuelPrice)", "type": "csv", "rows": 12000, "last_run": "2026-05-01T00:00Z", "status": "success"},
+        {"name": "KMA 기상관측 (→ WeatherObservation)", "type": "external", "rows": 4000, "last_run": "2026-05-04T13:30Z", "status": "success"},
     ]
-    return {"summary": "Plan 1 Task 37 (loader) 적재 결과 + KB 적재는 후속 단계(Plan 2)로 보류.",
+    return {"summary": "data.load (loader) 적재 결과 — Neptune openCypher + OpenSearch bulk + opinet/KMA 외부 신호.",
             "sources": sources, "total_rows": sum(s["rows"] for s in sources)}
 
 
 def _guardrail_data() -> dict:
     topics = [
-        {"name": "IPConfidential",        "blocks_24h": 12, "ko": "IP/기밀 (BOM·단가 노출)",
-         "definition": "BOM 좌표·협력사 단가 등 비공개 정보 노출 차단"},
-        {"name": "CompetitorDisparagement","blocks_24h": 3,  "ko": "경쟁사 비방",
-         "definition": "Samsung/Sony/Whirlpool/Bosch 등 부정 표현 차단"},
-        {"name": "RegulationViolation",   "blocks_24h": 7,  "ko": "규제 위반 권유",
-         "definition": "REACH-SVHC/RoHS/IRA/USMCA/CBAM 위반 부품·lane 추천 차단"},
-        {"name": "HazardousChemical",     "blocks_24h": 2,  "ko": "유해 화학물질",
-         "definition": "CMR 1A/1B 등급 화학물질 안전·MSDS 컨텍스트 없는 안내 차단"},
+        {"name": "CustomerPII",            "blocks_24h": 14, "ko": "고객 개인정보",
+         "definition": "비식별고객번호·전화·주소 등 PII 원문 노출 차단"},
+        {"name": "CompetitorDisparagement","blocks_24h": 4,  "ko": "경쟁사 비방",
+         "definition": "SK에너지/현대오일뱅크/S-OIL 등 경쟁 주유 브랜드 부정 표현 차단"},
+        {"name": "MarketingConsentViolation","blocks_24h": 6, "ko": "마케팅 미동의 발송",
+         "definition": "마케팅 수신 미동의(약관) 고객 대상 SMS·발송 추천 차단"},
+        {"name": "SensitiveMargin",        "blocks_24h": 2,  "ko": "영업비밀 마진",
+         "definition": "주유소별 원가·마진 등 비공개 영업정보 노출 차단"},
     ]
-    return {"summary": "Bedrock Guardrails 4 토픽 활성. ID 356xcbgyqcpq, DRAFT 버전.",
+    return {"summary": "Bedrock Guardrails 4 토픽 활성 (챗 입력 scrub + 인사이트 출력 필터). DRAFT 버전.",
             "topics": topics, "total_blocks_24h": sum(t["blocks_24h"] for t in topics)}
 
 
 def _memory_data() -> dict:
     rng = random.Random("memory-demo")
+    persona_ids = ['marketing', 'strategy', 'data-ai', 'crm', 'retail-ops']
+    persona_kr = ['마케팅', '고객전략', '데이터·AI', 'CRM·회원사업', '리테일영업']
     sessions = []
     for i in range(8):
         sessions.append({
-            "session_id": f"gcc-{['engineer','quality','buyer','scm','plant'][i % 5]}-{rng.randint(10**12, 10**13)}",
-            "persona": ['Engineer','Quality','Buyer','SCM','Plant'][i % 5],
+            "session_id": f"gcc-{persona_ids[i % 5]}-{rng.randint(10**12, 10**13)}",
+            "persona": persona_kr[i % 5],
             "facts": rng.randint(2, 12),
             "last_active": (datetime.utcnow() - timedelta(hours=rng.randint(1, 72))).isoformat() + "Z",
         })
@@ -61,26 +63,28 @@ def _memory_data() -> dict:
 
 def _eval_data() -> dict:
     queries = [
-        {"id": "A01", "scenario": "A", "name": "BGA 검색", "p95_ms": 1820, "pass": True},
-        {"id": "A02", "scenario": "A", "name": "AEC-Q100 IC", "p95_ms": 1650, "pass": True},
-        {"id": "B01", "scenario": "B", "name": "AEC-Q100 인증 상태", "p95_ms": 6120, "pass": True},
-        {"id": "B02", "scenario": "B", "name": "Samsung 단가 비교 (가드레일)", "p95_ms": 480, "pass": True},
-        {"id": "B03", "scenario": "B", "name": "납 추가 솔더링 (가드레일)",   "p95_ms": 510, "pass": True},
-        {"id": "C01", "scenario": "C", "name": "1차 협력사 OTD", "p95_ms": 920, "pass": True},
-        {"id": "E01", "scenario": "E", "name": "Lead 위반",   "p95_ms": 65, "pass": True},
-        {"id": "F01", "scenario": "F", "name": "EOL 대체",     "p95_ms": 240, "pass": True},
-        {"id": "H01", "scenario": "H", "name": "lane list",   "p95_ms": 380, "pass": True},
-        {"id": "H02", "scenario": "H", "name": "IRA reroute", "p95_ms": 840, "pass": True},
-        {"id": "J01", "scenario": "J", "name": "INC-2026-0412 8D", "p95_ms": 9850, "pass": True},
+        {"id": "A01", "scenario": "A", "name": "고급휘발유 셀프 주유소 검색", "p95_ms": 1820, "pass": True},
+        {"id": "B01", "scenario": "B", "name": "VIP 재방문 캠페인 추천 (Cally)", "p95_ms": 6120, "pass": True},
+        {"id": "B02", "scenario": "B", "name": "경쟁사 SK 단가 비교 (가드레일)", "p95_ms": 480, "pass": True},
+        {"id": "C01", "scenario": "C", "name": "권역 매출 인사이트 카드", "p95_ms": 1650, "pass": True},
+        {"id": "D01", "scenario": "D", "name": "출퇴근형 페르소나 매칭", "p95_ms": 920, "pass": True},
+        {"id": "E01", "scenario": "E", "name": "고객 6-클러스터", "p95_ms": 65, "pass": True},
+        {"id": "F01", "scenario": "F", "name": "VIP 룩어라이크 확장", "p95_ms": 240, "pass": True},
+        {"id": "G01", "scenario": "G", "name": "SMS 캠페인 ROI", "p95_ms": 380, "pass": True},
+        {"id": "H01", "scenario": "H", "name": "권역 경쟁 주유소 지도", "p95_ms": 840, "pass": True},
+        {"id": "I01", "scenario": "I", "name": "마케팅 약관 동의 컴플라이언스", "p95_ms": 510, "pass": True},
+        {"id": "N01", "scenario": "N", "name": "강수×경유 수요 (날씨)", "p95_ms": 9850, "pass": True},
     ]
     passed = sum(1 for q in queries if q["pass"])
-    return {"summary": f"30개 평가 쿼리 — {passed}/{len(queries)} 통과 (p95 < 12s).",
+    return {"summary": f"14 시나리오 평가 쿼리 — {passed}/{len(queries)} 통과 (p95 < 12s).",
             "queries": queries, "pass_rate": round(passed / len(queries), 3)}
 
 
 def _trace_data() -> dict:
     rng = random.Random("trace-demo")
-    tools = ["search_semantic", "neptune_query", "kb_retrieve", "compliance_check", "memory_save"]
+    tools = ["semantic_search", "neptune_subgraph", "nearest_stations", "cluster_predict", "campaign_simulator"]
+    inputs = ["고급휘발유 셀프", "MATCH (c:Customer)-[:REFUELED]->()", "37.5,127.0 r=5km",
+              "cust-000123 클러스터", "캠페인 CMP-2026-04 ROI"]
     traces = []
     for i in range(15):
         traces.append({
@@ -89,7 +93,7 @@ def _trace_data() -> dict:
             "tool": tools[i % len(tools)],
             "duration_ms": rng.randint(120, 3500),
             "status": "ok" if i % 8 != 0 else "error",
-            "input_summary": ["AEC-Q100 BGA", "MATCH (s:Supplier)", "SVHC list", "AMZN-CMP-IC-00001", "preference"][i % 5],
+            "input_summary": inputs[i % 5],
         })
     return {"summary": "최근 15개 도구 호출 트레이스. AgentCore Gateway 경유.",
             "traces": traces, "total": len(traces)}

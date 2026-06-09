@@ -132,17 +132,17 @@ ontology-gcc/
 │   ├── middleware_auth.py # Cognito JWT verification
 │   └── Dockerfile        # Multi-purpose: API server + one-shot data loader
 ├── web/                  # Next.js 14 frontend (TypeScript, ARM64)
-│   ├── app/              # App Router scenarios A-L + objects + ops + meta
+│   ├── app/              # App Router scenarios A-N + objects + ops + meta
 │   ├── components/       # PersonaSwitch, GuidedTour, CytoscapeView, Sidebar
 │   └── lib/api-client.ts # Typed SSE + REST client
 ├── infra-cdk/            # AWS CDK v2 infrastructure (TypeScript)
 │   ├── lib/              # network, data, compute, ai, edge, observability stacks
 │   └── test/             # Jest snapshot tests for all 6 stacks
-├── data/                 # Synthetic data generator + Neptune/OpenSearch loader
-├── ontology/             # Mapping CSVs (Opinet 유종/주유소 codes, KFDA 약관 terms,
-│                         #  GSC 내부 codes, KOSTAT 시도 GeoJSON, 5부서×14시나리오 priority)
+├── data/                 # Synthetic data generator + Neptune/OpenSearch loader (data/loader/*)
+├── ontology/             # classes/*.yaml (25), relations/edges.yaml (31), standards/opinet_codes.yaml,
+│                         #  generate_schema_ttl.py → schema.ttl (generated from data/schemas.py)
 ├── tests/                # Pytest suite — smoke + tests/api/ (httpx integration)
-├── docs/                 # Architecture, ADRs (decisions/0001-0004), runbooks
+├── docs/                 # Architecture, ADRs (decisions/0001-0022), runbooks (01-06)
 ├── scripts/              # KB index, Cognito provisioning, evaluation
 ├── .claude/              # Project harness — agents, skills, hooks, commands
 ├── .github/workflows/    # CI pipeline (python-ast, tsc, cdk-synth+jest, pytest)
@@ -193,8 +193,8 @@ See [docs/api-reference.md](docs/api-reference.md) for the full OpenAPI surface,
 - `GET  /api/journey/{cust_id}` (Scenario M)
 - `POST /api/weather/correlate` (Scenario N — 1275 days × 17 sido)
 - `GET  /api/objects/{type}` and `/api/objects/{type}/{id}` (25 클래스 객체 탐색)
-- `GET  /api/ontology/{classes,relations}` and `/api/personas`
-- `GET  /api/ops/{healthz,meta,resources}` (operations)
+- `GET  /api/ontology/{schema,standards,validation}` and `/api/personas`
+- `GET  /healthz`, `/api/ops/resources`, `/api/ops/{ingest,guardrail,memory,eval,trace}` (operations)
 
 ## Contributing
 
@@ -340,16 +340,16 @@ ontology-gcc/
 │   ├── middleware_auth.py # Cognito JWT 검증
 │   └── Dockerfile        # 다목적 이미지 — API 서버 + 일회성 데이터 로더
 ├── web/                  # Next.js 14 프론트엔드 (TypeScript, ARM64)
-│   ├── app/              # App Router 시나리오 A-G + 객체 + 운영 + 메타
+│   ├── app/              # App Router 시나리오 A-N + 객체 + 운영 + 메타
 │   ├── components/       # PersonaSwitch, GuidedTour, CytoscapeView, Sidebar
 │   └── lib/api-client.ts # 타입 안전 SSE + REST 클라이언트
 ├── infra-cdk/            # AWS CDK v2 인프라 (TypeScript)
 │   └── lib/              # network, data, compute, ai, edge, observability 스택
-├── data/                 # 합성 데이터 생성기 + Neptune/OpenSearch 로더
-├── ontology/             # 매핑 CSV (Opinet 유종/주유소 표준, KFDA 약관 용어,
-│                         #  GSC 내부 코드, KOSTAT 시도 GeoJSON, 5부서×14시나리오 priority)
-├── docs/                 # 아키텍처, ADR, 런북
-└── scripts/              # KB 인덱스, Cognito 사용자 프로비저닝, 평가
+├── data/                 # 합성 데이터 생성기 + Neptune/OpenSearch 로더 (data/loader/*)
+├── ontology/             # classes/*.yaml (25), relations/edges.yaml (31), standards/opinet_codes.yaml,
+│                         #  generate_schema_ttl.py → schema.ttl (data/schemas.py 에서 생성)
+├── docs/                 # 아키텍처, ADR (decisions/0001-0022), 런북 (01-06)
+└── scripts/              # 평가 하니스, codegraph 라벨링, 시나리오 스캐폴딩, git 훅, KMA 시크릿, object-edge 프로브
 ```
 
 ## 테스트
@@ -396,8 +396,8 @@ python3 scripts/eval_wow_queries.py
 - `GET  /api/journey/{cust_id}` (시나리오 M — 고객 여정)
 - `POST /api/weather/correlate` (시나리오 N — 날씨 × 연료, KMA 1275일 × 17 시도)
 - `GET  /api/objects/{type}` 및 `/api/objects/{type}/{id}` (25 클래스 객체 탐색)
-- `GET  /api/ontology/{classes,relations}` 및 `/api/personas`
-- `GET  /api/ops/{healthz,meta,resources}` (운영)
+- `GET  /api/ontology/{schema,standards,validation}` 및 `/api/personas`
+- `GET  /healthz`, `/api/ops/resources`, `/api/ops/{ingest,guardrail,memory,eval,trace}` (운영)
 
 ## 기여 방법
 

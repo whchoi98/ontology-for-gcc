@@ -36,12 +36,12 @@ load-schema:
 	python3 -m ontology.upload --endpoint "$(NEPTUNE_ENDPOINT)" --schema ontology/schema.ttl
 
 load-graph:
-	@echo "Loading ~10,644 nodes + BOM edges into Neptune via openCypher..."
-	NEPTUNE_ENDPOINT="$(NEPTUNE_ENDPOINT)" python3 -m data.load_graph --bom-edges
+	@echo "Loading 25-class nodes + 31 relation types into Neptune (cypher_bulk)..."
+	NEPTUNE_ENDPOINT="$(NEPTUNE_ENDPOINT)" python3 -m data.load --neptune --edges
 
 load-search:
-	@echo "Indexing components into OpenSearch Serverless (gcc-search)..."
-	OPENSEARCH_HOST="$(OPENSEARCH_HOST)" AWS_REGION="$(AWS_REGION)" python3 -m data.load_search
+	@echo "Indexing customers/stations into OpenSearch Serverless (gcc-search)..."
+	OPENSEARCH_HOST="$(OPENSEARCH_HOST)" AWS_REGION="$(AWS_REGION)" python3 -m data.load --opensearch
 
 # ── verification queries (run from inside VPC after load) ────────────────────
 verify-graph:

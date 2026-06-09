@@ -15,7 +15,8 @@ scripts/
 ├── label_communities.py           고객 그래프 community 라벨링
 ├── refresh_codegraph.sh           graphify 재실행 + community 라벨 in-place 패치
 ├── run_harness_eval.sh            .claude/ 하니스 12-차원 평가 실행
-└── setup-kma-secret.sh            KMA API 키 Secrets Manager 등록
+├── setup-kma-secret.sh            KMA API 키 Secrets Manager 등록
+└── probe_object_edges.py          Object Explorer 엣지 커버리지 진단 (offer/coupon/gas_station orphan 점검, ADR-0022)
 ```
 
 ## 핵심 컨벤션

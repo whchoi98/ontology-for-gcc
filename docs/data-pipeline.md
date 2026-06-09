@@ -16,18 +16,18 @@
    │                                   │
    ▼ Pydantic schemas → NDJSON ───────┘
    │
-   ├── S3 nodes/*.ndjson ──┐               ┌── data/load_graph.py
-   │                       │               │   (openCypher MERGE 500 배치)
-   └── ECS one-shot task ──┴───────────────┤   → Neptune (25 클래스, ~250K 엣지)
+   ├── S3 nodes/*.ndjson ──┐               ┌── data/loader/cypher_bulk.py
+   │                       │               │   (openCypher MERGE UNWIND 배치)
+   └── ECS one-shot task ──┴───────────────┤   → Neptune (25 클래스, ~3.2M 엣지)
        (api 이미지 재사용)                  │
-                                           └── data/load_search.py
+                                           └── data/loader/opensearch_index.py
                                                (Nori BM25 + Cohere embed-v4 KNN)
                                                → AOSS gcc-search
 ```
 
 - **소스**: `raw_data/` 9 CSV (PII 비식별, git-ignored) + KMA 17 시도 × N일
 - **중간 표현**: S3 NDJSON (Neptune·AOSS·ML write-back 의 공통 ground truth)
-- **그래프**: 25 클래스 / ~250K 엣지 (Customer / Station / Transaction / Campaign / Weather …)
+- **그래프**: 25 클래스 / 31 관계 타입 / ~3.2M 엣지 (Customer / GasStation / FuelTransaction / Campaign / WeatherObservation …)
 - **검색**: 듀얼 인덱스 (BM25 + KNN) + RRF fusion + Cohere rerank-v3
 - **실행**: 로컬에서 못 닿는 private Neptune 때문에 ECS one-shot 태스크가 API 이미지 재사용
 
@@ -65,12 +65,13 @@ def merge_dt_time(dt, hhmmss) -> str | None: ...          # YYYYMMDDHHMMSS
 | 어댑터 | 출력 스키마 | 비고 |
 |--------|-------------|------|
 | `opinet_price.py` | `FuelPrice` | 주유소 가격 (오피넷 표준 코드) |
-| `opinet_station.py` | `Station`, `Region` | 주유소 마스터 (시도·시군구·운영형태) |
+| `opinet_station.py` | `GasStation`, `Region` | 주유소 마스터 (시도·시군구·운영형태) |
 | `campaign_master.py` | `Campaign` | utf-8, 130 rows |
 | `consumption_index.py` | `ConsumptionIndex` | 카드 소비지수 외부 신호 |
-| `coupon_fact.py` | `Coupon`, `CouponUse` | 쿠폰 발급/사용 fact |
-| `airbridge.py` | `AdEvent` | 광고 이벤트 |
-| `survey.py` | `Survey` | 설문 응답 |
+| `coupon_fact.py` | `Campaign`, `Offer`, `Coupon`, `CouponUse` | 쿠폰 발급/사용 fact (Coupon pk=coupon_no, Offer pk=offer_cd — ADR-0022) |
+| `airbridge.py` | `AppEvent` | 앱 행동 이벤트 (Energy+/보너스카드앱) |
+| `survey.py` | `SurveyResponse` (라벨 `Survey`) | 설문 응답 (익명 ~25,946건 포함) |
+| `term_agreement.py` | `Term`, `TermAgreement` | 약관 동의 |
 
 ### 1.4 Cohort 분류 (ADR-0004)
 
@@ -205,54 +206,68 @@ def reprocess_from_cache() -> int:
 
 ---
 
-## 3. Neptune 적재 (`data/load_graph.py`)
+## 3. Neptune 적재 (`data/loader/cypher_bulk.py`)
 
-### 3.1 NDJSON → 클래스 매핑
+> ⚠ 과거의 `data/load_graph.py` (NODE_FILES 매니페스트) 는 mfg 잔재로 **제거됨** (ADR-0021).
+> live 적재는 `data/loader/cypher_bulk.py` 이며 `data/load.py` (`--neptune` / `--edges`) 가 호출한다.
+
+### 3.1 S3 prefix → (라벨, pk_field) 매핑
 
 ```python
-NODE_FILES = [
-    ("customers.ndjson",      "CustomerAccount"),
-    ("stations.ndjson",       "Station"),
-    ("regions.ndjson",        "Region"),
-    ("transactions.ndjson",   "FuelTransaction"),
-    ("campaigns.ndjson",      "Campaign"),
-    ("members.ndjson",        "Member"),
-    ("weather.ndjson",        "Weather"),       # date+sido 합성 id
-    ("clusters.ndjson",       "Cluster"),
-    ("personas.ndjson",       "Persona"),
-    # ... 25 클래스 ...
+# data/loader/cypher_bulk.py: NODE_MAP — (s3 prefix, Neptune 라벨, MERGE pk_field)
+NODE_MAP = [
+    ('nodes/customer/',             'Customer',            'cust_id'),
+    ('nodes/transaction/',          'FuelTransaction',     'tx_id'),
+    ('nodes/gas_station/',          'GasStation',          'opinet_no'),
+    ('nodes/region/',               'Region',              'region_cd'),
+    ('nodes/campaign/',             'Campaign',            'campaign_cd'),
+    ('nodes/offer/',                'Offer',               'offer_cd'),    # ADR-0022 (was offer_id)
+    ('nodes/coupon/',               'Coupon',              'coupon_no'),   # ADR-0022 (was coupon_id)
+    ('nodes/coupon_use/',           'CouponUse',           'use_id'),
+    ('nodes/fuel_price/',           'FuelPrice',           'price_id'),    # 합성 opinet-dt-grade
+    ('nodes/weather/',              'WeatherObservation',  'weather_id'),  # 합성 sido-dt-hour
+    ('nodes/campaign_sms/',         'CampaignSMS',         'sms_id'),
+    ('nodes/campaign_aggregation/', 'CampaignAggregation', 'agg_id'),
+    # … 총 25 클래스 (member/persona/cluster/segment/term/term_agreement/app_event/survey/timeslot/fuel_product …)
 ]
 ```
+
+**pk 정렬 불변식 (ADR-0022)**: 각 라벨의 `pk_field` 는 그 노드를 가리키는 모든 엣지의 match-field
+와 동일해야 한다. 어긋나면 엣지가 *다른 키의 orphan 스텁* 에 붙어 Object Explorer 관계도가 빈다.
+`tests/data/test_cypher_bulk_alignment.py` 가 이 불변식을 강제.
 
 ### 3.2 노드 MERGE (idempotent)
 
 ```python
-def _node_merge(label: str, props: dict) -> str:
-    set_clauses = ", ".join(f"n.{k} = ${k}" for k in props)
-    return f"MERGE (n:{label} {{id: $id}}) SET {set_clauses}"
+# data/loader/cypher_bulk.py:_flush_batch — pk_field 기준 UNWIND MERGE
+query = f"UNWIND $rows AS r MERGE (n:{label} {{{pk_field}: r.{pk_field}}}) SET n += r"
 ```
 
-배치 UNWIND 패턴:
+배치 UNWIND 패턴 (라벨별 `pk_field`):
 
 ```cypher
 UNWIND $rows AS r
-MERGE (n:Customer {id: r.id})
-  ON CREATE SET n += r.props
-  ON MATCH  SET n += r.props
+MERGE (n:Customer {cust_id: r.cust_id})
+SET n += r
 ```
 
 - 500행 단위
 - 재실행 안전 (no-op on match)
 - `parameters={"rows": [...]}` 키워드 전달 — *f-string 으로 user input interpolate 금지*
 
-### 3.3 엣지 MERGE
+### 3.3 엣지 MERGE (`EDGE_MAP` + `_build_edge_query`)
 
-```python
-f"MERGE (a)-[r:{rel}]->(b){set_part}"
+```cypher
+UNWIND $pairs AS p
+MERGE (a:Customer        {cust_id: p.s})
+MERGE (b:FuelTransaction {tx_id:   p.t})
+MERGE (a)-[:REFUELED]->(b)
 ```
 
-부모 노드가 *반드시 먼저* 적재되어 있어야 함 (MERGE이 새 stub 노드를 만들면 안 됨)
-→ 로딩 순서를 `NODE_FILES` 다음 `EDGE_FILES` 순서로 강제.
+- 31 관계 타입 (`EDGE_MAP`). `data/load.py --edges` 가 `load_all_edges()` 로 일괄 적재 (멱등, uncapped).
+- **MERGE-MERGE 엔드포인트** — MATCH-MATCH 는 양쪽 큰 라벨 엣지(REFUELED/PRICED_AT/TO)에서 t4g.medium OOM (ADR-0022).
+- 노드 선적재 전제. match-field 값에 노드가 없으면 *orphan 스텁* 생성 — pk 정렬(NODE_MAP)로
+  systemic 케이스 제거, 합성 store_cd 같은 잔여 orphan 은 리스트 필터로 숨김 (ADR-0022, Runbook 06).
 
 **Cypher 내 문자열 조합 금지 사례**: Neptune openCypher는
 ```cypher
@@ -269,7 +284,7 @@ row['cluster_id'] = f'cl-{int(a["cluster"]) + 1}'
 |------|------|------|
 | `BELONGS_TO` (Customer → Cluster) | `api/services/cluster_pipeline.py` | KMeans 6 + **StandardScaler** (6 feature: tx, amt, prem_ratio, vip 0/1, grade 1-3, sido 1-8). amt가 millions 단위라 미스케일 시 cluster 1개로 몰림. |
 | `HAS_PERSONA` (Customer → Persona) | `api/services/persona_writeback.py` | hash mod 5 분포 + VIP→crm, 100+ tx→marketing 우선. 약 10K씩 균등. |
-| `IN_SEGMENT` | mirror of BELONGS_TO | 시나리오 D/E 가 별도로 노출 |
+| `IN_SEGMENT` (Customer → Segment) | `api/services/persona_writeback.py:write_back_segments_from_clusters` | cluster→segment 파생. 시나리오 D/E 노출 |
 
 ECS run-task 호출 (API 이미지 재사용, command override):
 
@@ -278,7 +293,7 @@ aws ecs run-task --cluster ontology-gcc-dev-cluster \
   --task-definition ontology-gcc-dev-api \
   --overrides '{"containerOverrides":[{
     "name":"api",
-    "command":["python","-m","data.load","--neptune","--from-s3"]
+    "command":["python","-m","data.load","--neptune","--edges"]
   }]}'
 ```
 
@@ -367,7 +382,7 @@ aws ecs run-task --cluster ontology-gcc-dev-cluster \
   --network-configuration 'awsvpcConfiguration={subnets=["..."],securityGroups=["..."]}' \
   --overrides '{"containerOverrides":[{
     "name":"api",
-    "command":["python","-m","data.load","--neptune","--opensearch","--from-s3"]
+    "command":["python","-m","data.load","--neptune","--opensearch","--weather","--edges"]
   }]}'
 ```
 
@@ -402,10 +417,12 @@ curl -X POST "$OPENSEARCH_ENDPOINT/$INDEX/_count" \
   -H 'Content-Type: application/json' --aws-sigv4 'aws:amz:ap-northeast-2:aoss'
 ```
 
-기대 수치 (full load 후):
-- Customer 50K, FuelTransaction 139K, Station 8.5K, Weather 21,675 (1275일 × 17 시도)
-- BELONGS_TO 4.5K, HAS_PERSONA 49.5K, IN_SEGMENT 4.5K
+기대 수치 (full edge load 후 — 실측 Neptune 카운트, `_count_edges_by_type`):
+- 노드: Customer 50K, FuelTransaction ~556K, WeatherObservation 1,275, Coupon ~1.1K (coupon_no de-collapse)
+- 엣지 ~3.19M 총합: PRICED_AT 1.27M · AT 557K · REFUELED 556K · AT_TIME 428K · USED_APP 122K ·
+  IS_MEMBER 50.5K · HAS_PERSONA 49.5K · SENT_SMS 34K · TO 34K · BELONGS_TO/IN_SEGMENT 4K · AGGREGATED_AS 137
 - AOSS `gcc-search` index ~5K (검색 대상 도메인 노드)
+- 검증: `python3 scripts/probe_object_edges.py` — 정적 카탈로그(payment/fuel_product/channel) 외 전 타입 관계도 표시
 
 ### 6.2 wow-query eval (CI 게이트)
 
@@ -427,6 +444,9 @@ python scripts/eval_wow_queries.py --cf-domain gcc.whchoi.net
 | 0004 | cohort data depth tagging (real / synthetic 추적) |
 | 0005 | KMA API 2단계 캐시 + reprocess 모드 |
 | 0006 | TOOL_SPECS 단일 등록점 (semantic_search·weather_join 등이 이 데이터를 사용) |
+| 0020 | schema.ttl 을 data/schemas.py 에서 생성 (`ontology/generate_schema_ttl.py`) |
+| 0021 | pre-pivot mfg 잔재 18 파일 제거 (load_graph.py·data/public 등) |
+| 0022 | Object Explorer 엣지 키 정렬 (NODE_MAP pk ↔ edge match-field) + 엣지 재적재 (Runbook 06) |
 
 ---
 
@@ -443,4 +463,4 @@ python scripts/eval_wow_queries.py --cf-domain gcc.whchoi.net
 
 ---
 
-*Last updated: 2026-05-13. 새 외부 소스 추가 시: `data/external/` 어댑터 + `data/schemas.py` 스키마 + `data/load_graph.py` NODE_FILES/EDGE_FILES + 이 문서 §1-2 갱신.*
+*Last updated: 2026-06-09. 새 외부 소스 추가 시: `data/external/` 어댑터 + `data/schemas.py` 스키마 + `data/loader/cypher_bulk.py` NODE_MAP/EDGE_MAP + 이 문서 §1-3 갱신. 엣지 재적재는 Runbook 06.*

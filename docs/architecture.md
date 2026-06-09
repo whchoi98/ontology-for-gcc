@@ -19,12 +19,13 @@
 | `data/load.py` | CLI 진입점. Neptune + OpenSearch 동시 로드. ECS one-shot 태스크로 실행 (private subnet). |
 | `data/synthetic/` | 50K 고객 / 8.5K 주유소 / 139K 거래 합성 데이터 생성기. |
 | `data/external/kma_*.py` | 기상청 단기·과거 관측 API → S3 캐시 NDJSON. |
-| `data/public/opinet.py`, `kfda_term.py` | 표준 매핑 어댑터 (오피넷 코드, KFDA 용어). |
+| `data/real/*.py` | N=500 실데이터 어댑터 (opinet_price·opinet_station·transaction·coupon_fact·survey 등). 오피넷 표준 코드는 `ontology/standards/opinet_codes.yaml`. |
+| `data/loader/` | Neptune(`cypher_bulk`·`bulk_neptune`) + OpenSearch(`opensearch_index`) live 적재기. |
 
 #### Storage
 | Component | 역할 |
 |-----------|------|
-| Amazon Neptune | 지식 그래프 (openCypher). 25 클래스, ~ 250K 엣지. |
+| Amazon Neptune | 지식 그래프 (openCypher). 25 클래스, ~3.2M 엣지 (31 관계 타입). |
 | OpenSearch Serverless | Nori BM25 + Cohere KNN 듀얼 인덱스. RRF fusion. |
 | Amazon S3 | 합성 데이터 / KMA 캐시 / Cohere 임베딩 백업. |
 | Bedrock Knowledge Base | KFDA 용어집 (옵션). |
@@ -100,7 +101,7 @@
    │  Bedrock     │ │ AgentCore  │ │  Neptune     │ │OpenSearch│ │ Cognito    │
    │  Sonnet 4.6  │ │ Memory +   │ │  openCypher  │ │BM25 +    │ │ JWKS       │
    │  Cohere      │ │ CodeInterp │ │  25 클래스   │ │KNN + RRF │ │ verification│
-   │  embed/rerank│ │ Firecracker│ │  ~250K edges │ │+ rerank  │ │            │
+   │  embed/rerank│ │ Firecracker│ │  ~3.2M edges │ │+ rerank  │ │            │
    └──────────────┘ └────────────┘ └──────┬───────┘ └──────────┘ └────────────┘
                                           │
                                           ▼
@@ -143,8 +144,11 @@
 4. **Cohort tagging** — N=500 PII-마스킹 실데이터와 49.5K 합성 데이터 혼합. `data_source` 태그로 분리. (ADR-0004)
 5. **KMA 캐시 전략** — 일별 NDJSON S3 캐시 + Neptune `Weather` 노드. (ADR-0005)
 6. **TOOL_SPECS 단일 등록점** — 신규 도구는 `api/services/agent.py:TOOL_SPECS` + `_dispatch_tool` branch + chaining hint. (ADR-0006)
-7. **Persona registry SSoT** — `api/services/personas.py` 가 5 부서 페르소나의 단일 진실 (어조·KPI·시나리오 우선순위). (ADR-0007)
+7. **Persona registry SSoT** — `api/services/persona.py` 가 5 부서 페르소나의 단일 진실 (어조·KPI·시나리오 우선순위). (ADR-0007)
 8. **GuidedTour design** — 다크 테마, "Plan N" 같은 내부 jargon 제거. (ADR-0008)
+20. **schema.ttl SSoT 생성** — `ontology/schema.ttl` 은 `data/schemas.py` 에서 `ontology/generate_schema_ttl.py` 로 생성 (손편집 금지, 25 클래스 / 31 관계). (ADR-0020)
+21. **pre-pivot mfg 잔재 제거** — retail/mfg 참조 PoC 잔재 18 파일 삭제 (data/public · ontology/adapters · load_graph 등). (ADR-0021)
+22. **Object Explorer 엣지 키 정렬** — 노드 MERGE pk ↔ 엣지 match-field 정렬 (offer_cd/coupon_no/price_id), 엣지 적재 MERGE-MERGE (MATCH-MATCH 는 t4g.medium OOM). (ADR-0022)
 
 ### 운영
 
@@ -167,12 +171,13 @@
 | `data/load.py` | CLI entry. Loads Neptune + OpenSearch concurrently. Executed as a one-shot ECS task (private subnet). |
 | `data/synthetic/` | Synthetic generator: 50K customers / 8.5K stations / 139K transactions. |
 | `data/external/kma_*.py` | KMA short-term + historical observation APIs → S3-cached NDJSON. |
-| `data/public/opinet.py`, `kfda_term.py` | Standards mapping adapters (Opinet codes, KFDA terms). |
+| `data/real/*.py` | N=500 real-data adapters (opinet_price/opinet_station/transaction/coupon_fact/survey…). Opinet standard codes live in `ontology/standards/opinet_codes.yaml`. |
+| `data/loader/` | Live loaders for Neptune (`cypher_bulk`/`bulk_neptune`) + OpenSearch (`opensearch_index`). |
 
 #### Storage
 | Component | Role |
 |-----------|------|
-| Amazon Neptune | Knowledge graph (openCypher). 25 classes, ~250K edges. |
+| Amazon Neptune | Knowledge graph (openCypher). 25 classes, ~3.2M edges (31 relation types). |
 | OpenSearch Serverless | Nori BM25 + Cohere KNN dual index. RRF fusion. |
 | Amazon S3 | Synthetic data, KMA cache, Cohere embedding backups. |
 | Bedrock Knowledge Base | KFDA glossary (optional). |
@@ -248,7 +253,7 @@
    │  Bedrock     │ │ AgentCore  │ │  Neptune     │ │OpenSearch│ │ Cognito    │
    │  Sonnet 4.6  │ │ Memory +   │ │  openCypher  │ │BM25 +    │ │ JWKS       │
    │  Cohere      │ │ CodeInterp │ │  25 classes  │ │KNN + RRF │ │ verification│
-   │  embed/rerank│ │ Firecracker│ │  ~250K edges │ │+ rerank  │ │            │
+   │  embed/rerank│ │ Firecracker│ │  ~3.2M edges │ │+ rerank  │ │            │
    └──────────────┘ └────────────┘ └──────┬───────┘ └──────────┘ └────────────┘
                                           │
                                           ▼
@@ -291,8 +296,11 @@ Browser → CloudFront → Lambda@Edge(cookie→token) → ALB → ECS Web → E
 4. **Cohort tagging** — Mix of N=500 PII-masked real data and 49.5K synthetic; separated by a `data_source` tag. (ADR-0004)
 5. **KMA cache strategy** — Daily NDJSON on S3 + Neptune `Weather` nodes. (ADR-0005)
 6. **TOOL_SPECS single registration** — New tools land in `api/services/agent.py:TOOL_SPECS` with a `_dispatch_tool` branch and chaining hints. (ADR-0006)
-7. **Persona registry SSoT** — `api/services/personas.py` is the single source of truth for the five departmental personas (tone, KPI, scenario priority). (ADR-0007)
+7. **Persona registry SSoT** — `api/services/persona.py` is the single source of truth for the five departmental personas (tone, KPI, scenario priority). (ADR-0007)
 8. **GuidedTour design** — Dark theme; internal jargon like "Plan N" was removed. (ADR-0008)
+20. **schema.ttl generated from SSoT** — `ontology/schema.ttl` is generated from `data/schemas.py` via `ontology/generate_schema_ttl.py` (never hand-edited; 25 classes / 31 relations). (ADR-0020)
+21. **pre-pivot mfg cleanup** — Removed 18 retail/mfg reference-PoC leftover files (data/public · ontology/adapters · load_graph, etc.). (ADR-0021)
+22. **Object Explorer edge key alignment** — Aligned node MERGE pk with edge match-fields (offer_cd/coupon_no/price_id); edge load uses MERGE-MERGE (MATCH-MATCH OOMs Neptune t4g.medium). (ADR-0022)
 
 ### Operations
 

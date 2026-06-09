@@ -12,9 +12,9 @@
 
 ```
 data/
-├── load.py                CLI 진입점 (--neptune --opensearch --from-s3 --kma)
+├── load.py                CLI 진입점 (--neptune --opensearch --weather --edges --raw-dir)
 ├── schemas.py             Pydantic 노드/엣지 스키마 SSoT (25 클래스 + 31 관계)
-├── synthetic/             합성 generator (cohort/persona/cluster/...)
+├── synthetic/             합성 generator (customer/persona/cluster/segment/...)
 ├── real/                  N=500 PII-마스킹 실데이터 어댑터 (opinet_codes.yaml 소비)
 ├── external/              KMA 등 외부 API 어댑터
 ├── loader/                live Neptune/OpenSearch 로더 — cypher_bulk·bulk_neptune·opensearch_index
@@ -33,7 +33,7 @@ data/
   500 행 단위 배치. `parameters={"rows": [...]}` 키워드 전달.
 - **Cypher 안에서 문자열 조합 금지**: `'cl-' + toString(r.cluster + 1)` 같은 식 Neptune openCypher가 거부 케이스 있음 → Python에서 `f'cl-{int(a["cluster"]) + 1}'` 로 사전 계산 후 전달.
 - **에지 MERGE는 양쪽 노드 키 보장 후**: 부모 노드가 없으면 MERGE 가 새 stub 노드를 만들 수 있음 — 적재 순서 강제.
-- **S3 캐시**: KMA / Cohere 임베딩은 S3 NDJSON 라이트 후 재실행 시 `--from-s3` 로 재처리.
+- **S3 캐시**: KMA / Cohere 임베딩은 S3 NDJSON 으로 쓰여 재실행 시 자동 재사용 (KMA 재처리는 `python -m data.external.run_etl --reprocess`).
 
 ## 적재 실행
 
@@ -44,7 +44,7 @@ aws ecs run-task \
   --task-definition ontology-gcc-dev-api \
   --overrides '{"containerOverrides":[{
     "name":"api",
-    "command":["python","-m","data.load","--neptune","--opensearch","--from-s3"]
+    "command":["python","-m","data.load","--neptune","--opensearch","--weather","--edges"]
   }]}'
 ```
 

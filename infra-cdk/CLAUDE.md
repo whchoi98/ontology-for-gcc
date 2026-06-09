@@ -34,7 +34,7 @@ infra-cdk/
 - **ECR repo import**: `Repository.fromRepositoryName` 으로 import — `removalPolicy: RETAIN` 으로 옛 destroy 시 살아남은 repo 와 충돌 회피 (`AlreadyExists`). CDK 가 lifecycle 관리 안 함 → RETAIN 자연 유지.
 - **Lambda@Edge — synth-time string replace**: `process.env.COGNITO_USER_POOL_ID` 를 *synth time* 에 `lambda-edge-auth/index.js` 에 string replace 후 임시 디렉토리에 write → `fromAsset` 으로 deploy. 빈 값이면 *DEMO bypass* (모든 request pass-through). 운영 시 `.env` 채우고 edge redeploy (ADR-0017).
 - **ACM cert — fromCertificateArn**: 와일드카드 `*.whchoi.net` cert (us-east-1 ARN `arn:aws:acm:us-east-1:061525506239:certificate/7d53182a-...`) 를 import. `domainName` prop 있을 때만 cert 첨부 + alias 설정. DNS validation 우회 (ADR-0018).
-- **AOSS network policy**: 현재 `AllowFromPublic: true` — VPCE hardening Deferred (CFN create polling race condition, ADR-0016).
+- **AOSS network policy**: CDK 는 `AllowFromPublic: true` 를 emit; 운영 hardening 은 **수동 적용** (collection → `AllowFromPublic: false` + `SourceVPCEs: [vpce-0d638a0ed56410be0]` retail VPCE 재사용, dashboard 만 public 유지). AOSS 의 *VPC 당 VPCE 1개* 제한 때문 (ADR-0016). `cdk destroy` 가 이 수동 변경을 되돌리지 않음.
 - **IAM scope-down**: task role 은 `neptune-db:*` actions on cluster ARN, `bedrock:*` on inference-profile + foundation-model ARN 패턴, `aoss:APIAccessAll` on collection ARN. NeptuneFullAccess / `*` 사용 금지 (ADR-0014).
 - **DEMO_PUBLIC_MODE prod guard**: `-c stage=prod` 시 환경변수 자체 생성 안 함 → fail-closed (ADR-0015).
 - **ARM64 강제**: Task Def 의 `cpuArchitecture: 'ARM64'`. CDK 가 검증해 줌.
@@ -59,7 +59,9 @@ npx jest -u
 
 ```bash
 npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net
-bash scripts/cognito-update-callbacks.sh
+# Cognito callback URL 전체 re-PUT (update-user-pool-client 가 config clobber) — Runbook 02 참조
+aws cognito-idp update-user-pool-client --user-pool-id <POOL_ID> --client-id <CLIENT_ID> \
+  --callback-urls https://gcc.whchoi.net/auth/callback https://gcc-ontology.whchoi.net/auth/callback ...
 ```
 
 **외부 zone (다른 account) 의 gcc.whchoi.net CNAME 이 옛 CloudFront 를 가리키는 경우**: CloudFront 가 *hijacking 방지 검사* 로 alias 등록 거부. 해결 — `-c domain=` 생략하고 default URL 만 deploy 후 사용자가 외부 zone CNAME 을 새 CF 로 변경, 그 다음 `-c domain=` 으로 재배포 (ADR-0018).

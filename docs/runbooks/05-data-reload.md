@@ -159,10 +159,10 @@ aws s3api copy-object \
   --bucket gcc-ontology-dev-data \
   --key nodes/customer/all.ndjson
 
-# 그 다음 --from-s3 로 재적재
+# 그 다음 재적재 (노드 Bulk Load + 엣지 MERGE)
 aws ecs run-task ... --overrides '{"containerOverrides":[{
   "name":"api",
-  "command":["python","-m","data.load","--neptune","--from-s3"]
+  "command":["python","-m","data.load","--neptune","--edges"]
 }]}'
 ```
 
@@ -180,7 +180,8 @@ aws ecs run-task ... --overrides '{"containerOverrides":[{
 
 - ADR-0003 (bulk loader IAM), 0004 (cohort tagging), 0005 (KMA cache), 0012 (AWSV4SignerAuth)
 - `docs/data-pipeline.md` (raw_data + KMA → Neptune/AOSS 전체 흐름)
-- `data/load.py`, `data/load_graph.py`, `data/load_search.py`, `data/external/run_etl.py`
+- `data/load.py`, `data/loader/{cypher_bulk,bulk_neptune,opensearch_index}.py`, `data/external/run_etl.py`
+- 엣지만 재적재 (Object Explorer 관계도) → `docs/runbooks/06-object-explorer-edge-reload.md`
 
 ---
 *Last updated: 2026-05-14*

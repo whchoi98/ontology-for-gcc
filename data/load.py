@@ -1,4 +1,4 @@
-"""CLI: --neptune --opensearch --weather --from-s3 --raw-dir <path>.
+"""CLI: --neptune --opensearch --weather --edges --raw-dir <path> [--lookalike-target N].
 Real → Synthetic → External 순서로 노드·엣지 NDJSON을 S3에 업로드 후 Bulk Load."""
 from __future__ import annotations
 import argparse, os, json, boto3

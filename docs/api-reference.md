@@ -15,8 +15,9 @@ SSE 응답 공통 이벤트 스키마: `{"type": "phase|delta|log|final|result",
 | Method | Path | 설명 |
 |--------|------|------|
 | GET | `/healthz` | ALB 헬스체크. 의존성 lazy check. `200 {"ok": true}`. |
-| GET | `/api/ops/meta` | 배포 메타 (image tag, git SHA, region). |
 | GET | `/api/ops/resources` | Neptune·OpenSearch·Bedrock endpoint 마스킹된 상태. |
+| GET | `/api/ops/{area}` | 데모 콘텐츠. `area ∈ {ingest, guardrail, memory, eval, trace}` (GCC 도메인). |
+| GET | `/api/ops/live/{area}` | Neptune + 버퍼 backed 라이브 메트릭. `area ∈ {ingest, memory, eval, trace, guardrail}`. |
 
 ## 1. 시나리오 A — 검색 (`search.py`)
 
@@ -134,22 +135,25 @@ Body:
 | GET | `/api/objects/{type}` | 클래스별 인스턴스 리스트 (limit / order_by 지원). |
 | GET | `/api/objects/{type}/{id}` | 단일 노드 + 1-hop 이웃 (2-query split: anchor + neighbors). |
 
-지원 `type`: `customer`, `station`, `region`, `term`, `cluster`, `persona`, `segment`, `membership`, `card`, `payment`, `campaign`, `coupon`, `offer`, `couponuse`, `sms`, `consent`, `fuel`, `transaction`, `weather`, … (25 클래스).
+지원 `type` (snake_case 슬러그, `_TYPE_REGISTRY`): `customer`, `persona`, `cluster`, `segment`, `member`, `fuel_transaction`, `app_event`, `survey_response`, `coupon_use`, `payment_method`, `campaign`, `coupon`, `offer`, `channel`, `campaign_sms`, `campaign_aggregation`, `fuel_product`, `gas_station`, `fuel_price`, `region`, `term`, `term_agreement`, `consumption_index`, `weather_observation`, `time_slot` (25 클래스). 노드 pk = `id_prop` (offer→`offer_cd`, coupon→`coupon_no`, gas_station→`opinet_no`; ADR-0022).
 
 ## 16. 온톨로지 메타 (`ontology.py`, `personas.py`)
 
 | Method | Path | 설명 |
 |--------|------|------|
-| GET | `/api/ontology/classes` | 25 클래스 + 한국어/영문 라벨. |
-| GET | `/api/ontology/relations` | 엣지 타입 목록 (HAS_PERSONA, BELONGS_TO, IN_SEGMENT, …). |
+| GET | `/api/ontology/schema` | 25 클래스 / 31 관계 / 146 datatype props 요약 (`data/schemas.py` SSoT — `generate_schema_ttl.py` 와 동일 소스, ADR-0020). |
+| GET | `/api/ontology/standards` | opinet 표준 코드 매핑 (`ontology/standards/opinet_codes.yaml`). |
+| GET | `/api/ontology/validation` | Neptune 적재 vs spec 검증 리포트. |
 | GET | `/api/personas` | 5 부서 페르소나 정의 (시나리오 우선순위 + 어조 메타). |
 
-## 17. 인증 (`auth.py`)
+## 17. 인증 (`auth.py`, prefix `/auth`)
 
 | Method | Path | 설명 |
 |--------|------|------|
-| GET | `/api/auth/me` | 현재 세션 사용자 (Cognito 토큰 디코드). |
-| POST | `/api/auth/logout` | 쿠키 invalidate. |
+| GET | `/auth/login` | Cognito Hosted UI OAuth redirect 시작. |
+| GET | `/auth/callback` | OAuth code → 쿠키 교환. |
+| GET | `/auth/whoami` | 현재 세션 사용자 (Cognito 토큰 디코드). |
+| GET | `/auth/logout` | 쿠키 invalidate. |
 
 ## Error model
 

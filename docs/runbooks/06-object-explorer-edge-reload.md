@@ -94,4 +94,5 @@ fuel_price, weather_observation, time_slot` 가 `ok`. `app_event` 는 Step 3 후
   스텁들이 tx_count 상위를 점령해 gas_station 리스트를 가린다. **대응: 노드 삭제가 아니라
   `objects.py` gas_station 리스트 쿼리의 `WHERE n.opinet_no IS NOT NULL` 필터로 숨김** (비파괴).
   Region 도 `IN` 엣지가 `sido_nm` 로 MERGE 해 소수 orphan(region_cd null) 생성 — 현재 무해.
-```
+
+*Last updated: 2026-06-09*

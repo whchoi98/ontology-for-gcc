@@ -1,6 +1,6 @@
 # api/ — FastAPI 백엔드
 
-> Python 3.12 + FastAPI + Pydantic v2. Fargate ARM64. 25 라우터.
+> Python 3.12 + FastAPI + Pydantic v2. Fargate ARM64. 14 시나리오 (A–N) + 객체·온톨로지·ops·auth 라우터 (20 모듈).
 
 ## 모듈 역할
 
@@ -12,7 +12,7 @@
 
 ```
 api/
-├── main.py            FastAPI app + 25 router include + middleware 등록
+├── main.py            FastAPI app + router include (20 모듈) + middleware 등록
 ├── config.py          Pydantic Settings (env-driven, fail-closed 기본값)
 ├── aws_clients.py     boto3 session @lru_cache 팩토리
 ├── middleware_auth.py Cognito JWT + X-Origin-Auth-Token 검증

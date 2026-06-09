@@ -63,9 +63,13 @@ ontology-gcc/
 │   │   ├── external_signal.py   # J 외부 신호 (기상·여론)
 │   │   ├── outlier.py           # K 이상 행동 탐지
 │   │   ├── payment.py           # L 결제·멤버십 분석
+│   │   ├── journey.py           # M 고객 여정
+│   │   ├── weather.py           # N 날씨×연료
 │   │   ├── objects.py           # 객체 탐색 (25 클래스)
-│   │   ├── ontology.py          # 온톨로지 메타 / 관계
-│   │   └── ops.py               # /healthz, ops 메타
+│   │   ├── ontology.py          # 온톨로지 메타 (schema/standards/validation)
+│   │   ├── personas.py          # 5 부서 페르소나 (GET /api/personas)
+│   │   ├── auth.py              # /auth/* Cognito OAuth
+│   │   └── ops.py               # /healthz · /api/ops/{area} · /api/ops/live/*
 │   ├── services/         Bedrock / Neptune / OpenSearch / AgentCore wrappers
 │   ├── middleware_auth.py Cognito JWT verification
 │   ├── aws_clients.py    boto3 client factories (cached)
@@ -79,7 +83,7 @@ ontology-gcc/
 │   ├── lib/              network, data, compute, ai, edge, observability
 │   └── test/             Jest snapshot tests for all 6 stacks (Template.fromStack)
 ├── data/                 Synthetic data generator + Neptune/OpenSearch loader
-│   ├── load.py           CLI: --neptune --opensearch --from-s3
+│   ├── load.py           CLI: --neptune --opensearch --weather --edges --raw-dir
 │   ├── schemas.py        25-class Pydantic SSoT (ALL_CLASSES + ALL_RELATIONS)
 │   ├── real/             Live adapters: opinet_price/opinet_station/transaction/coupon_fact/…
 │   ├── synthetic/        Synthetic generators (customer/persona/cluster/segment/…)
@@ -89,9 +93,9 @@ ontology-gcc/
 ├── ontology/             classes/*.yaml (25), relations/edges.yaml (31), standards/opinet_codes.yaml,
 │                         mappings/raw_to_ontology.csv, schema.ttl (generated from data/schemas.py)
 ├── tests/                Pytest suite — smoke (router imports) + tests/api/ (httpx integration)
-├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0020), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload)
+├── docs/                 Architecture (KR/EN bilingual), api-reference, onboarding, data-pipeline, ADRs (decisions/0001-0022), runbooks (01 deploy / 02 domain / 03 incident / 04 secret / 05 data-reload / 06 object-explorer-edge-reload)
 ├── prompts/              Reusable LLM prompt 가이드 (sse-agent-design, cross-browser-popup-pattern)
-├── scripts/              KB index init, Cognito provisioning, eval harness, git hooks
+├── scripts/              eval harness, codegraph labeling, scenario scaffolding, git hooks, KMA secret setup, object-edge probe
 ├── .claude/              Project harness — agents, skills, hooks, commands, settings
 │   ├── agents/           code-reviewer.md, security-auditor.md (model: sonnet, structured output)
 │   ├── skills/           wow-query-eval.md, cypher-conventions.md
@@ -123,7 +127,7 @@ aws ecs update-service --cluster ontology-gcc-dev-cluster --service ontology-gcc
 
 # Reload synthetic data via one-shot ECS task (uses the API image with overridden command)
 aws ecs run-task --cluster ontology-gcc-dev-cluster --task-definition ontology-gcc-dev-api \
-  --overrides '{"containerOverrides":[{"name":"api","command":["python","-m","data.load","--neptune","--opensearch","--from-s3"]}]}'
+  --overrides '{"containerOverrides":[{"name":"api","command":["python","-m","data.load","--neptune","--opensearch","--weather","--edges"]}]}'
 
 # Frontend type check
 cd web && npx tsc --noEmit
@@ -161,7 +165,7 @@ python -m compileall -q api data scripts   # AST validation (also a CI job)
 - ECS services use `:latest` plus a SHA-pinned tag. For deterministic rollouts, register a new task definition revision pinning the SHA-tagged image rather than relying on `:latest` cache invalidation.
 - Neptune is in private subnets — `dev` EC2 cannot reach it directly. Run loaders as one-shot ECS tasks in the same SG.
 - VPC is imported from `ontology-for-retail`'s network stack via `Vpc.fromVpcAttributes` (preferred when CFN export exists) or `Vpc.fromLookup` (tag-based fallback). GCC's network stack only creates SGs (gcc-app-sg, gcc-neptune-sg, gcc-os-sg). Retail teardown will break GCC connectivity; coordinate destroys.
-- Custom domain `gcc.whchoi.net` is **not** wired by CDK — first deploy uses CloudFront default URL. Add domain via `npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net` then run `scripts/cognito-update-callbacks.sh` (legacy alias `gcc-ontology.whchoi.net` 도 등록, ADR-0009).
+- Custom domain `gcc.whchoi.net` is **not** wired by CDK — first deploy uses CloudFront default URL. Add domain via `npx cdk deploy ontology-gcc-dev-edge -c domain=gcc.whchoi.net` then update Cognito callback URLs with a full `aws cognito-idp update-user-pool-client` re-PUT per **Runbook 02** (`update-user-pool-client` clobbers config; legacy alias `gcc-ontology.whchoi.net` 도 등록, ADR-0009).
 
 ### Security
 

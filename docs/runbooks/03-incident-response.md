@@ -132,7 +132,7 @@ aws logs get-log-events --log-group-name "$LG" --log-stream-name "$STREAM" \
 **대응**:
 1. ECS task env: `COGNITO_USER_POOL_ID`, `COGNITO_CLIENT_ID` 정합 확인
 2. Cognito callback URL 양 도메인 (`gcc.whchoi.net` + legacy `gcc-ontology.whchoi.net`) 모두 등록
-3. `scripts/cognito-update-callbacks.sh` 재실행
+3. `aws cognito-idp update-user-pool-client` 전체 re-PUT (callback URL clobber 주의 — Runbook 02)
 
 ## Verification
 

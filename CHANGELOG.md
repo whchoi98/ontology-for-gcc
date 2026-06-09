@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **pre-pivot manufacturing leftovers** (ADR-0021): removed 18 dead/broken files (mfg standard loaders, mfg synthetic generators, legacy graph loader) plus their tests.
 
 ### Fixed
-- **Object Explorer 관계도 복구** (ADR-0022): offer/coupon 노드가 잘못된 합성 pk(=campaign_cd)로 MERGE되어 엣지가 orphan에 붙던 문제 — NODE_MAP pk를 자연키(offer_cd/coupon_no)로 정렬, `_TYPE_REGISTRY` id_prop 동기화, PRICED_AT를 합성 price_id 매칭 transform으로. 엣지 적재기는 MERGE-MERGE 유지(orphan 박멸은 키 정렬이 담당; MATCH-MATCH는 t4g.medium OOM으로 기각). 정렬 불변식 테스트 8종 + 검증 스크립트 `scripts/probe_object_edges.py` + 재적재 Runbook 06 추가.
-- **Object Explorer empty relationship graph** (ADR-0022): aligned node MERGE pk with edge match-fields (offer_cd/coupon_no/price_id) so MERGE attaches edges to the full node instead of orphan stubs. Kept MERGE-MERGE endpoints (MATCH-MATCH OOMs Neptune t4g.medium for two-large-label edges). Requires a Neptune edge reload (Runbook 06) to take effect on live data.
+- **Object Explorer 관계도 복구** (ADR-0022): offer/coupon 노드가 잘못된 합성 pk(=campaign_cd)로 MERGE되어 엣지가 orphan에 붙던 문제 — NODE_MAP pk를 자연키(offer_cd/coupon_no)로 정렬, `_TYPE_REGISTRY` id_prop 동기화, PRICED_AT를 합성 price_id 매칭 transform으로. 엣지 적재기는 MERGE-MERGE 유지(orphan 박멸은 키 정렬이 담당; MATCH-MATCH는 t4g.medium OOM으로 기각). 추가로 gas_station 리스트에 `WHERE opinet_no IS NOT NULL` 필터로 합성 store_cd AT-orphan 스텁을 비파괴 차단. 정렬 불변식 테스트 9종 + 검증 스크립트 `scripts/probe_object_edges.py` + 재적재 Runbook 06 추가.
+- **Object Explorer empty relationship graph** (ADR-0022): aligned node MERGE pk with edge match-fields (offer_cd/coupon_no/price_id) so MERGE attaches edges to the full node instead of orphan stubs; kept MERGE-MERGE endpoints (MATCH-MATCH OOMs Neptune t4g.medium for two-large-label edges); filtered gas_station list on `opinet_no IS NOT NULL` to hide synthetic-store_cd AT-orphan stubs. Requires a Neptune edge reload (Runbook 06) to take effect on live data.
 
 ### Security
 - **IAM task role scope-down** (ADR-0014): NeptuneFullAccess + `bedrock:*` + `aoss:*` 제거 → 명시 ARN (cluster ARN / inference-profile + foundation-model ARN 패턴 / collection ARN).
